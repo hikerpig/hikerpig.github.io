@@ -1,3 +1,8 @@
+$header-height: 61px;
+$toc-width: 330px;
+
+$breakpoint-small: 1100px;
+
 html {
 	background-color: #fff;
 	-webkit-font-smoothing: antialiased;
@@ -129,7 +134,57 @@ a:hover, a:active {
 	height: auto;
 	float: right;
 	width: 80%;
-	margin-top:60px;
+	// margin-top:60px;
+}
+
+.sidebar-nav {
+	.nav{
+		list-style:none;
+		padding:18px 30px;
+		float: left;
+		font-size:12px;
+
+	 	li{
+			position: relative;
+			display: initial;
+			padding-right:20px;
+		}
+		a {
+			color:#5A5A5A;
+		}
+		a:hover{
+			color:#4786D6;
+		}
+		a.current{
+			color:#5A5A5A;
+			padding-bottom: 22px;
+			border-bottom: 1px solid #5A5A5A;
+		}
+	}
+
+	.information{
+		float: right;
+		padding-top: 12px;
+		padding-right: 20px;
+
+		.avatar{
+			float: right;
+
+		img{
+			width: 32px;
+			height: 32px;
+			border-radius: 300px;
+			}
+		}
+		.back_btn{
+			float: left;
+			padding-top: 5px;
+			margin-right:-10px;
+      cursor: pointer;
+			padding-right:20px;
+
+		}
+	}
 }
 
 .page-top{
@@ -743,7 +798,7 @@ a.btn {
 	text-align:center;
 	padding-top:50px;
 }
-@media screen and (max-width: 960px) {
+@media screen and (max-width: $breakpoint-small) {
 	.sidebar {
 		width: 100%;
 		position:absolute;
@@ -786,4 +841,45 @@ a.btn {
 // Custom
 .sidebar__avatar {
   border-radius: 50%;
+}
+
+// Toc
+#toc {
+  $toc-normal-color: #2465a9;
+  $toc-hover-color: #002c58;
+
+  display: none;
+  position: fixed;
+  right: 0;
+  width: $toc-width;
+  top: 30px;
+  font-size: 13px;
+  color: $toc-normal-color - 1;
+  box-sizing: border-box;
+
+  border: 1px solid #f0f0f0;
+  margin-bottom: 20px;
+  padding: 10px 15px;
+
+  ol {
+    padding-left: 1em;
+  }
+
+  a,
+  a:link {
+    color: $toc-normal-color;
+
+    &:hover {
+      color: $toc-hover-color;
+    }
+  }
+}
+
+@media (min-width: $breakpoint-small) {
+  #toc {
+    display: block;
+  }
+  .post {
+    padding-right: $toc-width;
+  }
 }

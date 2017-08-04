@@ -5,7 +5,6 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://hikerpig.github.io/"/>
-  <updated>2016-12-21T14:22:21.000Z</updated>
   <id>http://hikerpig.github.io/</id>
   
   <author>
@@ -17,10 +16,10 @@
   
   <entry>
     <title>前端 Log 小记</title>
-    <link href="http://hikerpig.github.io/2016/12/21/2016-12-21-Enhanced-Client-Side-Console/"/>
-    <id>http://hikerpig.github.io/2016/12/21/2016-12-21-Enhanced-Client-Side-Console/</id>
-    <published>2016-12-21T14:22:21.000Z</published>
-    <updated>2016-12-21T14:22:21.000Z</updated>
+    <link href="http://hikerpig.github.io/2017/07/29/2016-12-21-Enhanced-Client-Side-Console/"/>
+    <id>http://hikerpig.github.io/2017/07/29/2016-12-21-Enhanced-Client-Side-Console/</id>
+    <published>2017-07-29T05:40:50.000Z</published>
+    <updated>2017-07-29T05:40:50.000Z</updated>
     
     <content type="html"><![CDATA[<p>相信各位前端工程师们都经历过一个黑暗的场景。</p>
 <img src="http://images-hikerpig.qiniudn.com/image/stack-or-gtfo.jpg" alt="undefined">
@@ -42,7 +41,7 @@
 <p>如果不使用自带 parser 的服务而是自己实现前后功能，可能在发送到服务器之前，最好做一些处理，例如生成更可读的错误栈，会让你工作更加轻松。栈信息对于定位和调试错误是十分重要的。</p>
 <h3 id="第三方库">第三方库</h3>
 <h4 id="tracekit"><a href="https://github.com/csnover/TraceKit" target="_blank" rel="external">TraceKit</a></h4>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 先注册一下报告的行为回调</span></div><div class="line">TraceKit.report.subscribe(<span class="function"><span class="keyword">function</span> <span class="title">yourLogger</span>(<span class="params">errorReport</span>) </span>&#123;</div><div class="line">  <span class="comment">// 发送ajax请求到服务器端</span></div><div class="line">  <span class="comment">// 在 https://gist.github.com/4491219 上有个好例子</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">// 开始写程序</span></div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">  <span class="comment">/*</span></div><div class="line">   * your application code here</div><div class="line">   *</div><div class="line">   */</div><div class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'oops'</span>);</div><div class="line">&#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">  TraceKit.report(e); <span class="comment">//error with stack trace gets normalized and sent to subscriber</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 先注册一下报告的行为回调</span></div><div class="line">TraceKit.report.subscribe(<span class="function"><span class="keyword">function</span> <span class="title">yourLogger</span>(<span class="params">errorReport</span>) </span>&#123;</div><div class="line">  <span class="comment">// 发送ajax请求到服务器端</span></div><div class="line">  <span class="comment">// 在 https://gist.github.com/4491219 上有个好例子</span></div><div class="line">&#125;;</div><div class="line"></div><div class="line"><span class="comment">// 开始写程序</span></div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">  <span class="comment">/*</span></div><div class="line"><span class="comment">   * your application code here</span></div><div class="line"><span class="comment">   *</span></div><div class="line"><span class="comment">   */</span></div><div class="line">  <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'oops'</span>);</div><div class="line">&#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">  TraceKit.report(e); <span class="comment">//error with stack trace gets normalized and sent to subscriber</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <h4 id="stacktrace.js"><a href="http://stacktracejs.com/" target="_blank" rel="external">stacktrace.js</a></h4>
 <p>解析错误栈并且给出结构化表示，api 设计满足 Promise 规范。</p>
 <p>官方给出的例子:</p>
@@ -79,34 +78,6 @@
       <category term="前端" scheme="http://hikerpig.github.io/tags/%E5%89%8D%E7%AB%AF/"/>
     
       <category term="Engineering" scheme="http://hikerpig.github.io/tags/Engineering/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>git小技巧七七八八</title>
-    <link href="http://hikerpig.github.io/2016/12/21/2014-03-21-git%E5%B0%8F%E6%8A%80%E5%B7%A7%E4%B8%83%E4%B8%83%E5%85%AB%E5%85%AB/"/>
-    <id>http://hikerpig.github.io/2016/12/21/2014-03-21-git小技巧七七八八/</id>
-    <published>2016-12-21T04:52:12.000Z</published>
-    <updated>2016-12-21T04:52:12.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="利用git-rev-parse">利用git rev-parse</h2>
-<p>刚来公司的时候，电脑上的项目运行环境还没有搭配好，一些前端的改动只能推到测试服务器上才能看见效果。因此在开发的时候要频繁地切换和合并开发分支到与测试环境的部署相关联的测试分支上,频繁地手敲命令checkout -&gt; pull -&gt; 等代码p…pu…pul…pulled-&gt; merge-&gt; oh conflict!-&gt; fix conflict -&gt; push -&gt; checkout 然后才查看页面继续开发。 前面的各种点点点急刹人,于是我写了个小脚本,省下了敲分支名的时间:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/zsh</span></div><div class="line">cur_branch=`git rev-parse --abbrev-ref HEAD`</div><div class="line">git checkout develop &amp;&amp; git pull &amp;&amp; git merge <span class="variable">$cur_branch</span> &amp;&amp; git push origin &amp;&amp; git checkout <span class="variable">$cur_branch</span></div></pre></td></tr></table></figure>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;利用git-rev-parse&quot;&gt;利用git rev-parse&lt;/h2&gt;
-&lt;p&gt;刚来公司的时候，电脑上的项目运行环境还没有搭配好，一些前端的改动只能推到测试服务器上才能看见效果。因此在开发的时候要频繁地切换和合并开发分支到与测试环境的部署相关联的测试分支上,频繁
-    
-    </summary>
-    
-      <category term="Tips" scheme="http://hikerpig.github.io/categories/Tips/"/>
-    
-    
-      <category term="git" scheme="http://hikerpig.github.io/tags/git/"/>
-    
-      <category term="tip" scheme="http://hikerpig.github.io/tags/tip/"/>
     
   </entry>
   
@@ -781,7 +752,7 @@ more script tags here...</code></pre>
 <p>最近jsperf挂了, V2还在开发不太好用, 现在这里存个档。</p>
 <h2 id="使用benchmark.js测试性能">使用Benchmark.js测试性能</h2>
 <p>写一个小页面测试两种方法速度:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> suite = <span class="literal">null</span>;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">readFile</span>(<span class="params">file, method, deferred</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> fr = <span class="keyword">new</span> FileReader();</div><div class="line">    fr[method](file);</div><div class="line">    fr.onloadend = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      deferred.resolve();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">runSuite</span>(<span class="params">file</span>) </span>&#123;</div><div class="line">    suite = <span class="keyword">new</span> Benchmark.Suite(&#123;</div><div class="line">      <span class="attr">name</span>: <span class="string">'FileReader perf'</span></div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    suite</div><div class="line">      .add(<span class="string">'FileReader.readAsArrayBuffer'</span>, &#123;</div><div class="line">        <span class="attr">defer</span>: <span class="literal">true</span>,</div><div class="line">        <span class="attr">fn</span>: <span class="function"><span class="keyword">function</span>(<span class="params">deferred</span>) </span>&#123;</div><div class="line">          readFile(file, <span class="string">'readAsArrayBuffer'</span>, deferred);</div><div class="line">        &#125;</div><div class="line">      &#125;)</div><div class="line">      .add(<span class="string">'FileReader.readAsDataURL'</span>, &#123;</div><div class="line">        <span class="attr">defer</span>: <span class="literal">true</span>,</div><div class="line">        <span class="attr">fn</span>: <span class="function"><span class="keyword">function</span>(<span class="params">deferred</span>) </span>&#123;</div><div class="line">          readFile(file, <span class="string">'readAsDataURL'</span>, deferred);</div><div class="line">        &#125;</div><div class="line">      &#125;)</div><div class="line">      .on(<span class="string">'complete'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">evt</span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'completed'</span>);</div><div class="line">        <span class="keyword">this</span>.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">bench</span>) </span>&#123;</div><div class="line">          <span class="built_in">console</span>.log(<span class="string">'Bench: '</span>, bench.name);</div><div class="line">          <span class="built_in">console</span>.log(<span class="string">'Hz: '</span>, bench.hz);</div><div class="line">        &#125;);</div><div class="line">      &#125;)</div><div class="line">      .run();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">onFileChage</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> file = e.target.files[<span class="number">0</span>];</div><div class="line">    runSuite(file);</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'fileinput'</span>).addEventListener(<span class="string">'change'</span>, onFileChage);</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">var</span> suite = <span class="literal">null</span>;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">readFile</span>(<span class="params">file, method, deferred</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> fr = <span class="keyword">new</span> FileReader();</div><div class="line">    fr[method](file);</div><div class="line">    fr.onloadend = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      deferred.resolve();</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">runSuite</span>(<span class="params">file</span>) </span>&#123;</div><div class="line">    suite = <span class="keyword">new</span> Benchmark.Suite(&#123;</div><div class="line">      name: <span class="string">'FileReader perf'</span></div><div class="line">    &#125;);</div><div class="line"></div><div class="line">    suite</div><div class="line">      .add(<span class="string">'FileReader.readAsArrayBuffer'</span>, &#123;</div><div class="line">        defer: <span class="literal">true</span>,</div><div class="line">        fn: <span class="function"><span class="keyword">function</span>(<span class="params">deferred</span>) </span>&#123;</div><div class="line">          readFile(file, <span class="string">'readAsArrayBuffer'</span>, deferred);</div><div class="line">        &#125;</div><div class="line">      &#125;)</div><div class="line">      .add(<span class="string">'FileReader.readAsDataURL'</span>, &#123;</div><div class="line">        defer: <span class="literal">true</span>,</div><div class="line">        fn: <span class="function"><span class="keyword">function</span>(<span class="params">deferred</span>) </span>&#123;</div><div class="line">          readFile(file, <span class="string">'readAsDataURL'</span>, deferred);</div><div class="line">        &#125;</div><div class="line">      &#125;)</div><div class="line">      .on(<span class="string">'complete'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">evt</span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'completed'</span>);</div><div class="line">        <span class="keyword">this</span>.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">bench</span>) </span>&#123;</div><div class="line">          <span class="built_in">console</span>.log(<span class="string">'Bench: '</span>, bench.name);</div><div class="line">          <span class="built_in">console</span>.log(<span class="string">'Hz: '</span>, bench.hz);</div><div class="line">        &#125;);</div><div class="line">      &#125;)</div><div class="line">      .run();</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">function</span> <span class="title">onFileChage</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> file = e.target.files[<span class="number">0</span>];</div><div class="line">    runSuite(file);</div><div class="line">  &#125;</div><div class="line">  <span class="built_in">document</span>.getElementById(<span class="string">'fileinput'</span>).addEventListener(<span class="string">'change'</span>, onFileChage);</div><div class="line">&#125;)();</div></pre></td></tr></table></figure>
 <h2 id="结果">结果</h2>
 <p>在我的MBP上测试:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">== Firefox 39.0 ==</div><div class="line"></div><div class="line">&quot;Bench: &quot; &quot;FileReader.readAsArrayBuffer&quot;</div><div class="line">&quot;Hz: &quot; 2852.075550774104</div><div class="line">&quot;Bench: &quot; &quot;FileReader.readAsDataURL&quot;</div><div class="line">&quot;Hz: &quot; 967.485735798381</div><div class="line"></div><div class="line">== Chrome 43.0 ==</div><div class="line"></div><div class="line">Bench:  FileReader.readAsArrayBuffer</div><div class="line">Hz:  221.9625071172418</div><div class="line">Bench:  FileReader.readAsDataURL</div><div class="line">Hz:  206.2738933937363</div></pre></td></tr></table></figure>
@@ -857,7 +828,7 @@ more script tags here...</code></pre>
 <li><code>vim.current.buffer.mark</code> 获取当前缓冲区的某个mark信息, 下面我使用的mark(‘&lt;’)和mark(‘&gt;’)是比较特殊的,上一次visual selection的起止位置</li>
 <li><code>vim.current.window.cursor</code> 当前窗口下输入光标所在位置</li>
 </ul>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div></pre></td><td class="code"><pre><div class="line">if exists("g:loaded_require_formatter")</div><div class="line">  finish</div><div class="line">endif</div><div class="line">let g:loaded_require_formatter = 1</div><div class="line"></div><div class="line">"Function: :format</div><div class="line">"Desc: align the require statement</div><div class="line">"</div><div class="line">func! s:format()</div><div class="line">python &lt;&lt; EOF</div><div class="line"></div><div class="line">import vim</div><div class="line">import re</div><div class="line"></div><div class="line"># prepare</div><div class="line">buffer = vim.current.buffer</div><div class="line">require_pattern = re.compile(r'(?P&lt;left&gt;\s*[\w\d_]+\s?)=\s*require(?P&lt;right&gt;[\w\d\"\'\s\(\)\-\/]+)')</div><div class="line">assign_pattern = re.compile(r'(?P&lt;left&gt;\s*[\w\d_]+\s?)[=:]\s*(?P&lt;right&gt;[\w\d\"\'\s\(\)\-\/]+)')</div><div class="line">g_pattern = require_pattern</div><div class="line">g_matches = []</div><div class="line">g_seperator = '='</div><div class="line"></div><div class="line">vst = 0</div><div class="line">vend = 0</div><div class="line">start_mark = buffer.mark('&lt;')</div><div class="line">end_mark = buffer.mark('&gt;')</div><div class="line">if start_mark:</div><div class="line">  vst = start_mark[0] - 1</div><div class="line">if end_mark:</div><div class="line">  vst = end_mark[0]</div><div class="line">cursor = vim.current.window.cursor</div><div class="line">cend = cursor[0]</div><div class="line">lines = buffer[0:]</div><div class="line">g_start_line = 0</div><div class="line">if vst and vend:</div><div class="line">  if vend == cend:</div><div class="line">    lines = buffer[vst:vend]</div><div class="line">    g_start_line = vst</div><div class="line">    g_pattern = assign_pattern</div><div class="line">    g_seperator = re.compile('[=:]')</div><div class="line">    #print 'vstart is', vst</div><div class="line">    #print 'vend is', vend</div><div class="line">    #print lines</div><div class="line"></div><div class="line">def get_formated_line(text, left_len, seperator='='):</div><div class="line">    """</div><div class="line">    :text: &#123;str&#125;</div><div class="line">    :left_len: &#123;int&#125;</div><div class="line">    :returns: &#123;str&#125;</div><div class="line"></div><div class="line">    """</div><div class="line">    if hasattr(seperator, 'match'):</div><div class="line">      match = seperator.search(text)</div><div class="line">      if match:</div><div class="line">        epos = match.start()</div><div class="line">      else:</div><div class="line">        return text</div><div class="line">    else:</div><div class="line">      epos = text.find(seperator)</div><div class="line">    left_str = text[0:epos]</div><div class="line">    remained = text[epos:]</div><div class="line">    short_of_len = left_len - len(left_str)</div><div class="line">    if short_of_len &gt; 0:</div><div class="line">        to_append = []</div><div class="line">        for i in range(0, short_of_len):</div><div class="line">            to_append.append(' ')</div><div class="line">        to_append = ''.join(to_append)</div><div class="line">        text = left_str + to_append + remained</div><div class="line"></div><div class="line">    return text</div><div class="line"></div><div class="line">def start(lines):</div><div class="line">    max_left_len = 0</div><div class="line">    matched_linenos = []</div><div class="line">    for i, line in enumerate(lines):</div><div class="line">        matches = g_pattern.match(line)</div><div class="line">        if matches:</div><div class="line">            matched_linenos.append(i)</div><div class="line">            g_matches.append(matches)</div><div class="line">            gp_dict = matches.groupdict()</div><div class="line">            left = gp_dict.get('left')</div><div class="line">            if not left[-1] == ' ':</div><div class="line">              left += ' '</div><div class="line">            left_len = len(left)</div><div class="line">            max_left_len = max(max_left_len, left_len)</div><div class="line"></div><div class="line">    for i in matched_linenos:</div><div class="line">        line = lines[i]</div><div class="line">        fl = get_formated_line(line, max_left_len, seperator=g_seperator)</div><div class="line">        #print "formed_line is ", fl</div><div class="line"></div><div class="line">        # replace the line</div><div class="line">        real_lineno = i + g_start_line</div><div class="line">        del buffer[real_lineno]</div><div class="line">        buffer.append(fl, real_lineno)</div><div class="line"></div><div class="line"># start</div><div class="line">try:</div><div class="line">  start(lines)</div><div class="line">except Exception as exp:</div><div class="line">  print exp</div><div class="line"></div><div class="line">EOF</div><div class="line">endfunc</div><div class="line"></div><div class="line">" change this map if it conflicts with others</div><div class="line">map &lt;C-e&gt; :echo &lt;SID&gt;format()&lt;CR&gt;</div><div class="line"></div><div class="line">" 处于visual模式的时候会报range not allowed的错,</div><div class="line">" vmap的时候先退出v模式"</div><div class="line">vmap &lt;C-e&gt; &lt;Esc&gt;:echo &lt;SID&gt;format()&lt;CR&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> exists(<span class="string">"g:loaded_require_formatter"</span>)</div><div class="line">  finish</div><div class="line">endif</div><div class="line">let g:loaded_require_formatter = <span class="number">1</span></div><div class="line"></div><div class="line"><span class="string">"Function: :format</span></div><div class="line"><span class="string">"</span>Desc: align the require statement</div><div class="line"><span class="string">"</span></div><div class="line"><span class="string">func! s:format()</span></div><div class="line"><span class="string">python &lt;&lt; EOF</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">import vim</span></div><div class="line"><span class="string">import re</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string"># prepare</span></div><div class="line"><span class="string">buffer = vim.current.buffer</span></div><div class="line"><span class="string">require_pattern = re.compile(r'(?P&lt;left&gt;\s*[\w\d_]+\s?)=\s*require(?P&lt;right&gt;[\w\d\"\'\s\(\)\-\/]+)')</span></div><div class="line"><span class="string">assign_pattern = re.compile(r'(?P&lt;left&gt;\s*[\w\d_]+\s?)[=:]\s*(?P&lt;right&gt;[\w\d\"\'\s\(\)\-\/]+)')</span></div><div class="line"><span class="string">g_pattern = require_pattern</span></div><div class="line"><span class="string">g_matches = []</span></div><div class="line"><span class="string">g_seperator = '='</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">vst = 0</span></div><div class="line"><span class="string">vend = 0</span></div><div class="line"><span class="string">start_mark = buffer.mark('&lt;')</span></div><div class="line"><span class="string">end_mark = buffer.mark('&gt;')</span></div><div class="line"><span class="string">if start_mark:</span></div><div class="line"><span class="string">  vst = start_mark[0] - 1</span></div><div class="line"><span class="string">if end_mark:</span></div><div class="line"><span class="string">  vst = end_mark[0]</span></div><div class="line"><span class="string">cursor = vim.current.window.cursor</span></div><div class="line"><span class="string">cend = cursor[0]</span></div><div class="line"><span class="string">lines = buffer[0:]</span></div><div class="line"><span class="string">g_start_line = 0</span></div><div class="line"><span class="string">if vst and vend:</span></div><div class="line"><span class="string">  if vend == cend:</span></div><div class="line"><span class="string">    lines = buffer[vst:vend]</span></div><div class="line"><span class="string">    g_start_line = vst</span></div><div class="line"><span class="string">    g_pattern = assign_pattern</span></div><div class="line"><span class="string">    g_seperator = re.compile('[=:]')</span></div><div class="line"><span class="string">    #print 'vstart is', vst</span></div><div class="line"><span class="string">    #print 'vend is', vend</span></div><div class="line"><span class="string">    #print lines</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">def get_formated_line(text, left_len, seperator='='):</span></div><div class="line"><span class="string">    "</span><span class="string">""</span></div><div class="line">    :text: &#123;str&#125;</div><div class="line">    :left_len: &#123;int&#125;</div><div class="line">    :returns: &#123;str&#125;</div><div class="line"></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    if hasattr(seperator, 'match'):</span></div><div class="line"><span class="string">      match = seperator.search(text)</span></div><div class="line"><span class="string">      if match:</span></div><div class="line"><span class="string">        epos = match.start()</span></div><div class="line"><span class="string">      else:</span></div><div class="line"><span class="string">        return text</span></div><div class="line"><span class="string">    else:</span></div><div class="line"><span class="string">      epos = text.find(seperator)</span></div><div class="line"><span class="string">    left_str = text[0:epos]</span></div><div class="line"><span class="string">    remained = text[epos:]</span></div><div class="line"><span class="string">    short_of_len = left_len - len(left_str)</span></div><div class="line"><span class="string">    if short_of_len &gt; 0:</span></div><div class="line"><span class="string">        to_append = []</span></div><div class="line"><span class="string">        for i in range(0, short_of_len):</span></div><div class="line"><span class="string">            to_append.append(' ')</span></div><div class="line"><span class="string">        to_append = ''.join(to_append)</span></div><div class="line"><span class="string">        text = left_str + to_append + remained</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    return text</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">def start(lines):</span></div><div class="line"><span class="string">    max_left_len = 0</span></div><div class="line"><span class="string">    matched_linenos = []</span></div><div class="line"><span class="string">    for i, line in enumerate(lines):</span></div><div class="line"><span class="string">        matches = g_pattern.match(line)</span></div><div class="line"><span class="string">        if matches:</span></div><div class="line"><span class="string">            matched_linenos.append(i)</span></div><div class="line"><span class="string">            g_matches.append(matches)</span></div><div class="line"><span class="string">            gp_dict = matches.groupdict()</span></div><div class="line"><span class="string">            left = gp_dict.get('left')</span></div><div class="line"><span class="string">            if not left[-1] == ' ':</span></div><div class="line"><span class="string">              left += ' '</span></div><div class="line"><span class="string">            left_len = len(left)</span></div><div class="line"><span class="string">            max_left_len = max(max_left_len, left_len)</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    for i in matched_linenos:</span></div><div class="line"><span class="string">        line = lines[i]</span></div><div class="line"><span class="string">        fl = get_formated_line(line, max_left_len, seperator=g_seperator)</span></div><div class="line"><span class="string">        #print "formed_line is ", fl</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        # replace the line</span></div><div class="line"><span class="string">        real_lineno = i + g_start_line</span></div><div class="line"><span class="string">        del buffer[real_lineno]</span></div><div class="line"><span class="string">        buffer.append(fl, real_lineno)</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string"># start</span></div><div class="line"><span class="string">try:</span></div><div class="line"><span class="string">  start(lines)</span></div><div class="line"><span class="string">except Exception as exp:</span></div><div class="line"><span class="string">  print exp</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">EOF</span></div><div class="line"><span class="string">endfunc</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" change this map if it conflicts with others</span></div><div class="line"><span class="string">map &lt;C-e&gt; :echo &lt;SID&gt;format()&lt;CR&gt;</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">" 处于visual模式的时候会报range not allowed的错,</span></div><div class="line"><span class="string">" vmap的时候先退出v模式"</span></div><div class="line"><span class="string">vmap &lt;C-e&gt; &lt;Esc&gt;:echo &lt;SID&gt;format()&lt;CR&gt;</span></div></pre></td></tr></table></figure>
 <p>这样在normal和visual模式下都可以轻松对齐了。</p>
 <h2 id="参考文章">参考文章</h2>
 <ul>
@@ -1066,6 +1037,94 @@ more script tags here...</code></pre>
   </entry>
   
   <entry>
+    <title>用node schedule简单地实现定时跑脚本功能</title>
+    <link href="http://hikerpig.github.io/2015/01/28/2014-04-21-%E7%94%A8node-schedule%E7%AE%80%E5%8D%95%E5%9C%B0%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E8%B7%91%E8%84%9A%E6%9C%AC%E5%8A%9F%E8%83%BD/"/>
+    <id>http://hikerpig.github.io/2015/01/28/2014-04-21-用node-schedule简单地实现定时跑脚本功能/</id>
+    <published>2015-01-28T04:09:59.000Z</published>
+    <updated>2015-01-28T04:09:59.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="" title="https://github.com/mattpat/node-schedule">node-schedule</a>是一个用node实现的任务调度系统，比起不太好配置的crontab，用来管理同用javascript写的定时脚本实在是再合适不过。</p>
+<p>以下是为之前的<a href="!--￼2--">虾米签到脚本</a>写的task runner:</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">schedule = <span class="built_in">require</span> <span class="string">'node-schedule'</span></div><div class="line">process = <span class="built_in">require</span> <span class="string">'child_process'</span></div><div class="line">fs = <span class="built_in">require</span> <span class="string">'fs'</span></div><div class="line"></div><div class="line">log = <span class="literal">null</span></div><div class="line"></div><div class="line">rule = <span class="keyword">new</span> schedule.RecurrenceRule()</div><div class="line"></div><div class="line"><span class="keyword">if</span> process.env <span class="keyword">is</span> <span class="string">'development'</span></div><div class="line">  rule.second = <span class="number">1</span> <span class="comment"># 每隔一分钟，测试用</span></div><div class="line"><span class="keyword">else</span></div><div class="line">  rule.hour = <span class="number">1</span> <span class="comment"># 凌晨1点签到</span></div><div class="line"></div><div class="line"><span class="comment"># 写入log文件中</span></div><div class="line"><span class="function"><span class="title">writeLog</span> = <span class="params">(text)</span>-&gt;</span></div><div class="line">  log = fs.createWriteStream(<span class="string">'log.txt'</span>, &#123;<span class="string">'flags'</span>: <span class="string">'a'</span>, encoding: <span class="string">'utf-8'</span>&#125;)</div><div class="line">  log.end(text)</div><div class="line"></div><div class="line"><span class="function"><span class="title">run</span> = <span class="params">()</span>-&gt;</span></div><div class="line">  child = process.spawn <span class="string">'casperjs'</span>, [<span class="string">'xiami_casper.coffee'</span>]</div><div class="line"></div><div class="line">  child.stdout.<span class="literal">on</span>(<span class="string">'data'</span>, <span class="function"><span class="params">(data)</span>-&gt;</span></div><div class="line">    text = <span class="keyword">new</span> Date() + data.toString()</div><div class="line">    writeLog(text)</div><div class="line">    <span class="built_in">console</span>.log text</div><div class="line">  )</div><div class="line"></div><div class="line">  child.stdout.<span class="literal">on</span>(<span class="string">'end'</span>, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">    writeLog(<span class="string">"Run job on <span class="subst">#&#123;<span class="keyword">new</span> Date().toString()&#125;</span>"</span>)</div><div class="line">  )</div><div class="line"></div><div class="line">  child.<span class="literal">on</span> <span class="string">'error'</span>, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">    <span class="built_in">console</span>.log arguments</div><div class="line"></div><div class="line">job = schedule.scheduleJob(rule, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">  run()</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>上传到vps上，用forever来启动runner长时间运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">forever start -c coffee schedule_runner.coffee</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;a href=&quot;&quot; title=&quot;https://github.com/mattpat/node-schedule&quot;&gt;node-schedule&lt;/a&gt;是一个用node实现的任务调度系统，比起不太好配置的crontab，用来管理同用javascript写的定时脚本实在是再
+    
+    </summary>
+    
+      <category term="玩具" scheme="http://hikerpig.github.io/categories/%E7%8E%A9%E5%85%B7/"/>
+    
+    
+      <category term="Node" scheme="http://hikerpig.github.io/tags/Node/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>放过Pygments,让Prism来给Jekyll博客加上代码高亮</title>
+    <link href="http://hikerpig.github.io/2015/01/28/2014-03-31-%E6%94%BE%E8%BF%87Pygments/"/>
+    <id>http://hikerpig.github.io/2015/01/28/2014-03-31-放过Pygments/</id>
+    <published>2015-01-28T04:09:59.000Z</published>
+    <updated>2015-01-28T04:09:59.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>jekyll目前至少支持Redcarpet和RDiscount以及kramadown几种类markdown引擎，</p>
+<ul>
+<li><p>rdiscount 是基于C实现的 markdown 引擎 discount 的ruby调用，优点不用说也知道就是快。缺点是扩展性差(不过要扩展的功能也能通过jekyll的插件来实现)，关于discount的语法可以去看看<a href="http://www.pell.portland.or.us/~orc/Code/discount" target="_blank" rel="external">discount主页</a>或者<a href="http://baige5117.github.io/blog/rdiscount.html" target="_blank" rel="external">国内的一篇介绍</a>。</p></li>
+<li><p>Redcarpet 就是大家喜闻乐见的Github Flavored Markdown, 有个好东家, 基于ruby实现，易于扩展，插件也貌似比较多。</p></li>
+</ul>
+<p>kramadown没有了解，不过估计应该像前两者一样都支持Fenced code block, 我选择的是Redcarpet, 在用一对三个反引号包裹代码块上附加的文本会被认为是代码高亮的提示，输出html的时候它会被转为class属性。</p>
+<p>例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'测试code block'</span>);</div></pre></td></tr></table></figure>
+<p>输出结果为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;pre&gt;</div><div class="line">  &lt;code class=&quot;js&quot;&gt;</div><div class="line">    console.log(&apos;测试code block&apos;);</div><div class="line">  &lt;/code&gt;</div><div class="line">&lt;/pre&gt;</div></pre></td></tr></table></figure>
+<h2 id="后端的处理">后端的处理</h2>
+<p>首先在jekyll的站点设置文件<code>_config.yml</code>里关闭pygment:</p>
+<pre><code>pygment:  false</code></pre>
+<h2 id="前端的处理">## 前端的处理</h2>
+<h3 id="css">CSS</h3>
+<p>Prism内置多种主题都挺好看，我选择了prism-okaidia的样式文件。</p>
+<p>Prism在处理完高亮的时候，是根据代码块的<code>language-*</code>类名来选择对应语言的语法的。难道我们写文章的时候还要在每个高亮文法前都加上这个后缀么？No no，因为我们是懒人，绝对没门。因此在让Prism执行高亮之前，我们还得做一些小小的处理:</p>
+<h3 id="javascript">javascript</h3>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">_prismHandler = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  $(<span class="string">'code'</span>).not(<span class="string">'[class*="language-"]'</span>).addClass(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> _lang = $(<span class="keyword">this</span>).attr(<span class="string">'class'</span>)  || <span class="string">'markup'</span>; <span class="comment">// 默认为markdown语法</span></div><div class="line">    _lang = _lang.replace(<span class="regexp">/(language|lang)+\-/gi</span>, <span class="string">''</span>);</div><div class="line">    <span class="keyword">return</span> <span class="string">'language-'</span> + (Prism.languages.hasOwnProperty(_lang) ? _lang : <span class="string">'markup'</span>);</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  Prism.highlightAll();</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>激动人心的时刻到来了：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$(<span class="built_in">document</span>).ready(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  _prismHandler();</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h1 id="为什么折腾">为什么折腾</h1>
+<p>除了因为作为菜鸟前端的局限外(感觉自己捅自己好轻松啊),折腾一番的好处当然就是，把代码高亮的任务转移给了客户端，每次重新生成网站的时候速度就xiu xiu xiu地上去了。</p>
+<p>选择Prism是因为当初看<a href="https://developer.mozilla.org" target="_blank" rel="external">MDN</a>教程的时候觉得代码块的配色实在是太美丽（因为作者也是个美丽的程序媛？）, 等宽字体Consolas非常舒适。</p>
+<p>不过说起来Prism好段时间没有更新，对于语言的支持也不是很完善（当然它有不错的<a href="http://prismjs.com/extending.html" target="_blank" rel="external">扩展机制</a>，你完全可以自己写一个语言的关键词定义)。如果哪天折腾之魂又出现了的话，可以尝试下用<a href="http://highlightjs.org/" target="_blank" rel="external">Highlight</a>，目前支持51种语言和20多种主题配色，官网也有方便的自定义包下载，让你在学习新语言的时候也能够满足漂漂亮亮地晒漂亮代码的需求（高手们真的care这个事情么= =）。</p>
+<h1 id="补充一下">补充一下</h1>
+<h2 id="prism-的不足">Prism 的不足</h2>
+<p>这个项目的维护得不是很频繁，试用了一下除了html、javascript、css以外的几种语言，感觉结果都不是特别精确，请看我的更新文章。</p>
+<h1 id="参考文章">参考文章</h1>
+<ul>
+<li><a href="http://www.pell.portland.or.us/~orc/Code/discount" target="_blank" rel="external">discount主页</a> discount 跟标准markdown的区别</li>
+<li><a href="http://baige5117.github.io/blog/rdiscount.html" target="_blank" rel="external">discount_brief</a> 国内的一篇介绍文章</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;jekyll目前至少支持Redcarpet和RDiscount以及kramadown几种类markdown引擎，&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;rdiscount 是基于C实现的 markdown 引擎 discount 的ruby调用，优点不用说也知道就是快。缺点是扩展
+    
+    </summary>
+    
+      <category term="工具" scheme="http://hikerpig.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
+    
+    
+      <category term="jekyll" scheme="http://hikerpig.github.io/tags/jekyll/"/>
+    
+      <category term="外貌协会" scheme="http://hikerpig.github.io/tags/%E5%A4%96%E8%B2%8C%E5%8D%8F%E4%BC%9A/"/>
+    
+      <category term="折腾" scheme="http://hikerpig.github.io/tags/%E6%8A%98%E8%85%BE/"/>
+    
+  </entry>
+  
+  <entry>
     <title>用 ssh reverse tunnel 调用远程服务器的剪切板使用</title>
     <link href="http://hikerpig.github.io/2015/01/28/2014-04-10-%E7%94%A8ssh-reverse-tunnel%E8%B0%83%E7%94%A8%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%89%AA%E5%88%87%E6%9D%BF%E4%BD%BF%E7%94%A8/"/>
     <id>http://hikerpig.github.io/2015/01/28/2014-04-10-用ssh-reverse-tunnel调用远程服务器的剪切板使用/</id>
@@ -1154,94 +1213,6 @@ more script tags here...</code></pre>
   </entry>
   
   <entry>
-    <title>放过Pygments,让Prism来给Jekyll博客加上代码高亮</title>
-    <link href="http://hikerpig.github.io/2015/01/28/2014-03-31-%E6%94%BE%E8%BF%87Pygments/"/>
-    <id>http://hikerpig.github.io/2015/01/28/2014-03-31-放过Pygments/</id>
-    <published>2015-01-28T04:09:59.000Z</published>
-    <updated>2015-01-28T04:09:59.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>jekyll目前至少支持Redcarpet和RDiscount以及kramadown几种类markdown引擎，</p>
-<ul>
-<li><p>rdiscount 是基于C实现的 markdown 引擎 discount 的ruby调用，优点不用说也知道就是快。缺点是扩展性差(不过要扩展的功能也能通过jekyll的插件来实现)，关于discount的语法可以去看看<a href="http://www.pell.portland.or.us/~orc/Code/discount" target="_blank" rel="external">discount主页</a>或者<a href="http://baige5117.github.io/blog/rdiscount.html" target="_blank" rel="external">国内的一篇介绍</a>。</p></li>
-<li><p>Redcarpet 就是大家喜闻乐见的Github Flavored Markdown, 有个好东家, 基于ruby实现，易于扩展，插件也貌似比较多。</p></li>
-</ul>
-<p>kramadown没有了解，不过估计应该像前两者一样都支持Fenced code block, 我选择的是Redcarpet, 在用一对三个反引号包裹代码块上附加的文本会被认为是代码高亮的提示，输出html的时候它会被转为class属性。</p>
-<p>例如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'测试code block'</span>);</div></pre></td></tr></table></figure>
-<p>输出结果为:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;pre&gt;</div><div class="line">  &lt;code class=&quot;js&quot;&gt;</div><div class="line">    console.log(&apos;测试code block&apos;);</div><div class="line">  &lt;/code&gt;</div><div class="line">&lt;/pre&gt;</div></pre></td></tr></table></figure>
-<h2 id="后端的处理">后端的处理</h2>
-<p>首先在jekyll的站点设置文件<code>_config.yml</code>里关闭pygment:</p>
-<pre><code>pygment:  false</code></pre>
-<h2 id="前端的处理">## 前端的处理</h2>
-<h3 id="css">CSS</h3>
-<p>Prism内置多种主题都挺好看，我选择了prism-okaidia的样式文件。</p>
-<p>Prism在处理完高亮的时候，是根据代码块的<code>language-*</code>类名来选择对应语言的语法的。难道我们写文章的时候还要在每个高亮文法前都加上这个后缀么？No no，因为我们是懒人，绝对没门。因此在让Prism执行高亮之前，我们还得做一些小小的处理:</p>
-<h3 id="javascript">javascript</h3>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">_prismHandler = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  $(<span class="string">'code'</span>).not(<span class="string">'[class*="language-"]'</span>).addClass(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> _lang = $(<span class="keyword">this</span>).attr(<span class="string">'class'</span>)  || <span class="string">'markup'</span>; <span class="comment">// 默认为markdown语法</span></div><div class="line">    _lang = _lang.replace(<span class="regexp">/(language|lang)+\-/gi</span>, <span class="string">''</span>);</div><div class="line">    <span class="keyword">return</span> <span class="string">'language-'</span> + (Prism.languages.hasOwnProperty(_lang) ? _lang : <span class="string">'markup'</span>);</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  Prism.highlightAll();</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>激动人心的时刻到来了：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$(<span class="built_in">document</span>).ready(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  _prismHandler();</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h1 id="为什么折腾">为什么折腾</h1>
-<p>除了因为作为菜鸟前端的局限外(感觉自己捅自己好轻松啊),折腾一番的好处当然就是，把代码高亮的任务转移给了客户端，每次重新生成网站的时候速度就xiu xiu xiu地上去了。</p>
-<p>选择Prism是因为当初看<a href="https://developer.mozilla.org" target="_blank" rel="external">MDN</a>教程的时候觉得代码块的配色实在是太美丽（因为作者也是个美丽的程序媛？）, 等宽字体Consolas非常舒适。</p>
-<p>不过说起来Prism好段时间没有更新，对于语言的支持也不是很完善（当然它有不错的<a href="http://prismjs.com/extending.html" target="_blank" rel="external">扩展机制</a>，你完全可以自己写一个语言的关键词定义)。如果哪天折腾之魂又出现了的话，可以尝试下用<a href="http://highlightjs.org/" target="_blank" rel="external">Highlight</a>，目前支持51种语言和20多种主题配色，官网也有方便的自定义包下载，让你在学习新语言的时候也能够满足漂漂亮亮地晒漂亮代码的需求（高手们真的care这个事情么= =）。</p>
-<h1 id="补充一下">补充一下</h1>
-<h2 id="prism-的不足">Prism 的不足</h2>
-<p>这个项目的维护得不是很频繁，试用了一下除了html、javascript、css以外的几种语言，感觉结果都不是特别精确，请看我的更新文章。</p>
-<h1 id="参考文章">参考文章</h1>
-<ul>
-<li><a href="http://www.pell.portland.or.us/~orc/Code/discount" target="_blank" rel="external">discount主页</a> discount 跟标准markdown的区别</li>
-<li><a href="http://baige5117.github.io/blog/rdiscount.html" target="_blank" rel="external">discount_brief</a> 国内的一篇介绍文章</li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;jekyll目前至少支持Redcarpet和RDiscount以及kramadown几种类markdown引擎，&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;rdiscount 是基于C实现的 markdown 引擎 discount 的ruby调用，优点不用说也知道就是快。缺点是扩展
-    
-    </summary>
-    
-      <category term="工具" scheme="http://hikerpig.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
-    
-    
-      <category term="jekyll" scheme="http://hikerpig.github.io/tags/jekyll/"/>
-    
-      <category term="外貌协会" scheme="http://hikerpig.github.io/tags/%E5%A4%96%E8%B2%8C%E5%8D%8F%E4%BC%9A/"/>
-    
-      <category term="折腾" scheme="http://hikerpig.github.io/tags/%E6%8A%98%E8%85%BE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>用node schedule简单地实现定时跑脚本功能</title>
-    <link href="http://hikerpig.github.io/2015/01/28/2014-04-21-%E7%94%A8node-schedule%E7%AE%80%E5%8D%95%E5%9C%B0%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E8%B7%91%E8%84%9A%E6%9C%AC%E5%8A%9F%E8%83%BD/"/>
-    <id>http://hikerpig.github.io/2015/01/28/2014-04-21-用node-schedule简单地实现定时跑脚本功能/</id>
-    <published>2015-01-28T04:09:59.000Z</published>
-    <updated>2015-01-28T04:09:59.000Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="" title="https://github.com/mattpat/node-schedule">node-schedule</a>是一个用node实现的任务调度系统，比起不太好配置的crontab，用来管理同用javascript写的定时脚本实在是再合适不过。</p>
-<p>以下是为之前的<a href="!--￼2--">虾米签到脚本</a>写的task runner:</p>
-<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">schedule = <span class="built_in">require</span> <span class="string">'node-schedule'</span></div><div class="line">process = <span class="built_in">require</span> <span class="string">'child_process'</span></div><div class="line">fs = <span class="built_in">require</span> <span class="string">'fs'</span></div><div class="line"></div><div class="line">log = <span class="literal">null</span></div><div class="line"></div><div class="line">rule = <span class="keyword">new</span> schedule.RecurrenceRule()</div><div class="line"></div><div class="line"><span class="keyword">if</span> process.env <span class="keyword">is</span> <span class="string">'development'</span></div><div class="line">  rule.second = <span class="number">1</span> <span class="comment"># 每隔一分钟，测试用</span></div><div class="line"><span class="keyword">else</span></div><div class="line">  rule.hour = <span class="number">1</span> <span class="comment"># 凌晨1点签到</span></div><div class="line"></div><div class="line"><span class="comment"># 写入log文件中</span></div><div class="line"><span class="function"><span class="title">writeLog</span> = <span class="params">(text)</span>-&gt;</span></div><div class="line">  log = fs.createWriteStream(<span class="string">'log.txt'</span>, &#123;<span class="string">'flags'</span>: <span class="string">'a'</span>, encoding: <span class="string">'utf-8'</span>&#125;)</div><div class="line">  log.end(text)</div><div class="line"><span class="function"></span></div><div class="line"><span class="title">run</span> = <span class="params">()</span>-&gt;</div><div class="line">  child = process.spawn <span class="string">'casperjs'</span>, [<span class="string">'xiami_casper.coffee'</span>]</div><div class="line"></div><div class="line">  child.stdout.<span class="literal">on</span>(<span class="string">'data'</span>, <span class="function"><span class="params">(data)</span>-&gt;</span></div><div class="line">    text = <span class="keyword">new</span> Date() + data.toString()</div><div class="line">    writeLog(text)</div><div class="line">    <span class="built_in">console</span>.log text</div><div class="line">  )</div><div class="line"></div><div class="line">  child.stdout.<span class="literal">on</span>(<span class="string">'end'</span>, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">    writeLog(<span class="string">"Run job on <span class="subst">#&#123;<span class="keyword">new</span> Date().toString()&#125;</span>"</span>)</div><div class="line">  )</div><div class="line"></div><div class="line">  child.<span class="literal">on</span> <span class="string">'error'</span>, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">    <span class="built_in">console</span>.log arguments</div><div class="line"></div><div class="line">job = schedule.scheduleJob(rule, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">  run()</div><div class="line">)</div></pre></td></tr></table></figure>
-<p>上传到vps上，用forever来启动runner长时间运行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">forever start -c coffee schedule_runner.coffee</div></pre></td></tr></table></figure>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;a href=&quot;&quot; title=&quot;https://github.com/mattpat/node-schedule&quot;&gt;node-schedule&lt;/a&gt;是一个用node实现的任务调度系统，比起不太好配置的crontab，用来管理同用javascript写的定时脚本实在是再
-    
-    </summary>
-    
-      <category term="玩具" scheme="http://hikerpig.github.io/categories/%E7%8E%A9%E5%85%B7/"/>
-    
-    
-      <category term="Node" scheme="http://hikerpig.github.io/tags/Node/"/>
-    
-  </entry>
-  
-  <entry>
     <title>Lodash和Underscore的小小区别</title>
     <link href="http://hikerpig.github.io/2015/01/28/2014-03-16-Lodash%E5%92%8CUnderscore%E7%9A%84%E5%B0%8F%E5%B0%8F%E5%8C%BA%E5%88%AB/"/>
     <id>http://hikerpig.github.io/2015/01/28/2014-03-16-Lodash和Underscore的小小区别/</id>
@@ -1272,27 +1243,6 @@ more script tags here...</code></pre>
       <category term="Javascript" scheme="http://hikerpig.github.io/tags/Javascript/"/>
     
       <category term="Coffeescript" scheme="http://hikerpig.github.io/tags/Coffeescript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title></title>
-    <link href="http://hikerpig.github.io/2015/01/28/scrollbar/"/>
-    <id>http://hikerpig.github.io/2015/01/28/scrollbar/</id>
-    <published>2015-01-28T04:09:59.000Z</published>
-    <updated>2015-01-28T04:09:59.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>scrollbar样式</p>
-<figure class="highlight css"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="selector-id">#right</span> <span class="selector-class">.insp</span><span class="selector-pseudo">::-webkit-scrollbar-thumb</span><span class="selector-pseudo">:vertical</span> &#123;</div><div class="line">    <span class="attribute">background</span>: transparent <span class="built_in">url</span>(<span class="string">'../img/scroll.png'</span>) no-repeat;</div><div class="line">    <span class="attribute">background-size</span>: <span class="number">30px</span> <span class="number">30px</span>;</div><div class="line">    <span class="attribute">min-height</span>: <span class="number">30px</span>;</div><div class="line">    <span class="attribute">min-width</span>: <span class="number">30px</span>;</div><div class="line">    <span class="attribute">display</span>: block</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;scrollbar样式&lt;/p&gt;
-&lt;figure class=&quot;highlight css&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div c
-    
-    </summary>
-    
     
   </entry>
   
@@ -1409,6 +1359,78 @@ more script tags here...</code></pre>
     
     
       <category term="Git" scheme="http://hikerpig.github.io/tags/Git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>git小技巧七七八八</title>
+    <link href="http://hikerpig.github.io/2014/03/21/2014-03-21-git%E5%B0%8F%E6%8A%80%E5%B7%A7%E4%B8%83%E4%B8%83%E5%85%AB%E5%85%AB/"/>
+    <id>http://hikerpig.github.io/2014/03/21/2014-03-21-git小技巧七七八八/</id>
+    <published>2014-03-21T02:09:12.000Z</published>
+    <updated>2017-07-30T10:52:56.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="利用git-rev-parse">利用git rev-parse</h2>
+<p>刚来公司的时候，电脑上的项目运行环境还没有搭配好，一些前端的改动只能推到测试服务器上才能看见效果。因此在开发的时候要频繁地切换和合并开发分支到与测试环境的部署相关联的测试分支上,频繁地手敲命令checkout -&gt; pull -&gt; 等代码p…pu…pul…pulled-&gt; merge-&gt; oh conflict!-&gt; fix conflict -&gt; push -&gt; checkout 然后才查看页面继续开发。 前面的各种点点点急刹人,于是我写了个小脚本,省下了敲分支名的时间:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/zsh</span></div><div class="line">cur_branch=`git rev-parse --abbrev-ref HEAD`</div><div class="line">git checkout develop &amp;&amp; git pull &amp;&amp; git merge <span class="variable">$cur_branch</span> &amp;&amp; git push origin &amp;&amp; git checkout <span class="variable">$cur_branch</span></div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;利用git-rev-parse&quot;&gt;利用git rev-parse&lt;/h2&gt;
+&lt;p&gt;刚来公司的时候，电脑上的项目运行环境还没有搭配好，一些前端的改动只能推到测试服务器上才能看见效果。因此在开发的时候要频繁地切换和合并开发分支到与测试环境的部署相关联的测试分支上,频繁
+    
+    </summary>
+    
+      <category term="Tips" scheme="http://hikerpig.github.io/categories/Tips/"/>
+    
+    
+      <category term="git" scheme="http://hikerpig.github.io/tags/git/"/>
+    
+      <category term="tip" scheme="http://hikerpig.github.io/tags/tip/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Web开发国内常用源</title>
+    <link href="http://hikerpig.github.io/2013/12/14/2014-03-26-web%E5%BC%80%E5%8F%91%E5%9B%BD%E5%86%85%E5%B8%B8%E7%94%A8%E6%BA%90/"/>
+    <id>http://hikerpig.github.io/2013/12/14/2014-03-26-web开发国内常用源/</id>
+    <published>2013-12-14T02:09:12.000Z</published>
+    <updated>2015-02-05T04:09:46.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>国内配置开发环境的时候经常会要用到的这几个源, thanks to G*F*W ，我们自行get找国内镜像的能力:</p>
+<h3 id="python-pypi-pip">Python PyPI (pip)</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ nano ~/.pip/pip.conf</div></pre></td></tr></table></figure>
+<p>添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[global]</div><div class="line">index-url = http://pypi.douban.com/simple</div></pre></td></tr></table></figure>
+<h3 id="node-npm">Node NPM</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ nano ~/.npmrc</div></pre></td></tr></table></figure>
+<p>添加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">registry = http://registry.cnpmjs.org</div></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="http://cnpmjs.org/" target="_blank" rel="external">CNPM的源</a></p>
+</blockquote>
+<h3 id="rvm-and-ruby-gem">RVM and Ruby gem</h3>
+<h5 id="rvm">RVM</h5>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sed -i .bak <span class="string">'s!cache.ruby-lang.org/pub/ruby!ruby.taobao.org/mirrors/ruby!'</span> <span class="variable">$rvm_path</span>/config/db</div></pre></td></tr></table></figure>
+<h5 id="ruby-gem">Ruby Gem</h5>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ gem sources --remove https://rubygems.org/</div><div class="line">$ gem sources -a http://ruby.taobao.org/</div></pre></td></tr></table></figure>
+<blockquote>
+<p><a href="http://ruby.taobao.org/" target="_blank" rel="external">淘宝源</a></p>
+</blockquote>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;国内配置开发环境的时候经常会要用到的这几个源, thanks to G*F*W ，我们自行get找国内镜像的能力:&lt;/p&gt;
+&lt;h3 id=&quot;python-pypi-pip&quot;&gt;Python PyPI (pip)&lt;/h3&gt;
+&lt;figure class=&quot;highlight ba
+    
+    </summary>
+    
+      <category term="资源" scheme="http://hikerpig.github.io/categories/%E8%B5%84%E6%BA%90/"/>
+    
+    
+      <category term="NPM" scheme="http://hikerpig.github.io/tags/NPM/"/>
     
   </entry>
   
