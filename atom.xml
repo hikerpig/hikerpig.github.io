@@ -15,6 +15,85 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>Holy Awesome Spacemacs</title>
+    <link href="http://hikerpig.github.io/2017/08/06/2017-08-05-Holy-Awesome-Spacemacs/"/>
+    <id>http://hikerpig.github.io/2017/08/06/2017-08-05-Holy-Awesome-Spacemacs/</id>
+    <published>2017-08-06T08:48:09.000Z</published>
+    <updated>2017-08-06T08:48:09.000Z</updated>
+    
+    <content type="html"><![CDATA[<div class="figure">
+<img src="http://spacemacs.org/img/logo.svg">
+
+</div>
+<p>很久以前看 SICP 的时候尝试在 windows 下使用 emacs 时受到了惊吓，那刀耕火种一般的界面啊。后来在 Ubuntu 终端中打开，诶？怎么关不掉？不掉？掉？（其实 Vim 也一样，小白终结者）</p>
+<!-- ![刀耕火种的GUI](http://www.qaforcode.net/wp-content/uploads/2012/11/emacs.png) -->
+<p>但是看完<a href="https://www.zhihu.com/question/29692328" target="_blank" rel="external">如何评价 Emacs 的配置文件 Spacemacs？</a>以及身边多人的安利后，心痒痒地尝试了下，从一个外行人眼里看来，简直是 Emacs 界的一股清流，史诗级的配置工程。</p>
+<h1 id="安装">安装</h1>
+<p>鉴于有 Every thing in Emacs 的传统，选择了可以不光在终端里使用，便安装了带有 Mac GUI 系统支持的 Emacs：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install emacs --with-cocoa</div></pre></td></tr></table></figure>
+<h2 id="spacemacs">Spacemacs</h2>
+<p>完全没有历史的 <code>.emacs.d</code> 包袱，一键安装</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d</div></pre></td></tr></table></figure>
+<h1 id="开始使用">开始使用</h1>
+<p>还想说打开速度果然比 Vim 慢了不少，但是慢慢使用着发现，考虑到这些巨量的功能以及超棒的体验来说，等得太值了。重点是，<strong>开箱即用</strong>。</p>
+<p>选择了 Setup Guile 中提示了相对较重的 <code>helm</code> layer，以及开了其他七八个 layer。不考虑首次安装插件的时间，之后平均启动时间在15秒内。</p>
+<p>然后开始领教 Emacs 的能量：</p>
+<h1 id="org-mode">org-mode</h1>
+<p>江湖相传能用于<a href="http://docs.huihoo.com/open-source/guide/ch32.html" target="_blank" rel="external">组织你的意念</a>的“文档/知识/日程/<del>人生</del>管理工具”，神级插件。</p>
+<p>在这之前，使用 <a href="http://vimwiki.github.io" target="_blank" rel="external">Vimwiki</a> 管理个人知识，在 Vim 里的表现也是很棒的，但是折腾起来总有几点不甚满意，但在 org-mode 下找到了完美的解决方案。</p>
+<h2 id="文档转换">文档转换</h2>
+<p>在 Markdown 大行其道的今天，还需要单独去记忆 Vimwiki 自己的语法，有时候转不过弯来。还有，有时候一些收集性质的笔记，需要从 html 转换过来，Vimwiki 在这方面相关工具比较匮乏。</p>
+<p><code>org-mode</code> 虽说也是自成一派的语法，但是相关工具链非常完善，与各种文档格式互转毫无压力，例如 <a href="https://github.com/fasheng/vimwiki2org" target="_blank" rel="external">vimwiki2org</a>。</p>
+<p>当需要集成现有工具到编辑器里时，一边是定义清晰、文档完善、继承了 Lisp 系美感的 Emacs Lisp ，和时常让人呼唤神兽的 Vim Script。</p>
+<h2 id="代码块支持">代码块支持</h2>
+<p>在 Vimwiki 里插入和查阅代码块的体验，纯粹而贫乏。</p>
+<p>同样一个 python 代码块，在 Vimwiki 里：</p>
+<img src="http://images-hikerpig.qiniudn.com/image/emacs/vimwiki-code.png" alt="undefined">
+<p>而在 org-mode 当中一切都很行云流水</p>
+<img src="http://images-hikerpig.qiniudn.com/image/emacs/org-mode-code.png" alt="undefined">
+<h2 id="其他优点">其他优点</h2>
+<p>包括但不限于：</p>
+<ul>
+<li>所见即所得，默认情况下 live preview，不会生成多余文件</li>
+<li>强大的链接系统，直接跳转至多种形式的内外链接</li>
+<li>强大的日程规划功能</li>
+</ul>
+<h1 id="helm">helm</h1>
+<p><a href="http://tuhdo.github.io/helm-intro.html" target="_blank" rel="external">A Package in a league of its own: Helm</a></p>
+<p>交互形式让我想起了 Vim 下的 <code>ctrlp</code> 和 <code>unite</code>，但是能做的事情更多，而且扩展性更好。</p>
+<p>除了能找到任何文件外，还能找个任何一个命令，再也不用记那么多 <code>M-x</code> 命令了，再也不用担心小拇指受伤了。</p>
+<div class="figure">
+<img src="https://dn-linuxcn.qbox.me/data/attachment/album/201601/15/103214s4z77zo4pimefccm.jpg" alt="From linux.cn">
+<p class="caption">From linux.cn</p>
+</div>
+<h1 id="scala-mode-以及-ensime">scala-mode 以及 ensime</h1>
+<p>在做 Coursera 上 Scala 课程作业的时候试了一下。<a href="http://ensime.org/" target="_blank" rel="external">Ensime</a> 的 Emacs 插件完成度<a href="http://ensime.org/editors/" target="_blank" rel="external">非常的高</a>。</p>
+<h1 id="放弃折腾的部分">放弃折腾的部分</h1>
+<h2 id="javascript-和-eslint">Javascript 和 Eslint</h2>
+<p>作为一个前端，还是有点小遗憾的。</p>
+<p>没有找到开箱即用的插件，<code>flycheck</code> 似乎很是强大，但是要支持 eslint 还有改许多配置。当然了，前端开发还是看 VS Code 和 Atom 吧。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;div class=&quot;figure&quot;&gt;
+&lt;img src=&quot;http://spacemacs.org/img/logo.svg&quot;&gt;
+
+&lt;/div&gt;
+&lt;p&gt;很久以前看 SICP 的时候尝试在 windows 下使用 emacs 时受到了惊吓，那刀耕火种一般的界面啊。后来在 Ubu
+    
+    </summary>
+    
+    
+      <category term="emacs" scheme="http://hikerpig.github.io/tags/emacs/"/>
+    
+      <category term="editor" scheme="http://hikerpig.github.io/tags/editor/"/>
+    
+      <category term="productivity" scheme="http://hikerpig.github.io/tags/productivity/"/>
+    
+  </entry>
+  
+  <entry>
     <title>前端 Log 小记</title>
     <link href="http://hikerpig.github.io/2017/07/29/2016-12-21-Enhanced-Client-Side-Console/"/>
     <id>http://hikerpig.github.io/2017/07/29/2016-12-21-Enhanced-Client-Side-Console/</id>
@@ -1037,29 +1116,71 @@ more script tags here...</code></pre>
   </entry>
   
   <entry>
-    <title>用node schedule简单地实现定时跑脚本功能</title>
-    <link href="http://hikerpig.github.io/2015/01/28/2014-04-21-%E7%94%A8node-schedule%E7%AE%80%E5%8D%95%E5%9C%B0%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E8%B7%91%E8%84%9A%E6%9C%AC%E5%8A%9F%E8%83%BD/"/>
-    <id>http://hikerpig.github.io/2015/01/28/2014-04-21-用node-schedule简单地实现定时跑脚本功能/</id>
+    <title>让oh-my-zsh的git插件飞起来</title>
+    <link href="http://hikerpig.github.io/2015/01/28/2014-04-04-%E8%AE%A9oh-my-zsh%E7%9A%84gitfast%E6%8F%92%E4%BB%B6%E6%8B%AF%E6%95%91%E4%BD%A0/"/>
+    <id>http://hikerpig.github.io/2015/01/28/2014-04-04-让oh-my-zsh的gitfast插件拯救你/</id>
     <published>2015-01-28T04:09:59.000Z</published>
     <updated>2015-01-28T04:09:59.000Z</updated>
     
-    <content type="html"><![CDATA[<p><a href="" title="https://github.com/mattpat/node-schedule">node-schedule</a>是一个用node实现的任务调度系统，比起不太好配置的crontab，用来管理同用javascript写的定时脚本实在是再合适不过。</p>
-<p>以下是为之前的<a href="!--￼2--">虾米签到脚本</a>写的task runner:</p>
-<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">schedule = <span class="built_in">require</span> <span class="string">'node-schedule'</span></div><div class="line">process = <span class="built_in">require</span> <span class="string">'child_process'</span></div><div class="line">fs = <span class="built_in">require</span> <span class="string">'fs'</span></div><div class="line"></div><div class="line">log = <span class="literal">null</span></div><div class="line"></div><div class="line">rule = <span class="keyword">new</span> schedule.RecurrenceRule()</div><div class="line"></div><div class="line"><span class="keyword">if</span> process.env <span class="keyword">is</span> <span class="string">'development'</span></div><div class="line">  rule.second = <span class="number">1</span> <span class="comment"># 每隔一分钟，测试用</span></div><div class="line"><span class="keyword">else</span></div><div class="line">  rule.hour = <span class="number">1</span> <span class="comment"># 凌晨1点签到</span></div><div class="line"></div><div class="line"><span class="comment"># 写入log文件中</span></div><div class="line"><span class="function"><span class="title">writeLog</span> = <span class="params">(text)</span>-&gt;</span></div><div class="line">  log = fs.createWriteStream(<span class="string">'log.txt'</span>, &#123;<span class="string">'flags'</span>: <span class="string">'a'</span>, encoding: <span class="string">'utf-8'</span>&#125;)</div><div class="line">  log.end(text)</div><div class="line"></div><div class="line"><span class="function"><span class="title">run</span> = <span class="params">()</span>-&gt;</span></div><div class="line">  child = process.spawn <span class="string">'casperjs'</span>, [<span class="string">'xiami_casper.coffee'</span>]</div><div class="line"></div><div class="line">  child.stdout.<span class="literal">on</span>(<span class="string">'data'</span>, <span class="function"><span class="params">(data)</span>-&gt;</span></div><div class="line">    text = <span class="keyword">new</span> Date() + data.toString()</div><div class="line">    writeLog(text)</div><div class="line">    <span class="built_in">console</span>.log text</div><div class="line">  )</div><div class="line"></div><div class="line">  child.stdout.<span class="literal">on</span>(<span class="string">'end'</span>, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">    writeLog(<span class="string">"Run job on <span class="subst">#&#123;<span class="keyword">new</span> Date().toString()&#125;</span>"</span>)</div><div class="line">  )</div><div class="line"></div><div class="line">  child.<span class="literal">on</span> <span class="string">'error'</span>, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">    <span class="built_in">console</span>.log arguments</div><div class="line"></div><div class="line">job = schedule.scheduleJob(rule, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">  run()</div><div class="line">)</div></pre></td></tr></table></figure>
-<p>上传到vps上，用forever来启动runner长时间运行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">forever start -c coffee schedule_runner.coffee</div></pre></td></tr></table></figure>
+    <content type="html"><![CDATA[<p>作为一个伪文艺程序员，在ubuntu上使用zsh搭配OMG的插件oh-my-zsh，小日子曾经过的滋滋润润，各种auto-completion让我基本上爱上Tab键了。后来换了台旧MBP，每次跑到项目文件夹下<code>git checkout feat (tab)</code>就傻了，出去泡一杯咖啡回来shell还在哼哧哼哧地忙活着，分分钟有种再手贱&lt;tab&gt;就剁掉的冲动。</p>
+<p><a href="http://marc-abramowitz.com/archives/2012/04/10/fix-for-oh-my-zsh-git-svn-prompt-slowness/comment-page-1/" target="_blank" rel="external">有位仁兄</a>找到了问题的解决方法，原来作恶的是<code>~/.oh-my-zsh/lib/git.zsh</code>中的<code>git_prompt_info()</code> 调用的<code>parse_git_dirty()</code>函数。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># get the name of the branch we are on</span></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">git_prompt_info</span></span>() &#123;</div><div class="line">  <span class="keyword">if</span> [[ <span class="string">"<span class="variable">$(git config --get oh-my-zsh.hide-status)</span>"</span> != <span class="string">"1"</span> ]]; <span class="keyword">then</span></div><div class="line">    ref=$(<span class="built_in">command</span> git symbolic-ref HEAD 2&gt; /dev/null) || \</div><div class="line">    ref=$(<span class="built_in">command</span> git rev-parse --short HEAD 2&gt; /dev/null) || <span class="built_in">return</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$ZSH_THEME_GIT_PROMPT_PREFIX</span><span class="variable">$&#123;ref#refs/heads/&#125;</span><span class="variable">$(parse_git_dirty)</span><span class="variable">$ZSH_THEME_GIT_PROMPT_SUFFIX</span>"</span></div><div class="line">  <span class="keyword">fi</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment"># Checks if working tree is dirty</span></div><div class="line"><span class="function"><span class="title">parse_git_dirty</span></span>() &#123;</div><div class="line">  <span class="built_in">local</span> SUBMODULE_SYNTAX=<span class="string">''</span></div><div class="line">  <span class="built_in">local</span> GIT_STATUS=<span class="string">''</span></div><div class="line">  <span class="built_in">local</span> CLEAN_MESSAGE=<span class="string">'nothing to commit (working directory clean)'</span></div><div class="line">  <span class="keyword">if</span> [[ <span class="string">"<span class="variable">$(command git config --get oh-my-zsh.hide-status)</span>"</span> != <span class="string">"1"</span> ]]; <span class="keyword">then</span></div><div class="line">    <span class="keyword">if</span> [[ <span class="variable">$POST_1_7_2_GIT</span> -gt 0 ]]; <span class="keyword">then</span></div><div class="line">          SUBMODULE_SYNTAX=<span class="string">"--ignore-submodules=dirty"</span></div><div class="line">    <span class="keyword">fi</span></div><div class="line">    <span class="keyword">if</span> [[ <span class="string">"<span class="variable">$DISABLE_UNTRACKED_FILES_DIRTY</span>"</span> == <span class="string">"true"</span> ]]; <span class="keyword">then</span></div><div class="line">        GIT_STATUS=$(<span class="built_in">command</span> git status -s <span class="variable">$&#123;SUBMODULE_SYNTAX&#125;</span> -uno 2&gt; /dev/null | tail -n1)</div><div class="line">    <span class="keyword">else</span></div><div class="line">        GIT_STATUS=$(<span class="built_in">command</span> git status -s <span class="variable">$&#123;SUBMODULE_SYNTAX&#125;</span> 2&gt; /dev/null | tail -n1)</div><div class="line">    <span class="keyword">fi</span></div><div class="line">    <span class="keyword">if</span> [[ -n <span class="variable">$GIT_STATUS</span> ]]; <span class="keyword">then</span></div><div class="line">      <span class="built_in">echo</span> <span class="string">"<span class="variable">$ZSH_THEME_GIT_PROMPT_DIRTY</span>"</span></div><div class="line">    <span class="keyword">else</span></div><div class="line">      <span class="built_in">echo</span> <span class="string">"<span class="variable">$ZSH_THEME_GIT_PROMPT_CLEAN</span>"</span></div><div class="line">    <span class="keyword">fi</span></div><div class="line">  <span class="keyword">else</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$ZSH_THEME_GIT_PROMPT_CLEAN</span>"</span></div><div class="line">  <span class="keyword">fi</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>他贴出的gist是这样的：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">git_prompt_info</span></span>() &#123;</div><div class="line">  ref=$(git symbolic-ref HEAD 2&gt; /dev/null) || <span class="built_in">return</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"<span class="variable">$ZSH_THEME_GIT_PROMPT_PREFIX</span><span class="variable">$&#123;ref#refs/heads/&#125;</span><span class="variable">$ZSH_THEME_GIT_PROMPT_SUFFIX</span>"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其实sf上早有人问过这问题，解决方案也早已存在于oh-my-zsh的标配插件中了。直接在<code>~/.zshrc</code>中修改下调用插件就好</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">plugins=(gitfast) <span class="comment"># 原来是git</span></div></pre></td></tr></table></figure>
+<p>看看<code>.oh-my-zsh/plugins/gitfast.plugin.zsh</code>里的写法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">dir=$(dirname <span class="variable">$0</span>)</div><div class="line"><span class="built_in">source</span> <span class="variable">$dir</span>/../git/git.plugin.zsh</div><div class="line"><span class="built_in">source</span> <span class="variable">$dir</span>/git-prompt.sh</div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">git_prompt_info</span></span>() &#123;</div><div class="line">  dirty=<span class="string">"<span class="variable">$(parse_git_dirty)</span>"</span></div><div class="line">  __git_ps1 <span class="string">"<span class="variable">$&#123;ZSH_THEME_GIT_PROMPT_PREFIX//\%/%%&#125;</span>%s<span class="variable">$&#123;dirty//\%/%%&#125;</span><span class="variable">$&#123;ZSH_THEME_GIT_PROMPT_SUFFIX//\%/%%&#125;</span>"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>没有了<code>parse_git_dirty</code>，我们就看不到zsh 中git repo名字旁边提示当前分支是否dirty的小勾勾“✔”和小叉叉“✗”，但是人生体验流畅了不只十个数量级啊。比起肆意的人生，OOXX算什么呢！！！（话题没有跑偏没有跑偏(;¬_¬) ）</p>
+<p>从此&lt;tab&gt;键又能肆意飞翔了。</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;&lt;a href=&quot;&quot; title=&quot;https://github.com/mattpat/node-schedule&quot;&gt;node-schedule&lt;/a&gt;是一个用node实现的任务调度系统，比起不太好配置的crontab，用来管理同用javascript写的定时脚本实在是再
+      让oh-my-zsh的git插件飞起来
     
     </summary>
     
-      <category term="玩具" scheme="http://hikerpig.github.io/categories/%E7%8E%A9%E5%85%B7/"/>
+      <category term="Tips" scheme="http://hikerpig.github.io/categories/Tips/"/>
     
     
-      <category term="Node" scheme="http://hikerpig.github.io/tags/Node/"/>
+      <category term="Git" scheme="http://hikerpig.github.io/tags/Git/"/>
+    
+      <category term="zsh" scheme="http://hikerpig.github.io/tags/zsh/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Lodash和Underscore的小小区别</title>
+    <link href="http://hikerpig.github.io/2015/01/28/2014-03-16-Lodash%E5%92%8CUnderscore%E7%9A%84%E5%B0%8F%E5%B0%8F%E5%8C%BA%E5%88%AB/"/>
+    <id>http://hikerpig.github.io/2015/01/28/2014-03-16-Lodash和Underscore的小小区别/</id>
+    <published>2015-01-28T04:09:59.000Z</published>
+    <updated>2015-01-28T04:09:59.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>之前在项目小重构的时候想试试号称Underscore继承者的Lodash，无痛迁移，而且新的API也很好用，这几天调一个bug的时候却发现<code>_.each</code>的结果怎么都不对。</p>
+<p>翻Lodash 文档才发现人家都明明白白地写了：</p>
+<blockquote>
+<p>_.forEach(collection, [callback=identity], [thisArg])</p>
+<p>Iterates over elements of a collection, executing the callback for each element. The callback is bound to thisArg and invoked with three arguments; (value, index|key, collection). Callbacks may exit iteration early by explicitly returning false.</p>
+</blockquote>
+<p>这一点跟Underscore使用的原生JS不太一样。</p>
+<p>其实也只有callback的返回值是false的时候遍历才会停止，我们一般手写JS代码单纯地用<code>forEach</code>遍历数组的时候使用<code>return</code>也只是想进入对下个元素的处理，不会给返回值赋什么意义，于是函数的返回值为undefined。所以用Lodash一直也没有什么问题。</p>
+<p>但是在项目里你要用Coffeescript，保不准就呵呵了：</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">segments = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</div><div class="line">lessThanThree = <span class="literal">true</span></div><div class="line">_.each segments, <span class="function"><span class="params">(seg, index)</span> -&gt;</span></div><div class="line">	<span class="built_in">console</span>.log seg</div><div class="line">    <span class="keyword">if</span> index &gt; <span class="number">2</span></div><div class="line">    	lessThanThree = <span class="literal">false</span></div><div class="line"></div><div class="line"><span class="comment"># 在Underscore下输出是</span></div><div class="line"><span class="number">1</span></div><div class="line"><span class="number">2</span></div><div class="line"><span class="number">3</span></div><div class="line"><span class="number">4</span></div><div class="line"></div><div class="line"><span class="comment"># Lodash下输出是</span></div><div class="line"><span class="number">1</span></div><div class="line"><span class="number">2</span></div><div class="line"><span class="number">3</span></div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      从Lodash迁移到Underscore时候要小心的小小差异
+    
+    </summary>
+    
+      <category term="前端" scheme="http://hikerpig.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
+    
+    
+      <category term="Javascript" scheme="http://hikerpig.github.io/tags/Javascript/"/>
+    
+      <category term="Coffeescript" scheme="http://hikerpig.github.io/tags/Coffeescript/"/>
     
   </entry>
   
@@ -1178,71 +1299,29 @@ more script tags here...</code></pre>
   </entry>
   
   <entry>
-    <title>让oh-my-zsh的git插件飞起来</title>
-    <link href="http://hikerpig.github.io/2015/01/28/2014-04-04-%E8%AE%A9oh-my-zsh%E7%9A%84gitfast%E6%8F%92%E4%BB%B6%E6%8B%AF%E6%95%91%E4%BD%A0/"/>
-    <id>http://hikerpig.github.io/2015/01/28/2014-04-04-让oh-my-zsh的gitfast插件拯救你/</id>
+    <title>用node schedule简单地实现定时跑脚本功能</title>
+    <link href="http://hikerpig.github.io/2015/01/28/2014-04-21-%E7%94%A8node-schedule%E7%AE%80%E5%8D%95%E5%9C%B0%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E8%B7%91%E8%84%9A%E6%9C%AC%E5%8A%9F%E8%83%BD/"/>
+    <id>http://hikerpig.github.io/2015/01/28/2014-04-21-用node-schedule简单地实现定时跑脚本功能/</id>
     <published>2015-01-28T04:09:59.000Z</published>
     <updated>2015-01-28T04:09:59.000Z</updated>
     
-    <content type="html"><![CDATA[<p>作为一个伪文艺程序员，在ubuntu上使用zsh搭配OMG的插件oh-my-zsh，小日子曾经过的滋滋润润，各种auto-completion让我基本上爱上Tab键了。后来换了台旧MBP，每次跑到项目文件夹下<code>git checkout feat (tab)</code>就傻了，出去泡一杯咖啡回来shell还在哼哧哼哧地忙活着，分分钟有种再手贱&lt;tab&gt;就剁掉的冲动。</p>
-<p><a href="http://marc-abramowitz.com/archives/2012/04/10/fix-for-oh-my-zsh-git-svn-prompt-slowness/comment-page-1/" target="_blank" rel="external">有位仁兄</a>找到了问题的解决方法，原来作恶的是<code>~/.oh-my-zsh/lib/git.zsh</code>中的<code>git_prompt_info()</code> 调用的<code>parse_git_dirty()</code>函数。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># get the name of the branch we are on</span></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">git_prompt_info</span></span>() &#123;</div><div class="line">  <span class="keyword">if</span> [[ <span class="string">"<span class="variable">$(git config --get oh-my-zsh.hide-status)</span>"</span> != <span class="string">"1"</span> ]]; <span class="keyword">then</span></div><div class="line">    ref=$(<span class="built_in">command</span> git symbolic-ref HEAD 2&gt; /dev/null) || \</div><div class="line">    ref=$(<span class="built_in">command</span> git rev-parse --short HEAD 2&gt; /dev/null) || <span class="built_in">return</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$ZSH_THEME_GIT_PROMPT_PREFIX</span><span class="variable">$&#123;ref#refs/heads/&#125;</span><span class="variable">$(parse_git_dirty)</span><span class="variable">$ZSH_THEME_GIT_PROMPT_SUFFIX</span>"</span></div><div class="line">  <span class="keyword">fi</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment"># Checks if working tree is dirty</span></div><div class="line"><span class="function"><span class="title">parse_git_dirty</span></span>() &#123;</div><div class="line">  <span class="built_in">local</span> SUBMODULE_SYNTAX=<span class="string">''</span></div><div class="line">  <span class="built_in">local</span> GIT_STATUS=<span class="string">''</span></div><div class="line">  <span class="built_in">local</span> CLEAN_MESSAGE=<span class="string">'nothing to commit (working directory clean)'</span></div><div class="line">  <span class="keyword">if</span> [[ <span class="string">"<span class="variable">$(command git config --get oh-my-zsh.hide-status)</span>"</span> != <span class="string">"1"</span> ]]; <span class="keyword">then</span></div><div class="line">    <span class="keyword">if</span> [[ <span class="variable">$POST_1_7_2_GIT</span> -gt 0 ]]; <span class="keyword">then</span></div><div class="line">          SUBMODULE_SYNTAX=<span class="string">"--ignore-submodules=dirty"</span></div><div class="line">    <span class="keyword">fi</span></div><div class="line">    <span class="keyword">if</span> [[ <span class="string">"<span class="variable">$DISABLE_UNTRACKED_FILES_DIRTY</span>"</span> == <span class="string">"true"</span> ]]; <span class="keyword">then</span></div><div class="line">        GIT_STATUS=$(<span class="built_in">command</span> git status -s <span class="variable">$&#123;SUBMODULE_SYNTAX&#125;</span> -uno 2&gt; /dev/null | tail -n1)</div><div class="line">    <span class="keyword">else</span></div><div class="line">        GIT_STATUS=$(<span class="built_in">command</span> git status -s <span class="variable">$&#123;SUBMODULE_SYNTAX&#125;</span> 2&gt; /dev/null | tail -n1)</div><div class="line">    <span class="keyword">fi</span></div><div class="line">    <span class="keyword">if</span> [[ -n <span class="variable">$GIT_STATUS</span> ]]; <span class="keyword">then</span></div><div class="line">      <span class="built_in">echo</span> <span class="string">"<span class="variable">$ZSH_THEME_GIT_PROMPT_DIRTY</span>"</span></div><div class="line">    <span class="keyword">else</span></div><div class="line">      <span class="built_in">echo</span> <span class="string">"<span class="variable">$ZSH_THEME_GIT_PROMPT_CLEAN</span>"</span></div><div class="line">    <span class="keyword">fi</span></div><div class="line">  <span class="keyword">else</span></div><div class="line">    <span class="built_in">echo</span> <span class="string">"<span class="variable">$ZSH_THEME_GIT_PROMPT_CLEAN</span>"</span></div><div class="line">  <span class="keyword">fi</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>他贴出的gist是这样的：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">git_prompt_info</span></span>() &#123;</div><div class="line">  ref=$(git symbolic-ref HEAD 2&gt; /dev/null) || <span class="built_in">return</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"<span class="variable">$ZSH_THEME_GIT_PROMPT_PREFIX</span><span class="variable">$&#123;ref#refs/heads/&#125;</span><span class="variable">$ZSH_THEME_GIT_PROMPT_SUFFIX</span>"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>其实sf上早有人问过这问题，解决方案也早已存在于oh-my-zsh的标配插件中了。直接在<code>~/.zshrc</code>中修改下调用插件就好</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">plugins=(gitfast) <span class="comment"># 原来是git</span></div></pre></td></tr></table></figure>
-<p>看看<code>.oh-my-zsh/plugins/gitfast.plugin.zsh</code>里的写法</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">dir=$(dirname <span class="variable">$0</span>)</div><div class="line"><span class="built_in">source</span> <span class="variable">$dir</span>/../git/git.plugin.zsh</div><div class="line"><span class="built_in">source</span> <span class="variable">$dir</span>/git-prompt.sh</div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">git_prompt_info</span></span>() &#123;</div><div class="line">  dirty=<span class="string">"<span class="variable">$(parse_git_dirty)</span>"</span></div><div class="line">  __git_ps1 <span class="string">"<span class="variable">$&#123;ZSH_THEME_GIT_PROMPT_PREFIX//\%/%%&#125;</span>%s<span class="variable">$&#123;dirty//\%/%%&#125;</span><span class="variable">$&#123;ZSH_THEME_GIT_PROMPT_SUFFIX//\%/%%&#125;</span>"</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>没有了<code>parse_git_dirty</code>，我们就看不到zsh 中git repo名字旁边提示当前分支是否dirty的小勾勾“✔”和小叉叉“✗”，但是人生体验流畅了不只十个数量级啊。比起肆意的人生，OOXX算什么呢！！！（话题没有跑偏没有跑偏(;¬_¬) ）</p>
-<p>从此&lt;tab&gt;键又能肆意飞翔了。</p>
+    <content type="html"><![CDATA[<p><a href="" title="https://github.com/mattpat/node-schedule">node-schedule</a>是一个用node实现的任务调度系统，比起不太好配置的crontab，用来管理同用javascript写的定时脚本实在是再合适不过。</p>
+<p>以下是为之前的<a href="!--￼2--">虾米签到脚本</a>写的task runner:</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">schedule = <span class="built_in">require</span> <span class="string">'node-schedule'</span></div><div class="line">process = <span class="built_in">require</span> <span class="string">'child_process'</span></div><div class="line">fs = <span class="built_in">require</span> <span class="string">'fs'</span></div><div class="line"></div><div class="line">log = <span class="literal">null</span></div><div class="line"></div><div class="line">rule = <span class="keyword">new</span> schedule.RecurrenceRule()</div><div class="line"></div><div class="line"><span class="keyword">if</span> process.env <span class="keyword">is</span> <span class="string">'development'</span></div><div class="line">  rule.second = <span class="number">1</span> <span class="comment"># 每隔一分钟，测试用</span></div><div class="line"><span class="keyword">else</span></div><div class="line">  rule.hour = <span class="number">1</span> <span class="comment"># 凌晨1点签到</span></div><div class="line"></div><div class="line"><span class="comment"># 写入log文件中</span></div><div class="line"><span class="function"><span class="title">writeLog</span> = <span class="params">(text)</span>-&gt;</span></div><div class="line">  log = fs.createWriteStream(<span class="string">'log.txt'</span>, &#123;<span class="string">'flags'</span>: <span class="string">'a'</span>, encoding: <span class="string">'utf-8'</span>&#125;)</div><div class="line">  log.end(text)</div><div class="line"></div><div class="line"><span class="function"><span class="title">run</span> = <span class="params">()</span>-&gt;</span></div><div class="line">  child = process.spawn <span class="string">'casperjs'</span>, [<span class="string">'xiami_casper.coffee'</span>]</div><div class="line"></div><div class="line">  child.stdout.<span class="literal">on</span>(<span class="string">'data'</span>, <span class="function"><span class="params">(data)</span>-&gt;</span></div><div class="line">    text = <span class="keyword">new</span> Date() + data.toString()</div><div class="line">    writeLog(text)</div><div class="line">    <span class="built_in">console</span>.log text</div><div class="line">  )</div><div class="line"></div><div class="line">  child.stdout.<span class="literal">on</span>(<span class="string">'end'</span>, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">    writeLog(<span class="string">"Run job on <span class="subst">#&#123;<span class="keyword">new</span> Date().toString()&#125;</span>"</span>)</div><div class="line">  )</div><div class="line"></div><div class="line">  child.<span class="literal">on</span> <span class="string">'error'</span>, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">    <span class="built_in">console</span>.log arguments</div><div class="line"></div><div class="line">job = schedule.scheduleJob(rule, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">  run()</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>上传到vps上，用forever来启动runner长时间运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">forever start -c coffee schedule_runner.coffee</div></pre></td></tr></table></figure>
 ]]></content>
     
     <summary type="html">
     
-      让oh-my-zsh的git插件飞起来
+      &lt;p&gt;&lt;a href=&quot;&quot; title=&quot;https://github.com/mattpat/node-schedule&quot;&gt;node-schedule&lt;/a&gt;是一个用node实现的任务调度系统，比起不太好配置的crontab，用来管理同用javascript写的定时脚本实在是再
     
     </summary>
     
-      <category term="Tips" scheme="http://hikerpig.github.io/categories/Tips/"/>
+      <category term="玩具" scheme="http://hikerpig.github.io/categories/%E7%8E%A9%E5%85%B7/"/>
     
     
-      <category term="Git" scheme="http://hikerpig.github.io/tags/Git/"/>
-    
-      <category term="zsh" scheme="http://hikerpig.github.io/tags/zsh/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Lodash和Underscore的小小区别</title>
-    <link href="http://hikerpig.github.io/2015/01/28/2014-03-16-Lodash%E5%92%8CUnderscore%E7%9A%84%E5%B0%8F%E5%B0%8F%E5%8C%BA%E5%88%AB/"/>
-    <id>http://hikerpig.github.io/2015/01/28/2014-03-16-Lodash和Underscore的小小区别/</id>
-    <published>2015-01-28T04:09:59.000Z</published>
-    <updated>2015-01-28T04:09:59.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>之前在项目小重构的时候想试试号称Underscore继承者的Lodash，无痛迁移，而且新的API也很好用，这几天调一个bug的时候却发现<code>_.each</code>的结果怎么都不对。</p>
-<p>翻Lodash 文档才发现人家都明明白白地写了：</p>
-<blockquote>
-<p>_.forEach(collection, [callback=identity], [thisArg])</p>
-<p>Iterates over elements of a collection, executing the callback for each element. The callback is bound to thisArg and invoked with three arguments; (value, index|key, collection). Callbacks may exit iteration early by explicitly returning false.</p>
-</blockquote>
-<p>这一点跟Underscore使用的原生JS不太一样。</p>
-<p>其实也只有callback的返回值是false的时候遍历才会停止，我们一般手写JS代码单纯地用<code>forEach</code>遍历数组的时候使用<code>return</code>也只是想进入对下个元素的处理，不会给返回值赋什么意义，于是函数的返回值为undefined。所以用Lodash一直也没有什么问题。</p>
-<p>但是在项目里你要用Coffeescript，保不准就呵呵了：</p>
-<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">segments = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</div><div class="line">lessThanThree = <span class="literal">true</span></div><div class="line">_.each segments, <span class="function"><span class="params">(seg, index)</span> -&gt;</span></div><div class="line">	<span class="built_in">console</span>.log seg</div><div class="line">    <span class="keyword">if</span> index &gt; <span class="number">2</span></div><div class="line">    	lessThanThree = <span class="literal">false</span></div><div class="line"></div><div class="line"><span class="comment"># 在Underscore下输出是</span></div><div class="line"><span class="number">1</span></div><div class="line"><span class="number">2</span></div><div class="line"><span class="number">3</span></div><div class="line"><span class="number">4</span></div><div class="line"></div><div class="line"><span class="comment"># Lodash下输出是</span></div><div class="line"><span class="number">1</span></div><div class="line"><span class="number">2</span></div><div class="line"><span class="number">3</span></div></pre></td></tr></table></figure>
-]]></content>
-    
-    <summary type="html">
-    
-      从Lodash迁移到Underscore时候要小心的小小差异
-    
-    </summary>
-    
-      <category term="前端" scheme="http://hikerpig.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
-    
-    
-      <category term="Javascript" scheme="http://hikerpig.github.io/tags/Javascript/"/>
-    
-      <category term="Coffeescript" scheme="http://hikerpig.github.io/tags/Coffeescript/"/>
+      <category term="Node" scheme="http://hikerpig.github.io/tags/Node/"/>
     
   </entry>
   
@@ -1388,50 +1467,6 @@ more script tags here...</code></pre>
       <category term="git" scheme="http://hikerpig.github.io/tags/git/"/>
     
       <category term="tip" scheme="http://hikerpig.github.io/tags/tip/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Web开发国内常用源</title>
-    <link href="http://hikerpig.github.io/2013/12/14/2014-03-26-web%E5%BC%80%E5%8F%91%E5%9B%BD%E5%86%85%E5%B8%B8%E7%94%A8%E6%BA%90/"/>
-    <id>http://hikerpig.github.io/2013/12/14/2014-03-26-web开发国内常用源/</id>
-    <published>2013-12-14T02:09:12.000Z</published>
-    <updated>2015-02-05T04:09:46.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>国内配置开发环境的时候经常会要用到的这几个源, thanks to G*F*W ，我们自行get找国内镜像的能力:</p>
-<h3 id="python-pypi-pip">Python PyPI (pip)</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ nano ~/.pip/pip.conf</div></pre></td></tr></table></figure>
-<p>添加</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[global]</div><div class="line">index-url = http://pypi.douban.com/simple</div></pre></td></tr></table></figure>
-<h3 id="node-npm">Node NPM</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ nano ~/.npmrc</div></pre></td></tr></table></figure>
-<p>添加</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">registry = http://registry.cnpmjs.org</div></pre></td></tr></table></figure>
-<blockquote>
-<p><a href="http://cnpmjs.org/" target="_blank" rel="external">CNPM的源</a></p>
-</blockquote>
-<h3 id="rvm-and-ruby-gem">RVM and Ruby gem</h3>
-<h5 id="rvm">RVM</h5>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ sed -i .bak <span class="string">'s!cache.ruby-lang.org/pub/ruby!ruby.taobao.org/mirrors/ruby!'</span> <span class="variable">$rvm_path</span>/config/db</div></pre></td></tr></table></figure>
-<h5 id="ruby-gem">Ruby Gem</h5>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ gem sources --remove https://rubygems.org/</div><div class="line">$ gem sources -a http://ruby.taobao.org/</div></pre></td></tr></table></figure>
-<blockquote>
-<p><a href="http://ruby.taobao.org/" target="_blank" rel="external">淘宝源</a></p>
-</blockquote>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;国内配置开发环境的时候经常会要用到的这几个源, thanks to G*F*W ，我们自行get找国内镜像的能力:&lt;/p&gt;
-&lt;h3 id=&quot;python-pypi-pip&quot;&gt;Python PyPI (pip)&lt;/h3&gt;
-&lt;figure class=&quot;highlight ba
-    
-    </summary>
-    
-      <category term="资源" scheme="http://hikerpig.github.io/categories/%E8%B5%84%E6%BA%90/"/>
-    
-    
-      <category term="NPM" scheme="http://hikerpig.github.io/tags/NPM/"/>
     
   </entry>
   
