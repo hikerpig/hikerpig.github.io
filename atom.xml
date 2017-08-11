@@ -19,7 +19,7 @@
     <link href="http://hikerpig.github.io/2017/08/06/2017-08-05-Holy-Awesome-Spacemacs/"/>
     <id>http://hikerpig.github.io/2017/08/06/2017-08-05-Holy-Awesome-Spacemacs/</id>
     <published>2017-08-06T08:48:09.000Z</published>
-    <updated>2017-08-06T08:48:09.000Z</updated>
+    <updated>2017-08-11T10:40:06.000Z</updated>
     
     <content type="html"><![CDATA[<div class="figure">
 <img src="http://spacemacs.org/img/logo.svg">
@@ -56,7 +56,12 @@
 <ul>
 <li>所见即所得，默认情况下 live preview，不会生成多余文件</li>
 <li>强大的链接系统，直接跳转至多种形式的内外链接</li>
-<li>强大的日程规划功能</li>
+<li>强大的<a href="http://orgmode.org/manual/Agenda-Views.html" target="_blank" rel="external">日程规划功能</a></li>
+<li>强大的<a href="http://www.cnblogs.com/holbrook/archive/2012/04/12/2444992.html" target="_blank" rel="external">表格编辑功能</a></li>
+</ul>
+<h3 id="一些收集">一些收集</h3>
+<ul>
+<li><a href="http://doc.norang.ca/org-mode.htm" target="_blank" rel="external">Organize Your Life In Plain Text!</a></li>
 </ul>
 <h1 id="helm">helm</h1>
 <p><a href="http://tuhdo.github.io/helm-intro.html" target="_blank" rel="external">A Package in a league of its own: Helm</a></p>
@@ -68,6 +73,12 @@
 </div>
 <h1 id="scala-mode-以及-ensime">scala-mode 以及 ensime</h1>
 <p>在做 Coursera 上 Scala 课程作业的时候试了一下。<a href="http://ensime.org/" target="_blank" rel="external">Ensime</a> 的 Emacs 插件完成度<a href="http://ensime.org/editors/" target="_blank" rel="external">非常的高</a>。</p>
+<h1 id="可以使用但不准备替换现有主力编辑器atomvim的">可以使用，但不准备替换现有主力编辑器（Atom/Vim）的</h1>
+<h2 id="coffee-mode">coffee-mode</h2>
+<p><a href="https://github.com/defunkt/coffee-mode" target="_blank" rel="external">coffee-mode</a> 支持 coffeescript 文件的语法高亮、编译和 watch 等功能，配合 etags 使用还不错。</p>
+<p>与 evil 一起使用的时候需要一些额外配置，否则用 <code>o</code> 换行的时候发现缩进不对。</p>
+<p>官方 README 给出了解决方案：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">(custom-set-variables</div><div class="line"> &apos;(coffee-indent-like-python-mode t))</div></pre></td></tr></table></figure>
 <h1 id="放弃折腾的部分">放弃折腾的部分</h1>
 <h2 id="javascript-和-eslint">Javascript 和 Eslint</h2>
 <p>作为一个前端，还是有点小遗憾的。</p>
