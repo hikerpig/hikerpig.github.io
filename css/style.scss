@@ -3,6 +3,9 @@ $toc-width: 330px;
 
 $breakpoint-small: 1100px;
 
+$f-color-dark: #424242;
+$f-color-light-dark: #666666;
+
 html {
 	background-color: #fff;
 	-webkit-font-smoothing: antialiased;
@@ -20,7 +23,7 @@ body {
 p {
 	line-height: 1.9em;
 	font-weight: 400;
-	font-size: 14px;
+	font-size: 15px;
 }
 
 a {
@@ -818,6 +821,9 @@ a.btn {
 				}
 			}
 		}
+  .post {
+    margin: 20px;
+  }
 	.page-top{
 		width: 100%
 	}
@@ -832,9 +838,6 @@ a.btn {
 	}
 	.footer{
 		display: none;
-	}
-	.share{
-		display: grid;
 	}
 }
 
@@ -898,3 +901,14 @@ a.btn {
 .feature_image {
   margin-top: 10px;
 }
+
+/* Typograph */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: $f-color-light-dark;
+}
+
+

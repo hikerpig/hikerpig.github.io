@@ -19,14 +19,13 @@
     <link href="http://hikerpig.github.io/2017/08/06/2017-08-05-Holy-Awesome-Spacemacs/"/>
     <id>http://hikerpig.github.io/2017/08/06/2017-08-05-Holy-Awesome-Spacemacs/</id>
     <published>2017-08-06T08:48:09.000Z</published>
-    <updated>2017-08-11T10:40:06.000Z</updated>
+    <updated>2017-08-13T02:28:29.000Z</updated>
     
     <content type="html"><![CDATA[<div class="figure">
 <img src="http://spacemacs.org/img/logo.svg">
 
 </div>
 <p>很久以前看 SICP 的时候尝试在 windows 下使用 emacs 时受到了惊吓，那刀耕火种一般的界面啊。后来在 Ubuntu 终端中打开，诶？怎么关不掉？不掉？掉？（其实 Vim 也一样，小白终结者）</p>
-<!-- ![刀耕火种的GUI](http://www.qaforcode.net/wp-content/uploads/2012/11/emacs.png) -->
 <p>但是看完<a href="https://www.zhihu.com/question/29692328" target="_blank" rel="external">如何评价 Emacs 的配置文件 Spacemacs？</a>以及身边多人的安利后，心痒痒地尝试了下，从一个外行人眼里看来，简直是 Emacs 界的一股清流，史诗级的配置工程。</p>
 <h1 id="安装">安装</h1>
 <p>鉴于有 Every thing in Emacs 的传统，选择了可以不光在终端里使用，便安装了带有 Mac GUI 系统支持的 Emacs：</p>
@@ -73,6 +72,16 @@
 </div>
 <h1 id="scala-mode-以及-ensime">scala-mode 以及 ensime</h1>
 <p>在做 Coursera 上 Scala 课程作业的时候试了一下。<a href="http://ensime.org/" target="_blank" rel="external">Ensime</a> 的 Emacs 插件完成度<a href="http://ensime.org/editors/" target="_blank" rel="external">非常的高</a>。</p>
+<h1 id="artist-mode">artist-mode</h1>
+<p>无比炫酷的 ACSII Art 工具，写注释和文档有时一图胜千言。配合 org-mode，感觉自己从未如此热爱写文档。</p>
+<p>看<a href="http://emacser.com/artist-mode.htm" target="_blank" rel="external">emacser 上的一篇介绍</a>。</p>
+<p>Vim 上有个类似的插件 <a href="http://www.vim.org/scripts/script.php?script_id=40" target="_blank" rel="external">Drawit.vim</a>，不知二者谁先谁后，都挺好用的。</p>
+<h1 id="imenu-list">imenu-list</h1>
+<p>在右边新建一个 buffer 显示 imenu 的结果，接近于 Vim 的 Tagbar 使用体验。</p>
+<div class="figure">
+<img src="https://github.com/bmag/imenu-list/raw/master/images/imenu-list-dark.png" alt="github imenu-list">
+<p class="caption">github imenu-list</p>
+</div>
 <h1 id="可以使用但不准备替换现有主力编辑器atomvim的">可以使用，但不准备替换现有主力编辑器（Atom/Vim）的</h1>
 <h2 id="coffee-mode">coffee-mode</h2>
 <p><a href="https://github.com/defunkt/coffee-mode" target="_blank" rel="external">coffee-mode</a> 支持 coffeescript 文件的语法高亮、编译和 watch 等功能，配合 etags 使用还不错。</p>
@@ -1040,6 +1049,33 @@ more script tags here...</code></pre>
   </entry>
   
   <entry>
+    <title>正则也可以很好玩</title>
+    <link href="http://hikerpig.github.io/2015/01/28/2014-04-29-%E6%AD%A3%E5%88%99%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%BE%88%E5%A5%BD%E7%8E%A9/"/>
+    <id>http://hikerpig.github.io/2015/01/28/2014-04-29-正则也可以很好玩/</id>
+    <published>2015-01-28T04:12:03.000Z</published>
+    <updated>2017-07-24T08:39:03.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="正则填字游戏game"><a href="http://regexcrossword.com/" target="_blank" rel="external">正则填字游戏</a></h2>
+<h2 id="debuggexdebuggex"><a href="https://www.debuggex.com" target="_blank" rel="external">Debuggex</a></h2>
+<p>可视化正则匹配过程, 用于调试十分方便</p>
+<img src="http://images-hikerpig.qiniudn.com/image/debuggex.png" alt="undefined">
+<h2 id="regexperregexper"><a href="http://www.regexper.com/" target="_blank" rel="external">regexper</a></h2>
+<p>一个把javascript正则表达式转换成图表的工具网站。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;正则填字游戏game&quot;&gt;&lt;a href=&quot;http://regexcrossword.com/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;正则填字游戏&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;debuggexdebuggex&quot;&gt;&lt;a href=&quot;h
+    
+    </summary>
+    
+    
+      <category term="Toys" scheme="http://hikerpig.github.io/tags/Toys/"/>
+    
+  </entry>
+  
+  <entry>
     <title>在Jekyll博客里优雅地嵌入Github Gist</title>
     <link href="http://hikerpig.github.io/2015/01/28/2014-04-08-%E5%9C%A8Jekyll%E5%8D%9A%E5%AE%A2%E9%87%8C%E4%BC%98%E9%9B%85%E5%9C%B0%E5%B5%8C%E5%85%A5Github-Gist/"/>
     <id>http://hikerpig.github.io/2015/01/28/2014-04-08-在Jekyll博客里优雅地嵌入Github-Gist/</id>
@@ -1100,29 +1136,63 @@ more script tags here...</code></pre>
   </entry>
   
   <entry>
-    <title>正则也可以很好玩</title>
-    <link href="http://hikerpig.github.io/2015/01/28/2014-04-29-%E6%AD%A3%E5%88%99%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%BE%88%E5%A5%BD%E7%8E%A9/"/>
-    <id>http://hikerpig.github.io/2015/01/28/2014-04-29-正则也可以很好玩/</id>
-    <published>2015-01-28T04:12:03.000Z</published>
-    <updated>2017-07-24T08:39:03.000Z</updated>
+    <title>Lodash和Underscore的小小区别</title>
+    <link href="http://hikerpig.github.io/2015/01/28/2014-03-16-Lodash%E5%92%8CUnderscore%E7%9A%84%E5%B0%8F%E5%B0%8F%E5%8C%BA%E5%88%AB/"/>
+    <id>http://hikerpig.github.io/2015/01/28/2014-03-16-Lodash和Underscore的小小区别/</id>
+    <published>2015-01-28T04:09:59.000Z</published>
+    <updated>2015-01-28T04:09:59.000Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="正则填字游戏game"><a href="http://regexcrossword.com/" target="_blank" rel="external">正则填字游戏</a></h2>
-<h2 id="debuggexdebuggex"><a href="https://www.debuggex.com" target="_blank" rel="external">Debuggex</a></h2>
-<p>可视化正则匹配过程, 用于调试十分方便</p>
-<img src="http://images-hikerpig.qiniudn.com/image/debuggex.png" alt="undefined">
-<h2 id="regexperregexper"><a href="http://www.regexper.com/" target="_blank" rel="external">regexper</a></h2>
-<p>一个把javascript正则表达式转换成图表的工具网站。</p>
+    <content type="html"><![CDATA[<p>之前在项目小重构的时候想试试号称Underscore继承者的Lodash，无痛迁移，而且新的API也很好用，这几天调一个bug的时候却发现<code>_.each</code>的结果怎么都不对。</p>
+<p>翻Lodash 文档才发现人家都明明白白地写了：</p>
+<blockquote>
+<p>_.forEach(collection, [callback=identity], [thisArg])</p>
+<p>Iterates over elements of a collection, executing the callback for each element. The callback is bound to thisArg and invoked with three arguments; (value, index|key, collection). Callbacks may exit iteration early by explicitly returning false.</p>
+</blockquote>
+<p>这一点跟Underscore使用的原生JS不太一样。</p>
+<p>其实也只有callback的返回值是false的时候遍历才会停止，我们一般手写JS代码单纯地用<code>forEach</code>遍历数组的时候使用<code>return</code>也只是想进入对下个元素的处理，不会给返回值赋什么意义，于是函数的返回值为undefined。所以用Lodash一直也没有什么问题。</p>
+<p>但是在项目里你要用Coffeescript，保不准就呵呵了：</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">segments = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</div><div class="line">lessThanThree = <span class="literal">true</span></div><div class="line">_.each segments, <span class="function"><span class="params">(seg, index)</span> -&gt;</span></div><div class="line">	<span class="built_in">console</span>.log seg</div><div class="line">    <span class="keyword">if</span> index &gt; <span class="number">2</span></div><div class="line">    	lessThanThree = <span class="literal">false</span></div><div class="line"></div><div class="line"><span class="comment"># 在Underscore下输出是</span></div><div class="line"><span class="number">1</span></div><div class="line"><span class="number">2</span></div><div class="line"><span class="number">3</span></div><div class="line"><span class="number">4</span></div><div class="line"></div><div class="line"><span class="comment"># Lodash下输出是</span></div><div class="line"><span class="number">1</span></div><div class="line"><span class="number">2</span></div><div class="line"><span class="number">3</span></div></pre></td></tr></table></figure>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;正则填字游戏game&quot;&gt;&lt;a href=&quot;http://regexcrossword.com/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;正则填字游戏&lt;/a&gt;&lt;/h2&gt;
-&lt;h2 id=&quot;debuggexdebuggex&quot;&gt;&lt;a href=&quot;h
+      从Lodash迁移到Underscore时候要小心的小小差异
     
     </summary>
     
+      <category term="前端" scheme="http://hikerpig.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
     
-      <category term="Toys" scheme="http://hikerpig.github.io/tags/Toys/"/>
+    
+      <category term="Javascript" scheme="http://hikerpig.github.io/tags/Javascript/"/>
+    
+      <category term="Coffeescript" scheme="http://hikerpig.github.io/tags/Coffeescript/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>用node schedule简单地实现定时跑脚本功能</title>
+    <link href="http://hikerpig.github.io/2015/01/28/2014-04-21-%E7%94%A8node-schedule%E7%AE%80%E5%8D%95%E5%9C%B0%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E8%B7%91%E8%84%9A%E6%9C%AC%E5%8A%9F%E8%83%BD/"/>
+    <id>http://hikerpig.github.io/2015/01/28/2014-04-21-用node-schedule简单地实现定时跑脚本功能/</id>
+    <published>2015-01-28T04:09:59.000Z</published>
+    <updated>2015-01-28T04:09:59.000Z</updated>
+    
+    <content type="html"><![CDATA[<p><a href="" title="https://github.com/mattpat/node-schedule">node-schedule</a>是一个用node实现的任务调度系统，比起不太好配置的crontab，用来管理同用javascript写的定时脚本实在是再合适不过。</p>
+<p>以下是为之前的<a href="!--￼2--">虾米签到脚本</a>写的task runner:</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">schedule = <span class="built_in">require</span> <span class="string">'node-schedule'</span></div><div class="line">process = <span class="built_in">require</span> <span class="string">'child_process'</span></div><div class="line">fs = <span class="built_in">require</span> <span class="string">'fs'</span></div><div class="line"></div><div class="line">log = <span class="literal">null</span></div><div class="line"></div><div class="line">rule = <span class="keyword">new</span> schedule.RecurrenceRule()</div><div class="line"></div><div class="line"><span class="keyword">if</span> process.env <span class="keyword">is</span> <span class="string">'development'</span></div><div class="line">  rule.second = <span class="number">1</span> <span class="comment"># 每隔一分钟，测试用</span></div><div class="line"><span class="keyword">else</span></div><div class="line">  rule.hour = <span class="number">1</span> <span class="comment"># 凌晨1点签到</span></div><div class="line"></div><div class="line"><span class="comment"># 写入log文件中</span></div><div class="line"><span class="function"><span class="title">writeLog</span> = <span class="params">(text)</span>-&gt;</span></div><div class="line">  log = fs.createWriteStream(<span class="string">'log.txt'</span>, &#123;<span class="string">'flags'</span>: <span class="string">'a'</span>, encoding: <span class="string">'utf-8'</span>&#125;)</div><div class="line">  log.end(text)</div><div class="line"></div><div class="line"><span class="function"><span class="title">run</span> = <span class="params">()</span>-&gt;</span></div><div class="line">  child = process.spawn <span class="string">'casperjs'</span>, [<span class="string">'xiami_casper.coffee'</span>]</div><div class="line"></div><div class="line">  child.stdout.<span class="literal">on</span>(<span class="string">'data'</span>, <span class="function"><span class="params">(data)</span>-&gt;</span></div><div class="line">    text = <span class="keyword">new</span> Date() + data.toString()</div><div class="line">    writeLog(text)</div><div class="line">    <span class="built_in">console</span>.log text</div><div class="line">  )</div><div class="line"></div><div class="line">  child.stdout.<span class="literal">on</span>(<span class="string">'end'</span>, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">    writeLog(<span class="string">"Run job on <span class="subst">#&#123;<span class="keyword">new</span> Date().toString()&#125;</span>"</span>)</div><div class="line">  )</div><div class="line"></div><div class="line">  child.<span class="literal">on</span> <span class="string">'error'</span>, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">    <span class="built_in">console</span>.log arguments</div><div class="line"></div><div class="line">job = schedule.scheduleJob(rule, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">  run()</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>上传到vps上，用forever来启动runner长时间运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">forever start -c coffee schedule_runner.coffee</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;a href=&quot;&quot; title=&quot;https://github.com/mattpat/node-schedule&quot;&gt;node-schedule&lt;/a&gt;是一个用node实现的任务调度系统，比起不太好配置的crontab，用来管理同用javascript写的定时脚本实在是再
+    
+    </summary>
+    
+      <category term="玩具" scheme="http://hikerpig.github.io/categories/%E7%8E%A9%E5%85%B7/"/>
+    
+    
+      <category term="Node" scheme="http://hikerpig.github.io/tags/Node/"/>
     
   </entry>
   
@@ -1162,36 +1232,55 @@ more script tags here...</code></pre>
   </entry>
   
   <entry>
-    <title>Lodash和Underscore的小小区别</title>
-    <link href="http://hikerpig.github.io/2015/01/28/2014-03-16-Lodash%E5%92%8CUnderscore%E7%9A%84%E5%B0%8F%E5%B0%8F%E5%8C%BA%E5%88%AB/"/>
-    <id>http://hikerpig.github.io/2015/01/28/2014-03-16-Lodash和Underscore的小小区别/</id>
+    <title>用 ssh reverse tunnel 调用远程服务器的剪切板使用</title>
+    <link href="http://hikerpig.github.io/2015/01/28/2014-04-10-%E7%94%A8ssh-reverse-tunnel%E8%B0%83%E7%94%A8%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%89%AA%E5%88%87%E6%9D%BF%E4%BD%BF%E7%94%A8/"/>
+    <id>http://hikerpig.github.io/2015/01/28/2014-04-10-用ssh-reverse-tunnel调用远程服务器的剪切板使用/</id>
     <published>2015-01-28T04:09:59.000Z</published>
     <updated>2015-01-28T04:09:59.000Z</updated>
     
-    <content type="html"><![CDATA[<p>之前在项目小重构的时候想试试号称Underscore继承者的Lodash，无痛迁移，而且新的API也很好用，这几天调一个bug的时候却发现<code>_.each</code>的结果怎么都不对。</p>
-<p>翻Lodash 文档才发现人家都明明白白地写了：</p>
-<blockquote>
-<p>_.forEach(collection, [callback=identity], [thisArg])</p>
-<p>Iterates over elements of a collection, executing the callback for each element. The callback is bound to thisArg and invoked with three arguments; (value, index|key, collection). Callbacks may exit iteration early by explicitly returning false.</p>
-</blockquote>
-<p>这一点跟Underscore使用的原生JS不太一样。</p>
-<p>其实也只有callback的返回值是false的时候遍历才会停止，我们一般手写JS代码单纯地用<code>forEach</code>遍历数组的时候使用<code>return</code>也只是想进入对下个元素的处理，不会给返回值赋什么意义，于是函数的返回值为undefined。所以用Lodash一直也没有什么问题。</p>
-<p>但是在项目里你要用Coffeescript，保不准就呵呵了：</p>
-<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">segments = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</div><div class="line">lessThanThree = <span class="literal">true</span></div><div class="line">_.each segments, <span class="function"><span class="params">(seg, index)</span> -&gt;</span></div><div class="line">	<span class="built_in">console</span>.log seg</div><div class="line">    <span class="keyword">if</span> index &gt; <span class="number">2</span></div><div class="line">    	lessThanThree = <span class="literal">false</span></div><div class="line"></div><div class="line"><span class="comment"># 在Underscore下输出是</span></div><div class="line"><span class="number">1</span></div><div class="line"><span class="number">2</span></div><div class="line"><span class="number">3</span></div><div class="line"><span class="number">4</span></div><div class="line"></div><div class="line"><span class="comment"># Lodash下输出是</span></div><div class="line"><span class="number">1</span></div><div class="line"><span class="number">2</span></div><div class="line"><span class="number">3</span></div></pre></td></tr></table></figure>
+    <content type="html"><![CDATA[<p>用ssh在远程服务器上工作的时候看着vim的满屏代码，突然怎么都没办法复制下来（其实鼠标还是可以用的，不过如果内容多到跨屏那就呵呵呵了），真是急死人，万能的google啊帮助我吧。</p>
+<h1 id="在本机上要做的事">在本机上要做的事</h1>
+<p>先用netcat建立一个剪贴板服务在后台运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">PORT=5566</div><div class="line"><span class="keyword">while</span> : ;<span class="keyword">do</span> nc -l localhost <span class="variable">$PORT</span> | pbcopy ; <span class="keyword">done</span> &amp;</div></pre></td></tr></table></figure>
+<p>现在这两个命令的效果是一样的了：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> <span class="string">"剪贴板"</span> | pbcopy</div><div class="line"><span class="built_in">echo</span> <span class="string">"剪贴板"</span> | nc localhost 5566</div></pre></td></tr></table></figure>
+<p>然后我们在ssh的时候加上反向代理参数:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 表明当前ssh会话所有向远程服务器B的5566端口发送的信息都会转到本机A的5566端口上</span></div><div class="line">ssh user@remote-server.com -R 5566:localhost:5566</div></pre></td></tr></table></figure>
+<p>现在在ssh会话中尝试下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat test_file.txt | nc -v localhost 5566</div></pre></td></tr></table></figure>
+<p>然后ctrl + v 试试，哈哈。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Connection to localhost 5566 port [tcp/*] succeeded!</div></pre></td></tr></table></figure>
+<p>去掉-v(verbose)选项可以让一切在默默中进行。</p>
+<p>我整理出一个脚本，运行这个脚本就能搞出一个能偷用剪贴板的ssh会话了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">PORT=5566</div><div class="line">ssh_server=<span class="string">'ubuntu@crmdev'</span></div><div class="line"></div><div class="line"><span class="comment"># using mac</span></div><div class="line"><span class="keyword">if</span> [[ -n `<span class="built_in">which</span> pbcopy` ]]; <span class="keyword">then</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"@Mac"</span></div><div class="line">  copy_command=<span class="string">'pbcopy'</span></div><div class="line"><span class="keyword">elif</span> [[ -n `<span class="built_in">which</span> xsel` ]]; <span class="keyword">then</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"you can use xsel on ubuntu"</span></div><div class="line">  copy_command=<span class="string">'xsel'</span></div><div class="line"><span class="keyword">else</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"you don't have clipboard utility"</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line">existed=`ps | grep nc | grep <span class="variable">$PORT</span>`</div><div class="line"></div><div class="line"><span class="comment"># start a netcat server</span></div><div class="line"><span class="keyword">if</span> [[ -n <span class="variable">$existed</span> ]]; <span class="keyword">then</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"nc <span class="variable">$PORT</span> already existed"</span></div><div class="line"><span class="keyword">else</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"nc <span class="variable">$PORT</span> does not exist"</span></div><div class="line">  <span class="keyword">if</span> [[ -n <span class="variable">$copy_command</span> ]]; <span class="keyword">then</span></div><div class="line">    <span class="keyword">while</span> : ;<span class="keyword">do</span> nc -l localhost <span class="variable">$PORT</span> | <span class="variable">$copy_command</span> ; <span class="keyword">done</span> &amp;</div><div class="line">  <span class="keyword">fi</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line"><span class="comment"># ssh the server</span></div><div class="line"><span class="keyword">if</span> [[ -n <span class="variable">$copy_command</span> ]]; <span class="keyword">then</span></div><div class="line">  ssh -R <span class="variable">$PORT</span>:localhost:<span class="variable">$PORT</span> <span class="variable">$ssh_server</span></div><div class="line"><span class="keyword">else</span></div><div class="line">  ssh <span class="variable">$ssh_server</span></div><div class="line"><span class="keyword">fi</span></div></pre></td></tr></table></figure>
+<h2 id="其他方法">其他方法</h2>
+<p>还有一个方法是<a href="https://defuse.ca/blog/clipboard-over-ssh-with-vim" target="_blank" rel="external">开启ssh的X11Forwarding选项</a>，还没试过。</p>
+<h1 id="在远程服务器需要做的事">在远程服务器需要做的事</h1>
+<p>使用vim编辑的时候，为了使用系统剪贴板并传到5566端口上，需要覆盖下我们在vim里的复制键位映射：</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">vmap</span> <span class="comment">"+y ::w !nc localhost 5566&lt;CR&gt;</span></div></pre></td></tr></table></figure>
+<p>其中<code>'&lt;,'&gt;</code>对应的是在Vim的Visual模式下选中的文本，使用<code>!nc</code>调用shell中的<code>nc</code>程序，便可以转发选中内容。</p>
+<p>离鼠标依赖又远了一点。</p>
+<h1 id="参考文章">参考文章</h1>
+<ul>
+<li><a href="http://gistflow.com/posts/934-copy-from-a-remote-server-to-the-local-mac-clipboard" class="uri" target="_blank" rel="external">http://gistflow.com/posts/934-copy-from-a-remote-server-to-the-local-mac-clipboard</a></li>
+<li><a href="http://evolvingweb.ca/blog/exposing-your-clipboard-over-ssh" target="_blank" rel="external">exposing-your-clipboard-over-ssh</a></li>
+<li><a href="http://superuser.com/questions/407888/synchronize-pasteboard-between-remote-tmux-session-and-local-mac-os-pasteboard" target="_blank" rel="external">synchronize-pasteboard-between-remote-tmux-session-and-local-mac-os-pasteboard</a></li>
+<li><a href="http://benninger.ca/posts/vim-use-selected-text-as-input-to-a-shell-command/" target="_blank" rel="external">vim-use-selected-text-as-input-to-a-shell-command</a></li>
+</ul>
 ]]></content>
     
     <summary type="html">
     
-      从Lodash迁移到Underscore时候要小心的小小差异
+      &lt;p&gt;用ssh在远程服务器上工作的时候看着vim的满屏代码，突然怎么都没办法复制下来（其实鼠标还是可以用的，不过如果内容多到跨屏那就呵呵呵了），真是急死人，万能的google啊帮助我吧。&lt;/p&gt;
+&lt;h1 id=&quot;在本机上要做的事&quot;&gt;在本机上要做的事&lt;/h1&gt;
+&lt;p&gt;先用netca
     
     </summary>
     
-      <category term="前端" scheme="http://hikerpig.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
+      <category term="Tips" scheme="http://hikerpig.github.io/categories/Tips/"/>
     
     
-      <category term="Javascript" scheme="http://hikerpig.github.io/tags/Javascript/"/>
-    
-      <category term="Coffeescript" scheme="http://hikerpig.github.io/tags/Coffeescript/"/>
+      <category term="Vim" scheme="http://hikerpig.github.io/tags/Vim/"/>
     
   </entry>
   
@@ -1253,86 +1342,6 @@ more script tags here...</code></pre>
       <category term="外貌协会" scheme="http://hikerpig.github.io/tags/%E5%A4%96%E8%B2%8C%E5%8D%8F%E4%BC%9A/"/>
     
       <category term="折腾" scheme="http://hikerpig.github.io/tags/%E6%8A%98%E8%85%BE/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>用 ssh reverse tunnel 调用远程服务器的剪切板使用</title>
-    <link href="http://hikerpig.github.io/2015/01/28/2014-04-10-%E7%94%A8ssh-reverse-tunnel%E8%B0%83%E7%94%A8%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%89%AA%E5%88%87%E6%9D%BF%E4%BD%BF%E7%94%A8/"/>
-    <id>http://hikerpig.github.io/2015/01/28/2014-04-10-用ssh-reverse-tunnel调用远程服务器的剪切板使用/</id>
-    <published>2015-01-28T04:09:59.000Z</published>
-    <updated>2015-01-28T04:09:59.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>用ssh在远程服务器上工作的时候看着vim的满屏代码，突然怎么都没办法复制下来（其实鼠标还是可以用的，不过如果内容多到跨屏那就呵呵呵了），真是急死人，万能的google啊帮助我吧。</p>
-<h1 id="在本机上要做的事">在本机上要做的事</h1>
-<p>先用netcat建立一个剪贴板服务在后台运行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">PORT=5566</div><div class="line"><span class="keyword">while</span> : ;<span class="keyword">do</span> nc -l localhost <span class="variable">$PORT</span> | pbcopy ; <span class="keyword">done</span> &amp;</div></pre></td></tr></table></figure>
-<p>现在这两个命令的效果是一样的了：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">echo</span> <span class="string">"剪贴板"</span> | pbcopy</div><div class="line"><span class="built_in">echo</span> <span class="string">"剪贴板"</span> | nc localhost 5566</div></pre></td></tr></table></figure>
-<p>然后我们在ssh的时候加上反向代理参数:</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 表明当前ssh会话所有向远程服务器B的5566端口发送的信息都会转到本机A的5566端口上</span></div><div class="line">ssh user@remote-server.com -R 5566:localhost:5566</div></pre></td></tr></table></figure>
-<p>现在在ssh会话中尝试下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat test_file.txt | nc -v localhost 5566</div></pre></td></tr></table></figure>
-<p>然后ctrl + v 试试，哈哈。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Connection to localhost 5566 port [tcp/*] succeeded!</div></pre></td></tr></table></figure>
-<p>去掉-v(verbose)选项可以让一切在默默中进行。</p>
-<p>我整理出一个脚本，运行这个脚本就能搞出一个能偷用剪贴板的ssh会话了。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">PORT=5566</div><div class="line">ssh_server=<span class="string">'ubuntu@crmdev'</span></div><div class="line"></div><div class="line"><span class="comment"># using mac</span></div><div class="line"><span class="keyword">if</span> [[ -n `<span class="built_in">which</span> pbcopy` ]]; <span class="keyword">then</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"@Mac"</span></div><div class="line">  copy_command=<span class="string">'pbcopy'</span></div><div class="line"><span class="keyword">elif</span> [[ -n `<span class="built_in">which</span> xsel` ]]; <span class="keyword">then</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"you can use xsel on ubuntu"</span></div><div class="line">  copy_command=<span class="string">'xsel'</span></div><div class="line"><span class="keyword">else</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"you don't have clipboard utility"</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line">existed=`ps | grep nc | grep <span class="variable">$PORT</span>`</div><div class="line"></div><div class="line"><span class="comment"># start a netcat server</span></div><div class="line"><span class="keyword">if</span> [[ -n <span class="variable">$existed</span> ]]; <span class="keyword">then</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"nc <span class="variable">$PORT</span> already existed"</span></div><div class="line"><span class="keyword">else</span></div><div class="line">  <span class="built_in">echo</span> <span class="string">"nc <span class="variable">$PORT</span> does not exist"</span></div><div class="line">  <span class="keyword">if</span> [[ -n <span class="variable">$copy_command</span> ]]; <span class="keyword">then</span></div><div class="line">    <span class="keyword">while</span> : ;<span class="keyword">do</span> nc -l localhost <span class="variable">$PORT</span> | <span class="variable">$copy_command</span> ; <span class="keyword">done</span> &amp;</div><div class="line">  <span class="keyword">fi</span></div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line"><span class="comment"># ssh the server</span></div><div class="line"><span class="keyword">if</span> [[ -n <span class="variable">$copy_command</span> ]]; <span class="keyword">then</span></div><div class="line">  ssh -R <span class="variable">$PORT</span>:localhost:<span class="variable">$PORT</span> <span class="variable">$ssh_server</span></div><div class="line"><span class="keyword">else</span></div><div class="line">  ssh <span class="variable">$ssh_server</span></div><div class="line"><span class="keyword">fi</span></div></pre></td></tr></table></figure>
-<h2 id="其他方法">其他方法</h2>
-<p>还有一个方法是<a href="https://defuse.ca/blog/clipboard-over-ssh-with-vim" target="_blank" rel="external">开启ssh的X11Forwarding选项</a>，还没试过。</p>
-<h1 id="在远程服务器需要做的事">在远程服务器需要做的事</h1>
-<p>使用vim编辑的时候，为了使用系统剪贴板并传到5566端口上，需要覆盖下我们在vim里的复制键位映射：</p>
-<figure class="highlight vim"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">vmap</span> <span class="comment">"+y ::w !nc localhost 5566&lt;CR&gt;</span></div></pre></td></tr></table></figure>
-<p>其中<code>'&lt;,'&gt;</code>对应的是在Vim的Visual模式下选中的文本，使用<code>!nc</code>调用shell中的<code>nc</code>程序，便可以转发选中内容。</p>
-<p>离鼠标依赖又远了一点。</p>
-<h1 id="参考文章">参考文章</h1>
-<ul>
-<li><a href="http://gistflow.com/posts/934-copy-from-a-remote-server-to-the-local-mac-clipboard" class="uri" target="_blank" rel="external">http://gistflow.com/posts/934-copy-from-a-remote-server-to-the-local-mac-clipboard</a></li>
-<li><a href="http://evolvingweb.ca/blog/exposing-your-clipboard-over-ssh" target="_blank" rel="external">exposing-your-clipboard-over-ssh</a></li>
-<li><a href="http://superuser.com/questions/407888/synchronize-pasteboard-between-remote-tmux-session-and-local-mac-os-pasteboard" target="_blank" rel="external">synchronize-pasteboard-between-remote-tmux-session-and-local-mac-os-pasteboard</a></li>
-<li><a href="http://benninger.ca/posts/vim-use-selected-text-as-input-to-a-shell-command/" target="_blank" rel="external">vim-use-selected-text-as-input-to-a-shell-command</a></li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;用ssh在远程服务器上工作的时候看着vim的满屏代码，突然怎么都没办法复制下来（其实鼠标还是可以用的，不过如果内容多到跨屏那就呵呵呵了），真是急死人，万能的google啊帮助我吧。&lt;/p&gt;
-&lt;h1 id=&quot;在本机上要做的事&quot;&gt;在本机上要做的事&lt;/h1&gt;
-&lt;p&gt;先用netca
-    
-    </summary>
-    
-      <category term="Tips" scheme="http://hikerpig.github.io/categories/Tips/"/>
-    
-    
-      <category term="Vim" scheme="http://hikerpig.github.io/tags/Vim/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>用node schedule简单地实现定时跑脚本功能</title>
-    <link href="http://hikerpig.github.io/2015/01/28/2014-04-21-%E7%94%A8node-schedule%E7%AE%80%E5%8D%95%E5%9C%B0%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E8%B7%91%E8%84%9A%E6%9C%AC%E5%8A%9F%E8%83%BD/"/>
-    <id>http://hikerpig.github.io/2015/01/28/2014-04-21-用node-schedule简单地实现定时跑脚本功能/</id>
-    <published>2015-01-28T04:09:59.000Z</published>
-    <updated>2015-01-28T04:09:59.000Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="" title="https://github.com/mattpat/node-schedule">node-schedule</a>是一个用node实现的任务调度系统，比起不太好配置的crontab，用来管理同用javascript写的定时脚本实在是再合适不过。</p>
-<p>以下是为之前的<a href="!--￼2--">虾米签到脚本</a>写的task runner:</p>
-<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">schedule = <span class="built_in">require</span> <span class="string">'node-schedule'</span></div><div class="line">process = <span class="built_in">require</span> <span class="string">'child_process'</span></div><div class="line">fs = <span class="built_in">require</span> <span class="string">'fs'</span></div><div class="line"></div><div class="line">log = <span class="literal">null</span></div><div class="line"></div><div class="line">rule = <span class="keyword">new</span> schedule.RecurrenceRule()</div><div class="line"></div><div class="line"><span class="keyword">if</span> process.env <span class="keyword">is</span> <span class="string">'development'</span></div><div class="line">  rule.second = <span class="number">1</span> <span class="comment"># 每隔一分钟，测试用</span></div><div class="line"><span class="keyword">else</span></div><div class="line">  rule.hour = <span class="number">1</span> <span class="comment"># 凌晨1点签到</span></div><div class="line"></div><div class="line"><span class="comment"># 写入log文件中</span></div><div class="line"><span class="function"><span class="title">writeLog</span> = <span class="params">(text)</span>-&gt;</span></div><div class="line">  log = fs.createWriteStream(<span class="string">'log.txt'</span>, &#123;<span class="string">'flags'</span>: <span class="string">'a'</span>, encoding: <span class="string">'utf-8'</span>&#125;)</div><div class="line">  log.end(text)</div><div class="line"></div><div class="line"><span class="function"><span class="title">run</span> = <span class="params">()</span>-&gt;</span></div><div class="line">  child = process.spawn <span class="string">'casperjs'</span>, [<span class="string">'xiami_casper.coffee'</span>]</div><div class="line"></div><div class="line">  child.stdout.<span class="literal">on</span>(<span class="string">'data'</span>, <span class="function"><span class="params">(data)</span>-&gt;</span></div><div class="line">    text = <span class="keyword">new</span> Date() + data.toString()</div><div class="line">    writeLog(text)</div><div class="line">    <span class="built_in">console</span>.log text</div><div class="line">  )</div><div class="line"></div><div class="line">  child.stdout.<span class="literal">on</span>(<span class="string">'end'</span>, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">    writeLog(<span class="string">"Run job on <span class="subst">#&#123;<span class="keyword">new</span> Date().toString()&#125;</span>"</span>)</div><div class="line">  )</div><div class="line"></div><div class="line">  child.<span class="literal">on</span> <span class="string">'error'</span>, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">    <span class="built_in">console</span>.log arguments</div><div class="line"></div><div class="line">job = schedule.scheduleJob(rule, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">  run()</div><div class="line">)</div></pre></td></tr></table></figure>
-<p>上传到vps上，用forever来启动runner长时间运行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">forever start -c coffee schedule_runner.coffee</div></pre></td></tr></table></figure>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;a href=&quot;&quot; title=&quot;https://github.com/mattpat/node-schedule&quot;&gt;node-schedule&lt;/a&gt;是一个用node实现的任务调度系统，比起不太好配置的crontab，用来管理同用javascript写的定时脚本实在是再
-    
-    </summary>
-    
-      <category term="玩具" scheme="http://hikerpig.github.io/categories/%E7%8E%A9%E5%85%B7/"/>
-    
-    
-      <category term="Node" scheme="http://hikerpig.github.io/tags/Node/"/>
     
   </entry>
   

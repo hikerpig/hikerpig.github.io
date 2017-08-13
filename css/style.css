@@ -14,7 +14,7 @@ body {
 p {
   line-height: 1.9em;
   font-weight: 400;
-  font-size: 14px; }
+  font-size: 15px; }
 
 a {
   text-decoration: none; }
@@ -575,6 +575,9 @@ a.btn {
       .sidebar .logo-title .title h3 {
         font-size: 20px; }
 
+  .post {
+    margin: 20px; }
+
   .page-top {
     width: 100%; }
 
@@ -588,10 +591,7 @@ a.btn {
     position: absolute; }
 
   .footer {
-    display: none; }
-
-  .share {
-    display: grid; } }
+    display: none; } }
 .sidebar__avatar {
   border-radius: 50%; }
 
@@ -631,5 +631,13 @@ a.btn {
     margin: 0 20px; } }
 .feature_image {
   margin-top: 10px; }
+
+/* Typograph */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  color: #666666; }
 
 /*# sourceMappingURL=style.css.map */
