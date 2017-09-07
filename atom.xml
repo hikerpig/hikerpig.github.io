@@ -15,16 +15,53 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>使用 Object.create(null) 创建空对象</title>
+    <link href="http://hikerpig.github.io/2017/09/07/2017-09-07-Using-Object.create/"/>
+    <id>http://hikerpig.github.io/2017/09/07/2017-09-07-Using-Object.create/</id>
+    <published>2017-09-07T06:21:56.000Z</published>
+    <updated>2017-09-07T06:33:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>使用对象字面量形式时，隐式地创建了一个以 <code>Object.prototype</code> 作为原型的对象。</p>
+<p>以下两种方式等同。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o1 = &#123;&#125;</div><div class="line"></div><div class="line"><span class="keyword">var</span> o2 = <span class="built_in">Object</span>.create(<span class="built_in">Object</span>.prototype)</div></pre></td></tr></table></figure>
+<h2 id="更省事的方法">更省事的方法</h2>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> o3 = <span class="built_in">Object</span>.create(<span class="literal">null</span>)</div></pre></td></tr></table></figure>
+<p>创建一个不继承任何原型的对象。</p>
+<p>如果需要创建一个简单的 map 性质的对象，使用此种方式，在对 <code>o3</code> 进行遍历的时候，就可以躲开充满恶意的世界在 <code>Object.prototype</code> 上添加的方法或属性。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="keyword">const</span> k <span class="keyword">in</span> o1) &#123;</div><div class="line">  <span class="keyword">if</span> (o1.hasOwnProperty(k)) &#123;</div><div class="line">  &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// 遍历时不需要判断 hasOwnProperty</span></div><div class="line"><span class="keyword">for</span> (<span class="keyword">const</span> k <span class="keyword">in</span> o3) &#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;使用对象字面量形式时，隐式地创建了一个以 &lt;code&gt;Object.prototype&lt;/code&gt; 作为原型的对象。&lt;/p&gt;
+&lt;p&gt;以下两种方式等同。&lt;/p&gt;
+&lt;figure class=&quot;highlight js&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutte
+    
+    </summary>
+    
+    
+      <category term="Javascript" scheme="http://hikerpig.github.io/tags/Javascript/"/>
+    
+  </entry>
+  
+  <entry>
     <title>给开发减压的 gulp.watch 配置</title>
     <link href="http://hikerpig.github.io/2017/08/22/2017-08-22-gulp-watch-for-poor-cpu/"/>
     <id>http://hikerpig.github.io/2017/08/22/2017-08-22-gulp-watch-for-poor-cpu/</id>
     <published>2017-08-22T04:33:04.000Z</published>
-    <updated>2017-08-22T04:55:09.000Z</updated>
+    <updated>2017-08-22T05:07:50.000Z</updated>
     
     <content type="html"><![CDATA[<p>Gulp 的文件监听使用了 <a href="https://github.com/shama/gaze" target="_blank" rel="external">gaze</a>，如果只看了 Gulp 的 API 文档可能会漏掉一些参数。</p>
 <p><a href="https://github.com/gulpjs/gulp/blob/master/docs/API.md" target="_blank" rel="external">Gulp 文档</a> 中提到:</p>
 <p><code>gulp.watch(glob[, opts], tasks)</code></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">opts</div><div class="line"></div><div class="line">Type: Object</div><div class="line"></div><div class="line">Options, that are passed to gaze.</div></pre></td></tr></table></figure>
+<p>options 包括:</p>
+<ul>
+<li><code>interval</code> {integer} Interval to pass to fs.watchFile</li>
+<li><code>debounceDelay</code> {integer} Delay for events called in succession for the same file/event in milliseconds</li>
+<li><code>mode</code> {string} Force the watch mode. Either ‘auto’ (default), ‘watch’ (force native events), or ‘poll’ (force stat polling).</li>
+<li><code>cwd</code> {string} The current working directory to base file patterns from. Default is process.cwd()</li>
+</ul>
 <p>gaze 的设置参数中，感觉最有用却被遗漏的就是 <code>interval</code> 了，好多人提到 <a href="https://github.com/gulpjs/gulp/issues/634" target="_blank" rel="external">gulp.watch CPU 占用太高</a>，因为 gaze 默认 100ms 检查监听的文件状态。</p>
 <p>如果监听文件太多导致 CPU 占用居高不下的话，可以考虑加大 <code>interval</code>:</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">gulp.watch(blob, &#123;<span class="attr">interval</span>: <span class="number">500</span>&#125;, tasks)</div></pre></td></tr></table></figure>
@@ -1076,6 +1113,33 @@ more script tags here...</code></pre>
   </entry>
   
   <entry>
+    <title>正则也可以很好玩</title>
+    <link href="http://hikerpig.github.io/2015/01/28/2014-04-29-%E6%AD%A3%E5%88%99%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%BE%88%E5%A5%BD%E7%8E%A9/"/>
+    <id>http://hikerpig.github.io/2015/01/28/2014-04-29-正则也可以很好玩/</id>
+    <published>2015-01-28T04:12:03.000Z</published>
+    <updated>2017-07-24T08:39:03.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="正则填字游戏game"><a href="http://regexcrossword.com/" target="_blank" rel="external">正则填字游戏</a></h2>
+<h2 id="debuggexdebuggex"><a href="https://www.debuggex.com" target="_blank" rel="external">Debuggex</a></h2>
+<p>可视化正则匹配过程, 用于调试十分方便</p>
+<img src="http://images-hikerpig.qiniudn.com/image/debuggex.png" alt="undefined">
+<h2 id="regexperregexper"><a href="http://www.regexper.com/" target="_blank" rel="external">regexper</a></h2>
+<p>一个把javascript正则表达式转换成图表的工具网站。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;正则填字游戏game&quot;&gt;&lt;a href=&quot;http://regexcrossword.com/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;正则填字游戏&lt;/a&gt;&lt;/h2&gt;
+&lt;h2 id=&quot;debuggexdebuggex&quot;&gt;&lt;a href=&quot;h
+    
+    </summary>
+    
+    
+      <category term="Toys" scheme="http://hikerpig.github.io/tags/Toys/"/>
+    
+  </entry>
+  
+  <entry>
     <title>在Jekyll博客里优雅地嵌入Github Gist</title>
     <link href="http://hikerpig.github.io/2015/01/28/2014-04-08-%E5%9C%A8Jekyll%E5%8D%9A%E5%AE%A2%E9%87%8C%E4%BC%98%E9%9B%85%E5%9C%B0%E5%B5%8C%E5%85%A5Github-Gist/"/>
     <id>http://hikerpig.github.io/2015/01/28/2014-04-08-在Jekyll博客里优雅地嵌入Github-Gist/</id>
@@ -1136,90 +1200,29 @@ more script tags here...</code></pre>
   </entry>
   
   <entry>
-    <title>正则也可以很好玩</title>
-    <link href="http://hikerpig.github.io/2015/01/28/2014-04-29-%E6%AD%A3%E5%88%99%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%BE%88%E5%A5%BD%E7%8E%A9/"/>
-    <id>http://hikerpig.github.io/2015/01/28/2014-04-29-正则也可以很好玩/</id>
-    <published>2015-01-28T04:12:03.000Z</published>
-    <updated>2017-07-24T08:39:03.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="正则填字游戏game"><a href="http://regexcrossword.com/" target="_blank" rel="external">正则填字游戏</a></h2>
-<h2 id="debuggexdebuggex"><a href="https://www.debuggex.com" target="_blank" rel="external">Debuggex</a></h2>
-<p>可视化正则匹配过程, 用于调试十分方便</p>
-<img src="http://images-hikerpig.qiniudn.com/image/debuggex.png" alt="undefined">
-<h2 id="regexperregexper"><a href="http://www.regexper.com/" target="_blank" rel="external">regexper</a></h2>
-<p>一个把javascript正则表达式转换成图表的工具网站。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;正则填字游戏game&quot;&gt;&lt;a href=&quot;http://regexcrossword.com/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;正则填字游戏&lt;/a&gt;&lt;/h2&gt;
-&lt;h2 id=&quot;debuggexdebuggex&quot;&gt;&lt;a href=&quot;h
-    
-    </summary>
-    
-    
-      <category term="Toys" scheme="http://hikerpig.github.io/tags/Toys/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>放过Pygments,让Prism来给Jekyll博客加上代码高亮</title>
-    <link href="http://hikerpig.github.io/2015/01/28/2014-03-31-%E6%94%BE%E8%BF%87Pygments/"/>
-    <id>http://hikerpig.github.io/2015/01/28/2014-03-31-放过Pygments/</id>
+    <title>用node schedule简单地实现定时跑脚本功能</title>
+    <link href="http://hikerpig.github.io/2015/01/28/2014-04-21-%E7%94%A8node-schedule%E7%AE%80%E5%8D%95%E5%9C%B0%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E8%B7%91%E8%84%9A%E6%9C%AC%E5%8A%9F%E8%83%BD/"/>
+    <id>http://hikerpig.github.io/2015/01/28/2014-04-21-用node-schedule简单地实现定时跑脚本功能/</id>
     <published>2015-01-28T04:09:59.000Z</published>
     <updated>2015-01-28T04:09:59.000Z</updated>
     
-    <content type="html"><![CDATA[<p>jekyll目前至少支持Redcarpet和RDiscount以及kramadown几种类markdown引擎，</p>
-<ul>
-<li><p>rdiscount 是基于C实现的 markdown 引擎 discount 的ruby调用，优点不用说也知道就是快。缺点是扩展性差(不过要扩展的功能也能通过jekyll的插件来实现)，关于discount的语法可以去看看<a href="http://www.pell.portland.or.us/~orc/Code/discount" target="_blank" rel="external">discount主页</a>或者<a href="http://baige5117.github.io/blog/rdiscount.html" target="_blank" rel="external">国内的一篇介绍</a>。</p></li>
-<li><p>Redcarpet 就是大家喜闻乐见的Github Flavored Markdown, 有个好东家, 基于ruby实现，易于扩展，插件也貌似比较多。</p></li>
-</ul>
-<p>kramadown没有了解，不过估计应该像前两者一样都支持Fenced code block, 我选择的是Redcarpet, 在用一对三个反引号包裹代码块上附加的文本会被认为是代码高亮的提示，输出html的时候它会被转为class属性。</p>
-<p>例如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'测试code block'</span>);</div></pre></td></tr></table></figure>
-<p>输出结果为:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;pre&gt;</div><div class="line">  &lt;code class=&quot;js&quot;&gt;</div><div class="line">    console.log(&apos;测试code block&apos;);</div><div class="line">  &lt;/code&gt;</div><div class="line">&lt;/pre&gt;</div></pre></td></tr></table></figure>
-<h2 id="后端的处理">后端的处理</h2>
-<p>首先在jekyll的站点设置文件<code>_config.yml</code>里关闭pygment:</p>
-<pre><code>pygment:  false</code></pre>
-<h2 id="前端的处理">## 前端的处理</h2>
-<h3 id="css">CSS</h3>
-<p>Prism内置多种主题都挺好看，我选择了prism-okaidia的样式文件。</p>
-<p>Prism在处理完高亮的时候，是根据代码块的<code>language-*</code>类名来选择对应语言的语法的。难道我们写文章的时候还要在每个高亮文法前都加上这个后缀么？No no，因为我们是懒人，绝对没门。因此在让Prism执行高亮之前，我们还得做一些小小的处理:</p>
-<h3 id="javascript">javascript</h3>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">_prismHandler = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  $(<span class="string">'code'</span>).not(<span class="string">'[class*="language-"]'</span>).addClass(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> _lang = $(<span class="keyword">this</span>).attr(<span class="string">'class'</span>)  || <span class="string">'markup'</span>; <span class="comment">// 默认为markdown语法</span></div><div class="line">    _lang = _lang.replace(<span class="regexp">/(language|lang)+\-/gi</span>, <span class="string">''</span>);</div><div class="line">    <span class="keyword">return</span> <span class="string">'language-'</span> + (Prism.languages.hasOwnProperty(_lang) ? _lang : <span class="string">'markup'</span>);</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  Prism.highlightAll();</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
-<p>激动人心的时刻到来了：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$(<span class="built_in">document</span>).ready(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  _prismHandler();</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
-<h1 id="为什么折腾">为什么折腾</h1>
-<p>除了因为作为菜鸟前端的局限外(感觉自己捅自己好轻松啊),折腾一番的好处当然就是，把代码高亮的任务转移给了客户端，每次重新生成网站的时候速度就xiu xiu xiu地上去了。</p>
-<p>选择Prism是因为当初看<a href="https://developer.mozilla.org" target="_blank" rel="external">MDN</a>教程的时候觉得代码块的配色实在是太美丽（因为作者也是个美丽的程序媛？）, 等宽字体Consolas非常舒适。</p>
-<p>不过说起来Prism好段时间没有更新，对于语言的支持也不是很完善（当然它有不错的<a href="http://prismjs.com/extending.html" target="_blank" rel="external">扩展机制</a>，你完全可以自己写一个语言的关键词定义)。如果哪天折腾之魂又出现了的话，可以尝试下用<a href="http://highlightjs.org/" target="_blank" rel="external">Highlight</a>，目前支持51种语言和20多种主题配色，官网也有方便的自定义包下载，让你在学习新语言的时候也能够满足漂漂亮亮地晒漂亮代码的需求（高手们真的care这个事情么= =）。</p>
-<h1 id="补充一下">补充一下</h1>
-<h2 id="prism-的不足">Prism 的不足</h2>
-<p>这个项目的维护得不是很频繁，试用了一下除了html、javascript、css以外的几种语言，感觉结果都不是特别精确，请看我的更新文章。</p>
-<h1 id="参考文章">参考文章</h1>
-<ul>
-<li><a href="http://www.pell.portland.or.us/~orc/Code/discount" target="_blank" rel="external">discount主页</a> discount 跟标准markdown的区别</li>
-<li><a href="http://baige5117.github.io/blog/rdiscount.html" target="_blank" rel="external">discount_brief</a> 国内的一篇介绍文章</li>
-</ul>
+    <content type="html"><![CDATA[<p><a href="" title="https://github.com/mattpat/node-schedule">node-schedule</a>是一个用node实现的任务调度系统，比起不太好配置的crontab，用来管理同用javascript写的定时脚本实在是再合适不过。</p>
+<p>以下是为之前的<a href="!--￼2--">虾米签到脚本</a>写的task runner:</p>
+<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">schedule = <span class="built_in">require</span> <span class="string">'node-schedule'</span></div><div class="line">process = <span class="built_in">require</span> <span class="string">'child_process'</span></div><div class="line">fs = <span class="built_in">require</span> <span class="string">'fs'</span></div><div class="line"></div><div class="line">log = <span class="literal">null</span></div><div class="line"></div><div class="line">rule = <span class="keyword">new</span> schedule.RecurrenceRule()</div><div class="line"></div><div class="line"><span class="keyword">if</span> process.env <span class="keyword">is</span> <span class="string">'development'</span></div><div class="line">  rule.second = <span class="number">1</span> <span class="comment"># 每隔一分钟，测试用</span></div><div class="line"><span class="keyword">else</span></div><div class="line">  rule.hour = <span class="number">1</span> <span class="comment"># 凌晨1点签到</span></div><div class="line"></div><div class="line"><span class="comment"># 写入log文件中</span></div><div class="line"><span class="function"><span class="title">writeLog</span> = <span class="params">(text)</span>-&gt;</span></div><div class="line">  log = fs.createWriteStream(<span class="string">'log.txt'</span>, &#123;<span class="string">'flags'</span>: <span class="string">'a'</span>, encoding: <span class="string">'utf-8'</span>&#125;)</div><div class="line">  log.end(text)</div><div class="line"></div><div class="line"><span class="function"><span class="title">run</span> = <span class="params">()</span>-&gt;</span></div><div class="line">  child = process.spawn <span class="string">'casperjs'</span>, [<span class="string">'xiami_casper.coffee'</span>]</div><div class="line"></div><div class="line">  child.stdout.<span class="literal">on</span>(<span class="string">'data'</span>, <span class="function"><span class="params">(data)</span>-&gt;</span></div><div class="line">    text = <span class="keyword">new</span> Date() + data.toString()</div><div class="line">    writeLog(text)</div><div class="line">    <span class="built_in">console</span>.log text</div><div class="line">  )</div><div class="line"></div><div class="line">  child.stdout.<span class="literal">on</span>(<span class="string">'end'</span>, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">    writeLog(<span class="string">"Run job on <span class="subst">#&#123;<span class="keyword">new</span> Date().toString()&#125;</span>"</span>)</div><div class="line">  )</div><div class="line"></div><div class="line">  child.<span class="literal">on</span> <span class="string">'error'</span>, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">    <span class="built_in">console</span>.log arguments</div><div class="line"></div><div class="line">job = schedule.scheduleJob(rule, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">  run()</div><div class="line">)</div></pre></td></tr></table></figure>
+<p>上传到vps上，用forever来启动runner长时间运行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">forever start -c coffee schedule_runner.coffee</div></pre></td></tr></table></figure>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;jekyll目前至少支持Redcarpet和RDiscount以及kramadown几种类markdown引擎，&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;p&gt;rdiscount 是基于C实现的 markdown 引擎 discount 的ruby调用，优点不用说也知道就是快。缺点是扩展
+      &lt;p&gt;&lt;a href=&quot;&quot; title=&quot;https://github.com/mattpat/node-schedule&quot;&gt;node-schedule&lt;/a&gt;是一个用node实现的任务调度系统，比起不太好配置的crontab，用来管理同用javascript写的定时脚本实在是再
     
     </summary>
     
-      <category term="工具" scheme="http://hikerpig.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
+      <category term="玩具" scheme="http://hikerpig.github.io/categories/%E7%8E%A9%E5%85%B7/"/>
     
     
-      <category term="jekyll" scheme="http://hikerpig.github.io/tags/jekyll/"/>
-    
-      <category term="外貌协会" scheme="http://hikerpig.github.io/tags/%E5%A4%96%E8%B2%8C%E5%8D%8F%E4%BC%9A/"/>
-    
-      <category term="折腾" scheme="http://hikerpig.github.io/tags/%E6%8A%98%E8%85%BE/"/>
+      <category term="Node" scheme="http://hikerpig.github.io/tags/Node/"/>
     
   </entry>
   
@@ -1312,29 +1315,63 @@ more script tags here...</code></pre>
   </entry>
   
   <entry>
-    <title>用node schedule简单地实现定时跑脚本功能</title>
-    <link href="http://hikerpig.github.io/2015/01/28/2014-04-21-%E7%94%A8node-schedule%E7%AE%80%E5%8D%95%E5%9C%B0%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E8%B7%91%E8%84%9A%E6%9C%AC%E5%8A%9F%E8%83%BD/"/>
-    <id>http://hikerpig.github.io/2015/01/28/2014-04-21-用node-schedule简单地实现定时跑脚本功能/</id>
+    <title>放过Pygments,让Prism来给Jekyll博客加上代码高亮</title>
+    <link href="http://hikerpig.github.io/2015/01/28/2014-03-31-%E6%94%BE%E8%BF%87Pygments/"/>
+    <id>http://hikerpig.github.io/2015/01/28/2014-03-31-放过Pygments/</id>
     <published>2015-01-28T04:09:59.000Z</published>
     <updated>2015-01-28T04:09:59.000Z</updated>
     
-    <content type="html"><![CDATA[<p><a href="" title="https://github.com/mattpat/node-schedule">node-schedule</a>是一个用node实现的任务调度系统，比起不太好配置的crontab，用来管理同用javascript写的定时脚本实在是再合适不过。</p>
-<p>以下是为之前的<a href="!--￼2--">虾米签到脚本</a>写的task runner:</p>
-<figure class="highlight coffeescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">schedule = <span class="built_in">require</span> <span class="string">'node-schedule'</span></div><div class="line">process = <span class="built_in">require</span> <span class="string">'child_process'</span></div><div class="line">fs = <span class="built_in">require</span> <span class="string">'fs'</span></div><div class="line"></div><div class="line">log = <span class="literal">null</span></div><div class="line"></div><div class="line">rule = <span class="keyword">new</span> schedule.RecurrenceRule()</div><div class="line"></div><div class="line"><span class="keyword">if</span> process.env <span class="keyword">is</span> <span class="string">'development'</span></div><div class="line">  rule.second = <span class="number">1</span> <span class="comment"># 每隔一分钟，测试用</span></div><div class="line"><span class="keyword">else</span></div><div class="line">  rule.hour = <span class="number">1</span> <span class="comment"># 凌晨1点签到</span></div><div class="line"></div><div class="line"><span class="comment"># 写入log文件中</span></div><div class="line"><span class="function"><span class="title">writeLog</span> = <span class="params">(text)</span>-&gt;</span></div><div class="line">  log = fs.createWriteStream(<span class="string">'log.txt'</span>, &#123;<span class="string">'flags'</span>: <span class="string">'a'</span>, encoding: <span class="string">'utf-8'</span>&#125;)</div><div class="line">  log.end(text)</div><div class="line"></div><div class="line"><span class="function"><span class="title">run</span> = <span class="params">()</span>-&gt;</span></div><div class="line">  child = process.spawn <span class="string">'casperjs'</span>, [<span class="string">'xiami_casper.coffee'</span>]</div><div class="line"></div><div class="line">  child.stdout.<span class="literal">on</span>(<span class="string">'data'</span>, <span class="function"><span class="params">(data)</span>-&gt;</span></div><div class="line">    text = <span class="keyword">new</span> Date() + data.toString()</div><div class="line">    writeLog(text)</div><div class="line">    <span class="built_in">console</span>.log text</div><div class="line">  )</div><div class="line"></div><div class="line">  child.stdout.<span class="literal">on</span>(<span class="string">'end'</span>, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">    writeLog(<span class="string">"Run job on <span class="subst">#&#123;<span class="keyword">new</span> Date().toString()&#125;</span>"</span>)</div><div class="line">  )</div><div class="line"></div><div class="line">  child.<span class="literal">on</span> <span class="string">'error'</span>, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">    <span class="built_in">console</span>.log arguments</div><div class="line"></div><div class="line">job = schedule.scheduleJob(rule, <span class="function"><span class="params">()</span>-&gt;</span></div><div class="line">  run()</div><div class="line">)</div></pre></td></tr></table></figure>
-<p>上传到vps上，用forever来启动runner长时间运行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">forever start -c coffee schedule_runner.coffee</div></pre></td></tr></table></figure>
+    <content type="html"><![CDATA[<p>jekyll目前至少支持Redcarpet和RDiscount以及kramadown几种类markdown引擎，</p>
+<ul>
+<li><p>rdiscount 是基于C实现的 markdown 引擎 discount 的ruby调用，优点不用说也知道就是快。缺点是扩展性差(不过要扩展的功能也能通过jekyll的插件来实现)，关于discount的语法可以去看看<a href="http://www.pell.portland.or.us/~orc/Code/discount" target="_blank" rel="external">discount主页</a>或者<a href="http://baige5117.github.io/blog/rdiscount.html" target="_blank" rel="external">国内的一篇介绍</a>。</p></li>
+<li><p>Redcarpet 就是大家喜闻乐见的Github Flavored Markdown, 有个好东家, 基于ruby实现，易于扩展，插件也貌似比较多。</p></li>
+</ul>
+<p>kramadown没有了解，不过估计应该像前两者一样都支持Fenced code block, 我选择的是Redcarpet, 在用一对三个反引号包裹代码块上附加的文本会被认为是代码高亮的提示，输出html的时候它会被转为class属性。</p>
+<p>例如：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">console</span>.log(<span class="string">'测试code block'</span>);</div></pre></td></tr></table></figure>
+<p>输出结果为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;pre&gt;</div><div class="line">  &lt;code class=&quot;js&quot;&gt;</div><div class="line">    console.log(&apos;测试code block&apos;);</div><div class="line">  &lt;/code&gt;</div><div class="line">&lt;/pre&gt;</div></pre></td></tr></table></figure>
+<h2 id="后端的处理">后端的处理</h2>
+<p>首先在jekyll的站点设置文件<code>_config.yml</code>里关闭pygment:</p>
+<pre><code>pygment:  false</code></pre>
+<h2 id="前端的处理">## 前端的处理</h2>
+<h3 id="css">CSS</h3>
+<p>Prism内置多种主题都挺好看，我选择了prism-okaidia的样式文件。</p>
+<p>Prism在处理完高亮的时候，是根据代码块的<code>language-*</code>类名来选择对应语言的语法的。难道我们写文章的时候还要在每个高亮文法前都加上这个后缀么？No no，因为我们是懒人，绝对没门。因此在让Prism执行高亮之前，我们还得做一些小小的处理:</p>
+<h3 id="javascript">javascript</h3>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">_prismHandler = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">  $(<span class="string">'code'</span>).not(<span class="string">'[class*="language-"]'</span>).addClass(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> _lang = $(<span class="keyword">this</span>).attr(<span class="string">'class'</span>)  || <span class="string">'markup'</span>; <span class="comment">// 默认为markdown语法</span></div><div class="line">    _lang = _lang.replace(<span class="regexp">/(language|lang)+\-/gi</span>, <span class="string">''</span>);</div><div class="line">    <span class="keyword">return</span> <span class="string">'language-'</span> + (Prism.languages.hasOwnProperty(_lang) ? _lang : <span class="string">'markup'</span>);</div><div class="line">  &#125;);</div><div class="line"></div><div class="line">  Prism.highlightAll();</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>激动人心的时刻到来了：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$(<span class="built_in">document</span>).ready(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</div><div class="line">  _prismHandler();</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h1 id="为什么折腾">为什么折腾</h1>
+<p>除了因为作为菜鸟前端的局限外(感觉自己捅自己好轻松啊),折腾一番的好处当然就是，把代码高亮的任务转移给了客户端，每次重新生成网站的时候速度就xiu xiu xiu地上去了。</p>
+<p>选择Prism是因为当初看<a href="https://developer.mozilla.org" target="_blank" rel="external">MDN</a>教程的时候觉得代码块的配色实在是太美丽（因为作者也是个美丽的程序媛？）, 等宽字体Consolas非常舒适。</p>
+<p>不过说起来Prism好段时间没有更新，对于语言的支持也不是很完善（当然它有不错的<a href="http://prismjs.com/extending.html" target="_blank" rel="external">扩展机制</a>，你完全可以自己写一个语言的关键词定义)。如果哪天折腾之魂又出现了的话，可以尝试下用<a href="http://highlightjs.org/" target="_blank" rel="external">Highlight</a>，目前支持51种语言和20多种主题配色，官网也有方便的自定义包下载，让你在学习新语言的时候也能够满足漂漂亮亮地晒漂亮代码的需求（高手们真的care这个事情么= =）。</p>
+<h1 id="补充一下">补充一下</h1>
+<h2 id="prism-的不足">Prism 的不足</h2>
+<p>这个项目的维护得不是很频繁，试用了一下除了html、javascript、css以外的几种语言，感觉结果都不是特别精确，请看我的更新文章。</p>
+<h1 id="参考文章">参考文章</h1>
+<ul>
+<li><a href="http://www.pell.portland.or.us/~orc/Code/discount" target="_blank" rel="external">discount主页</a> discount 跟标准markdown的区别</li>
+<li><a href="http://baige5117.github.io/blog/rdiscount.html" target="_blank" rel="external">discount_brief</a> 国内的一篇介绍文章</li>
+</ul>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;&lt;a href=&quot;&quot; title=&quot;https://github.com/mattpat/node-schedule&quot;&gt;node-schedule&lt;/a&gt;是一个用node实现的任务调度系统，比起不太好配置的crontab，用来管理同用javascript写的定时脚本实在是再
+      &lt;p&gt;jekyll目前至少支持Redcarpet和RDiscount以及kramadown几种类markdown引擎，&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;rdiscount 是基于C实现的 markdown 引擎 discount 的ruby调用，优点不用说也知道就是快。缺点是扩展
     
     </summary>
     
-      <category term="玩具" scheme="http://hikerpig.github.io/categories/%E7%8E%A9%E5%85%B7/"/>
+      <category term="工具" scheme="http://hikerpig.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
     
     
-      <category term="Node" scheme="http://hikerpig.github.io/tags/Node/"/>
+      <category term="jekyll" scheme="http://hikerpig.github.io/tags/jekyll/"/>
+    
+      <category term="外貌协会" scheme="http://hikerpig.github.io/tags/%E5%A4%96%E8%B2%8C%E5%8D%8F%E4%BC%9A/"/>
+    
+      <category term="折腾" scheme="http://hikerpig.github.io/tags/%E6%8A%98%E8%85%BE/"/>
     
   </entry>
   
@@ -1454,37 +1491,6 @@ more script tags here...</code></pre>
     
     
       <category term="sass" scheme="http://hikerpig.github.io/tags/sass/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>git hook中的$GIT_DIR</title>
-    <link href="http://hikerpig.github.io/2014/03/23/2014-03-23-git-hook%E4%B8%AD%E7%9A%84$GIT_DIR%E5%8F%98%E9%87%8F/"/>
-    <id>http://hikerpig.github.io/2014/03/23/2014-03-23-git-hook中的$GIT_DIR变量/</id>
-    <published>2014-03-23T02:09:12.000Z</published>
-    <updated>2015-01-28T04:09:59.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>一直使用githook post-update来部署我的jekyll博客，每次push到远程git仓库的时候，在vps上的生产目录会自动更新和重新生成页面和静态资源， post-update文件是这样的：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/usr/zsh</span></div><div class="line"></div><div class="line">branchName=$(git rev-parse --symbolic --abbrev-ref <span class="variable">$1</span>)</div><div class="line">HOME=/home/******</div><div class="line">BLOG_DIR=<span class="variable">$HOME</span>/*******</div><div class="line"></div><div class="line"><span class="built_in">cd</span> <span class="variable">$BLOG_DIR</span></div><div class="line">git pull origin <span class="variable">$branchName</span></div><div class="line"></div><div class="line"><span class="keyword">if</span> [ <span class="variable">$branchName</span> = <span class="string">"master"</span> ]; <span class="keyword">then</span></div><div class="line">  [ -s <span class="variable">$HOME</span>/.nvm/nvm.sh ] &amp;&amp; . <span class="variable">$HOME</span>/.nvm/nvm.sh <span class="comment"># This loads NVM</span></div><div class="line">  <span class="built_in">export</span> PATH=<span class="variable">$PATH</span>:<span class="variable">$HOME</span>/.rvm/bin <span class="comment"># Add RVM to PATH for scripting</span></div><div class="line">  nvm use 113</div><div class="line">  <span class="variable">$HOME</span>/.rvm/bin/rvm use ruby-2.0.0</div><div class="line">  jekyll build</div><div class="line">  make front</div><div class="line"><span class="keyword">fi</span></div><div class="line"></div><div class="line"><span class="built_in">exec</span> git update-server-info</div></pre></td></tr></table></figure>
-<p>但是执行的时候会出现一个奇怪的问题：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Counting objects: 5, <span class="keyword">done</span>.</div><div class="line">Delta compression using up to 4 threads.</div><div class="line">Compressing objects: 100% (3/3), <span class="keyword">done</span>.</div><div class="line">Writing objects: 100% (3/3), 281 bytes | 0 bytes/s, <span class="keyword">done</span>.</div><div class="line">Total 3 (delta 2), reused 0 (delta 0)</div><div class="line">remote: fatal: Not a git repository: <span class="string">'.'</span></div><div class="line">...</div></pre></td></tr></table></figure>
-<p>最后的这一句表示出错了，而且git pull也没有正确进行。</p>
-<p>有人在<a href="" title="http://stackoverflow.com/questions/4043609/getting-fatal-not-a-git-repository-when-using-post-update-hook-to-execut">这个问题</a>中谈到解决方法，改进的部分在这里：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> <span class="variable">$BLOG_DIR</span> || <span class="built_in">exit</span></div><div class="line"><span class="built_in">unset</span> GIT_DIR</div><div class="line">git pull origin <span class="variable">$branchName</span></div></pre></td></tr></table></figure>
-<p>之后果然就可以正确地pull代码了。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;一直使用githook post-update来部署我的jekyll博客，每次push到远程git仓库的时候，在vps上的生产目录会自动更新和重新生成页面和静态资源， post-update文件是这样的：&lt;/p&gt;
-&lt;figure class=&quot;highlight bash&quot;
-    
-    </summary>
-    
-      <category term="工具" scheme="http://hikerpig.github.io/categories/%E5%B7%A5%E5%85%B7/"/>
-    
-    
-      <category term="Git" scheme="http://hikerpig.github.io/tags/Git/"/>
     
   </entry>
   
