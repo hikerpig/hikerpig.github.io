@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://hikerpig.github.io/2018/01/21/2018-01-21-typed-vue-mixins/</loc>
+    
+    <lastmod>2018-04-11T14:32:04.919Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2018/04/09/2018-04-06-Write-Vue-Tests-in-Jest/</loc>
+    
+    <lastmod>2018-04-09T06:15:52.422Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://hikerpig.github.io/2018/04/02/2018-04-02-Customize-Error-in-Typescript/</loc>
     
     <lastmod>2018-04-06T10:17:25.837Z</lastmod>
@@ -12,20 +26,6 @@
     <loc>http://hikerpig.github.io/2017/09/25/2017-09-25-ES6+Babel-little-bug-under-IE11/</loc>
     
     <lastmod>2018-04-02T09:43:31.090Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2018/01/21/2018-01-21-typed-vue-mixins/</loc>
-    
-    <lastmod>2018-02-05T02:41:03.981Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2018/01/25/2018-01-25-invalid-html-and-vue-hydration/</loc>
-    
-    <lastmod>2018-01-25T02:50:28.482Z</lastmod>
     
   </url>
   

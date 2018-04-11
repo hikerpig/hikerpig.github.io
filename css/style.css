@@ -4,7 +4,7 @@ html {
   -webkit-font-smoothing: antialiased; }
 
 body {
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.7);
   font-family: 'PingHei', 'PingFang SC', Helvetica Neue, 'Work Sans', 'Hiragino Sans GB', 'Microsoft YaHei', SimSun, sans-serif;
   font-size: 15px;
   width: 100%;
@@ -668,5 +668,3 @@ table tr td:first-child {
 table tr th:last-child,
 table tr td:last-child {
   margin-bottom: 0; }
-
-/*# sourceMappingURL=style.css.map */
