@@ -2,212 +2,226 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://hikerpig.github.io/2018/07/31/2018-07-31-Goodbye%20My%20Santa%20Monica%20Dream/</loc>
+    <loc>http://hikerpig.github.io/2018/08/26/2018-08-26-beware-of-svg-transform/</loc>
     
-    <lastmod>2018-07-31T06:17:08.508Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2016/06/30/2016-06-02-turbocharged-javascript-refactoring-with-codemods/</loc>
-    
-    <lastmod>2018-07-11T11:04:47.463Z</lastmod>
+    <lastmod>2018-09-22T07:09:48.903Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://hikerpig.github.io/2018/07/07/2018-07-03-Vuex-Dynamic-Module-Hints/</loc>
+    <loc>http://hikerpig.github.io/2014/05/30/2014-05-30-Vim%E5%AE%9E%E7%94%A8%E8%AE%BE%E7%BD%AE/</loc>
     
-    <lastmod>2018-07-09T05:11:19.268Z</lastmod>
+    <lastmod>2018-09-11T12:36:21.048Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://hikerpig.github.io/2018/07/07/2018-05-03-Try-Rust-Webassemly/</loc>
+    <loc>http://hikerpig.github.io/2015/02/02/2015-02-02-simple-css-parser-with-js/</loc>
     
-    <lastmod>2018-07-07T15:09:32.282Z</lastmod>
+    <lastmod>2018-09-11T05:18:33.305Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://hikerpig.github.io/2018/01/21/2018-01-21-typed-vue-mixins/</loc>
     
-    <lastmod>2018-05-30T16:41:19.663Z</lastmod>
+    <lastmod>2018-09-07T03:01:14.276Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://hikerpig.github.io/2018/04/09/2018-04-06-Write-Vue-Tests-in-Jest/</loc>
+    <loc>http://hikerpig.github.io/2016/06/30/2016-06-02-turbocharged-javascript-refactoring-with-codemods/</loc>
     
-    <lastmod>2018-04-09T06:15:52.422Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2018/04/02/2018-04-02-Customize-Error-in-Typescript/</loc>
-    
-    <lastmod>2018-04-06T10:17:25.837Z</lastmod>
+    <lastmod>2018-08-26T08:57:39.030Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://hikerpig.github.io/2017/09/25/2017-09-25-ES6+Babel-little-bug-under-IE11/</loc>
+    <loc>http://hikerpig.github.io/2014/03/31/2014-03-31-%E6%94%BE%E8%BF%87Pygments/</loc>
     
-    <lastmod>2018-04-02T09:43:31.090Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2018/01/24/2017-09-07-Using-Object.create/</loc>
-    
-    <lastmod>2018-01-24T15:20:18.108Z</lastmod>
+    <lastmod>2018-08-26T08:57:00.940Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://hikerpig.github.io/2017/08/22/2017-08-22-gulp-watch-for-poor-cpu/</loc>
+    <loc>http://hikerpig.github.io/2014/04/02/2014-04-02-%E4%BB%8E%E4%BB%8A%E5%BC%80%E5%A7%8B%E7%94%A8Casperjs%E6%9D%A5%E6%9A%B4%E5%8A%9B%E7%AD%BE%E5%88%B0%E5%90%A7/</loc>
     
-    <lastmod>2017-08-22T05:07:50.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2017/08/06/2017-08-05-Holy-Awesome-Spacemacs/</loc>
-    
-    <lastmod>2017-08-13T02:28:29.000Z</lastmod>
+    <lastmod>2018-08-26T08:56:00.294Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://hikerpig.github.io/2014/03/21/2014-03-21-git%E5%B0%8F%E6%8A%80%E5%B7%A7%E4%B8%83%E4%B8%83%E5%85%AB%E5%85%AB/</loc>
+    <loc>http://hikerpig.github.io/2014/04/04/2014-04-04-%E8%AE%A9oh-my-zsh%E7%9A%84gitfast%E6%8F%92%E4%BB%B6%E6%8B%AF%E6%95%91%E4%BD%A0/</loc>
     
-    <lastmod>2017-08-05T07:10:12.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2017/07/29/2016-12-21-Enhanced-Client-Side-Console/</loc>
-    
-    <lastmod>2017-07-29T05:40:50.000Z</lastmod>
+    <lastmod>2018-08-26T08:55:55.508Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://hikerpig.github.io/2015/01/28/2014-04-29-%E6%AD%A3%E5%88%99%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%BE%88%E5%A5%BD%E7%8E%A9/</loc>
+    <loc>http://hikerpig.github.io/2014/04/08/2014-04-08-%E5%9C%A8Jekyll%E5%8D%9A%E5%AE%A2%E9%87%8C%E4%BC%98%E9%9B%85%E5%9C%B0%E5%B5%8C%E5%85%A5Github-Gist/</loc>
     
-    <lastmod>2017-07-24T08:39:03.000Z</lastmod>
+    <lastmod>2018-08-26T08:55:48.961Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2014/04/10/2014-04-10-%E7%94%A8ssh-reverse-tunnel%E8%B0%83%E7%94%A8%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%89%AA%E5%88%87%E6%9D%BF%E4%BD%BF%E7%94%A8/</loc>
+    
+    <lastmod>2018-08-26T08:55:17.742Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2014/04/21/2014-04-21-%E7%94%A8node-schedule%E7%AE%80%E5%8D%95%E5%9C%B0%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E8%B7%91%E8%84%9A%E6%9C%AC%E5%8A%9F%E8%83%BD/</loc>
+    
+    <lastmod>2018-08-26T08:55:13.968Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2014/04/22/2014-04-22-Coffeescript%E5%B0%8F%E8%A7%92%E8%90%BD%EF%BC%8C%E5%92%8Cjavascript%E6%B7%B7%E5%86%99/</loc>
+    
+    <lastmod>2018-08-26T08:55:07.708Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2014/04/29/2014-04-29-%E6%AD%A3%E5%88%99%E4%B9%9F%E5%8F%AF%E4%BB%A5%E5%BE%88%E5%A5%BD%E7%8E%A9/</loc>
+    
+    <lastmod>2018-08-26T08:54:49.580Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://hikerpig.github.io/2015/01/26/2015-01-26-%E7%94%A8Sass%E6%90%9E%E5%AE%9AFlat%E9%A3%8E%E6%A0%BC%E7%9A%84%E5%9B%BE%E6%A0%87%E9%95%BF%E6%8A%95%E5%BD%B1/</loc>
     
-    <lastmod>2017-07-22T17:26:09.000Z</lastmod>
+    <lastmod>2018-08-26T08:53:59.287Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://hikerpig.github.io/2016/04/28/2016-04-28-%E8%AF%91-Javascript-%E5%A7%BF%E5%8A%BF%E6%8F%90%E5%8D%87%E7%AE%80%E7%95%A5/</loc>
+    <loc>http://hikerpig.github.io/2015/01/28/2015-01-28-%E4%BD%BF%E7%94%A8Coffeetags%E5%9C%A8VIM%E4%B8%AD%E6%98%BE%E7%A4%BAcoffee%E6%96%87%E4%BB%B6%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84/</loc>
     
-    <lastmod>2016-04-28T03:21:18.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2015/07/11/2015-07-11-Test-FileReader-methods/</loc>
-    
-    <lastmod>2015-07-11T06:46:58.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2015/07/02/2015-01-28-%E4%BD%BF%E7%94%A8Coffeetags%E5%9C%A8VIM%E4%B8%AD%E6%98%BE%E7%A4%BAcoffee%E6%96%87%E4%BB%B6%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84/</loc>
-    
-    <lastmod>2015-07-02T02:56:18.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2015/05/21/2015-04-16-Align-your-assignment-sentence-using-Python-in-Vim/</loc>
-    
-    <lastmod>2015-05-21T02:20:57.000Z</lastmod>
+    <lastmod>2018-08-26T08:53:42.514Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://hikerpig.github.io/2015/02/05/2015-02-05-show-scss-code-outline-with-Tagbar/</loc>
     
-    <lastmod>2015-02-05T09:27:37.000Z</lastmod>
+    <lastmod>2018-08-26T08:53:32.420Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2015/04/16/2015-04-16-Align-your-assignment-sentence-using-Python-in-Vim/</loc>
+    
+    <lastmod>2018-08-26T08:53:25.243Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2015/07/11/2015-07-11-Test-FileReader-methods/</loc>
+    
+    <lastmod>2018-08-26T08:53:15.111Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2016/04/28/2016-04-28-%E8%AF%91-Javascript-%E5%A7%BF%E5%8A%BF%E6%8F%90%E5%8D%87%E7%AE%80%E7%95%A5/</loc>
+    
+    <lastmod>2018-08-26T08:52:47.250Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2016/12/21/2016-12-21-Enhanced-Client-Side-Console/</loc>
+    
+    <lastmod>2018-08-26T08:52:02.072Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2017/08/05/2017-08-05-Holy-Awesome-Spacemacs/</loc>
+    
+    <lastmod>2018-08-26T08:51:51.720Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2017/08/22/2017-08-22-gulp-watch-for-poor-cpu/</loc>
+    
+    <lastmod>2018-08-26T08:51:43.865Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2017/09/07/2017-09-07-Using-Object.create/</loc>
+    
+    <lastmod>2018-08-26T08:51:38.530Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2017/09/25/2017-09-25-ES6+Babel-little-bug-under-IE11/</loc>
+    
+    <lastmod>2018-08-26T08:51:33.168Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2018/04/02/2018-04-02-Customize-Error-in-Typescript/</loc>
+    
+    <lastmod>2018-08-26T08:50:49.156Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2018/04/06/2018-04-06-Write-Vue-Tests-in-Jest/</loc>
+    
+    <lastmod>2018-08-26T08:50:26.662Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2018/05/03/2018-05-03-Try-Rust-Webassemly/</loc>
+    
+    <lastmod>2018-08-26T08:50:19.060Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2018/07/03/2018-07-03-Vuex-Dynamic-Module-Hints/</loc>
+    
+    <lastmod>2018-08-26T08:50:04.217Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2018/07/31/2018-07-31-Goodbye%20My%20Santa%20Monica%20Dream/</loc>
+    
+    <lastmod>2018-08-26T08:49:59.529Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://hikerpig.github.io/2013/12/14/2014-03-26-web%E5%BC%80%E5%8F%91%E5%9B%BD%E5%86%85%E5%B8%B8%E7%94%A8%E6%BA%90/</loc>
     
-    <lastmod>2015-02-05T04:09:46.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2015/02/05/2014-04-02-%E4%BB%8E%E4%BB%8A%E5%BC%80%E5%A7%8B%E7%94%A8Casperjs%E6%9D%A5%E6%9A%B4%E5%8A%9B%E7%AD%BE%E5%88%B0%E5%90%A7/</loc>
-    
-    <lastmod>2015-02-05T04:08:06.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2015/02/05/2014-04-22-Coffeescript%E5%B0%8F%E8%A7%92%E8%90%BD%EF%BC%8C%E5%92%8Cjavascript%E6%B7%B7%E5%86%99/</loc>
-    
-    <lastmod>2015-02-05T02:13:32.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2015/01/28/2014-04-08-%E5%9C%A8Jekyll%E5%8D%9A%E5%AE%A2%E9%87%8C%E4%BC%98%E9%9B%85%E5%9C%B0%E5%B5%8C%E5%85%A5Github-Gist/</loc>
-    
-    <lastmod>2015-01-28T04:12:03.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2015/01/28/2014-03-16-Lodash%E5%92%8CUnderscore%E7%9A%84%E5%B0%8F%E5%B0%8F%E5%8C%BA%E5%88%AB/</loc>
-    
-    <lastmod>2015-01-28T04:09:59.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2015/01/28/2014-04-21-%E7%94%A8node-schedule%E7%AE%80%E5%8D%95%E5%9C%B0%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E8%B7%91%E8%84%9A%E6%9C%AC%E5%8A%9F%E8%83%BD/</loc>
-    
-    <lastmod>2015-01-28T04:09:59.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2015/01/28/2014-04-04-%E8%AE%A9oh-my-zsh%E7%9A%84gitfast%E6%8F%92%E4%BB%B6%E6%8B%AF%E6%95%91%E4%BD%A0/</loc>
-    
-    <lastmod>2015-01-28T04:09:59.000Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2015/01/28/2014-04-10-%E7%94%A8ssh-reverse-tunnel%E8%B0%83%E7%94%A8%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E5%89%AA%E5%88%87%E6%9D%BF%E4%BD%BF%E7%94%A8/</loc>
-    
-    <lastmod>2015-01-28T04:09:59.000Z</lastmod>
+    <lastmod>2018-08-05T05:56:32.242Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://hikerpig.github.io/2014/03/23/2014-03-23-git-hook%E4%B8%AD%E7%9A%84$GIT_DIR%E5%8F%98%E9%87%8F/</loc>
     
-    <lastmod>2015-01-28T04:09:59.000Z</lastmod>
+    <lastmod>2018-08-05T05:56:32.201Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://hikerpig.github.io/2015/01/28/2014-03-31-%E6%94%BE%E8%BF%87Pygments/</loc>
+    <loc>http://hikerpig.github.io/2014/03/21/2014-03-21-git%E5%B0%8F%E6%8A%80%E5%B7%A7%E4%B8%83%E4%B8%83%E5%85%AB%E5%85%AB/</loc>
     
-    <lastmod>2015-01-28T04:09:59.000Z</lastmod>
+    <lastmod>2018-08-05T05:56:32.182Z</lastmod>
     
   </url>
   
