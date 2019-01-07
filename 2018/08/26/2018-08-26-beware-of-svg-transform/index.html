@@ -1,45 +1,122 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>SVG 元素的自定义  transform origin · HP goes FE</title><meta name="description" content="不要使用 transform-origin 属性
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>SVG 元素的自定义  transform origin · HP goes FE</title><meta name="description" content="不要使用 transform-origin 属性
 SVG 支持 transform，而且写法似乎与 CSS 中相同，但是它的标准里并不支持 transform-origin 属性。虽然在部分浏览器中，给 SVG 元素指定 transform-origin 似乎是有效果的（写法和结果也与 CSS 一样"><meta name="keywords" content="Front-End,Programming,Hexo"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/https://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>SVG 元素的自定义  transform origin</a></h1></div><div class="post-content"><h2 id="不要使用-transform-origin-属性">不要使用 transform-origin 属性</h2>
 <p>SVG 支持 <code>transform</code>，而且写法似乎与 CSS 中相同，但是它的<a href="https://www.w3.org/TR/SVG11/coords.html" target="_blank" rel="noopener">标准</a>里并不支持 <code>transform-origin</code> 属性。虽然在部分浏览器中，给 SVG 元素指定 <code>transform-origin</code> 似乎是有效果的（写法和结果也与 CSS 一样），但是无法指望这个行为在所有浏览器里都有效。</p>
 <h1 id="自行解释-transformorigin">自行解释 transformOrigin</h1>
 <p>既然不能通过 attribute 来指定变换原点，我们只好通过对其他 transform 值的变动来实现想要的效果了。</p>
 <p>首先建立一个对象系统</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">class</span> Display &#123;</span><br><span class="line">  x: <span class="built_in">number</span> = <span class="number">0</span></span><br><span class="line">  y: <span class="built_in">number</span> = <span class="number">0</span></span><br><span class="line">  width: <span class="built_in">number</span></span><br><span class="line">  height: <span class="built_in">number</span></span><br><span class="line">  scale: [<span class="built_in">number</span>, <span class="built_in">number</span>] = [<span class="number">1</span>, <span class="number">1</span>]</span><br><span class="line">  transformOrigin?: [<span class="built_in">number</span>, <span class="built_in">number</span>]</span><br><span class="line"></span><br><span class="line">  parent?: Display</span><br><span class="line">  element: SVGElement</span><br><span class="line"></span><br><span class="line">  <span class="keyword">constructor</span>(<span class="params"></span>) &#123;</span><br><span class="line">     <span class="keyword">this</span>.element = <span class="keyword">this</span>.createElement() <span class="keyword">as</span> <span class="built_in">any</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  createElement() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">document</span>.createElement(<span class="string">'g'</span>)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  addChild(child: Display) &#123;</span><br><span class="line">    child.parent = <span class="keyword">this</span></span><br><span class="line">    <span class="keyword">this</span>.element.appendChild(child.element)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> Rect <span class="keyword">extends</span> Display &#123;</span><br><span class="line">  createElement() &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">document</span>.createElement(<span class="string">'rect'</span>)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs typescript">
+<span class="hljs-keyword">class</span> Display &#123;
+  x: <span class="hljs-built_in">number</span> = <span class="hljs-number">0</span>
+  y: <span class="hljs-built_in">number</span> = <span class="hljs-number">0</span>
+  width: <span class="hljs-built_in">number</span>
+  height: <span class="hljs-built_in">number</span>
+  scale: [<span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>] = [<span class="hljs-number">1</span>, <span class="hljs-number">1</span>]
+  transformOrigin?: [<span class="hljs-built_in">number</span>, <span class="hljs-built_in">number</span>]
+
+  parent?: Display
+  element: SVGElement
+
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params"></span>) &#123;
+     <span class="hljs-keyword">this</span>.element = <span class="hljs-keyword">this</span>.createElement() <span class="hljs-keyword">as</span> <span class="hljs-built_in">any</span>
+  &#125;
+
+  createElement() &#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'g'</span>)
+  &#125;
+
+  addChild(child: Display) &#123;
+    child.parent = <span class="hljs-keyword">this</span>
+    <span class="hljs-keyword">this</span>.element.appendChild(child.element)
+  &#125;
+&#125;
+
+<span class="hljs-keyword">class</span> Rect <span class="hljs-keyword">extends</span> Display &#123;
+  createElement() &#123;
+    <span class="hljs-keyword">return</span> <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'rect'</span>)
+  &#125;
+&#125;</code></pre>
 <p>此时有</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> r1 = <span class="keyword">new</span> Rect(&#123;</span><br><span class="line">  name: <span class="string">"r1"</span>,</span><br><span class="line">  x: <span class="number">10</span>,</span><br><span class="line">  y: <span class="number">10</span>,</span><br><span class="line">  width: <span class="number">100</span>,</span><br><span class="line">  height: <span class="number">50</span>,</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> r2 = <span class="keyword">new</span> Rect(&#123;</span><br><span class="line">  name: <span class="string">"r2"</span>,</span><br><span class="line">  x: <span class="number">10</span>,</span><br><span class="line">  y: <span class="number">10</span>,</span><br><span class="line">  width: <span class="number">100</span>,</span><br><span class="line">  height: <span class="number">50</span>,</span><br><span class="line">  scale: [<span class="number">2</span>, <span class="number">2</span>],</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs typescript"><span class="hljs-keyword">const</span> r1 = <span class="hljs-keyword">new</span> Rect(&#123;
+  name: <span class="hljs-string">"r1"</span>,
+  x: <span class="hljs-number">10</span>,
+  y: <span class="hljs-number">10</span>,
+  width: <span class="hljs-number">100</span>,
+  height: <span class="hljs-number">50</span>,
+&#125;)
+
+<span class="hljs-keyword">const</span> r2 = <span class="hljs-keyword">new</span> Rect(&#123;
+  name: <span class="hljs-string">"r2"</span>,
+  x: <span class="hljs-number">10</span>,
+  y: <span class="hljs-number">10</span>,
+  width: <span class="hljs-number">100</span>,
+  height: <span class="hljs-number">50</span>,
+  scale: [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>],
+&#125;)</code></pre>
 <p>经过简单的属性到 dom 的操作，得到</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">svg</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">rect</span> <span class="attr">name</span>=<span class="string">"r1"</span> <span class="attr">transform</span>=<span class="string">"translate(10,10)"</span> <span class="attr">width</span>=<span class="string">"100"</span> <span class="attr">height</span>=<span class="string">"50"</span> <span class="attr">fill</span>=<span class="string">"blue"</span> <span class="attr">opacity</span>=<span class="string">"0.8"</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">rect</span> <span class="attr">name</span>=<span class="string">"r2"</span> <span class="attr">transform</span>=<span class="string">"translate(10,10) scale(2,2)"</span> <span class="attr">width</span>=<span class="string">"100"</span> <span class="attr">height</span>=<span class="string">"50"</span> <span class="attr">fill</span>=<span class="string">"red"</span> <span class="attr">opacity</span>=<span class="string">"0.8"</span> /&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">svg</span>&gt;</span>
+   <span class="hljs-tag">&lt;<span class="hljs-name">rect</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"r1"</span> <span class="hljs-attr">transform</span>=<span class="hljs-string">"translate(10,10)"</span> <span class="hljs-attr">width</span>=<span class="hljs-string">"100"</span> <span class="hljs-attr">height</span>=<span class="hljs-string">"50"</span> <span class="hljs-attr">fill</span>=<span class="hljs-string">"blue"</span> <span class="hljs-attr">opacity</span>=<span class="hljs-string">"0.8"</span> /&gt;</span>
+   <span class="hljs-tag">&lt;<span class="hljs-name">rect</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"r2"</span> <span class="hljs-attr">transform</span>=<span class="hljs-string">"translate(10,10) scale(2,2)"</span> <span class="hljs-attr">width</span>=<span class="hljs-string">"100"</span> <span class="hljs-attr">height</span>=<span class="hljs-string">"50"</span> <span class="hljs-attr">fill</span>=<span class="hljs-string">"red"</span> <span class="hljs-attr">opacity</span>=<span class="hljs-string">"0.8"</span> /&gt;</span>
+ <span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span></code></pre>
 <svg style="background: #CCC">
 &lt;rect name=“r1” transform=“translate(10,10)” width=“100” height=“50” fill=“blue” opacity=“0.8” /&gt; <rect name="r2" transform="translate(10,10) scale(2,2)" width="100" height="50" fill="red" opacity="0.8"/>
 </svg>
 <p>r2 的变换，先平移再缩放，平移的结果就是缩放的原点。</p>
 <p>此处将 x/y 转为 translate 而不是 <code>x</code> 和 <code>y</code> 属性，是为了以统一的方式做坐标系的转换和运算，且考虑到许多元素没有 <code>x</code> 和 <code>y</code> 属性（如 <code>circle</code> 就只有 <code>cx</code> 和 <code>cy</code> ），但所有 SVG 元素都支持 transform 。</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">formTransform</span>(<span class="params">d: Display</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> scales = d.scale</span><br><span class="line">  <span class="keyword">const</span> scaleX = scales[<span class="number">0</span>]</span><br><span class="line">  <span class="keyword">const</span> scaleY = scales[<span class="number">1</span>]</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`translate(<span class="subst">$&#123;d.x&#125;</span>,<span class="subst">$&#123;d.y&#125;</span>) scale(<span class="subst">$&#123;scaleX&#125;</span>,<span class="subst">$&#123;scaleY&#125;</span>)`</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs typescript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">formTransform</span>(<span class="hljs-params">d: Display</span>) </span>&#123;
+  <span class="hljs-keyword">const</span> scales = d.scale
+  <span class="hljs-keyword">const</span> scaleX = scales[<span class="hljs-number">0</span>]
+  <span class="hljs-keyword">const</span> scaleY = scales[<span class="hljs-number">1</span>]
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`translate(<span class="hljs-subst">$&#123;d.x&#125;</span>,<span class="hljs-subst">$&#123;d.y&#125;</span>) scale(<span class="hljs-subst">$&#123;scaleX&#125;</span>,<span class="hljs-subst">$&#123;scaleY&#125;</span>)`</span>
+&#125;</code></pre>
 <h2 id="带位移补偿的缩放">带位移补偿的缩放</h2>
 <p>计算缩放的位移补偿值，使得缩放再位移后效果就与以变换原点为中心缩放一样。</p>
-<p>假设在缩放系数为 S 时，我们需要的 translate 为 <span class="math inline">\(TR\)</span>，变换完的结果：</p>
-<p><span class="math display">\[
+<p>假设在缩放系数为 S 时，我们需要的 translate 为 <span class="math inline">TR</span>，变换完的结果：</p>
+<p><span class="math display">
 x&#39;=(x+TR_x)\times S_x\\\\
 y&#39;=(y+TR_y)\times S_y
-\]</span></p>
+</span></p>
 <p>当以变换原点为特征点时，方程易于构建与求解。</p>
-<p>令 <span class="math inline">\(T_x\)</span> 和 <span class="math inline">\(T_y\)</span> 为变换原点相对于原坐标系左上角的坐标，当 <span class="math inline">\(x=T_x,\  y=T_y\)</span> 时，代入得到：</p>
-<p><span class="math display">\[
+<p>令 <span class="math inline">T_x</span> 和 <span class="math inline">T_y</span> 为变换原点相对于原坐标系左上角的坐标，当 <span class="math inline">x=T_x,\  y=T_y</span> 时，代入得到：</p>
+<p><span class="math display">
 TO_{x} \ \ =\ ( TO_{x} \ +TR_{x}) \times S_{x}\\\\
 TO_{y} \ \ =\ ( TO_{y} \ +TR_{y}) \times S_{y}
-\]</span></p>
+</span></p>
 <p>所以：</p>
-<p><span class="math display">\[
+<p><span class="math display">
 TR_{x} \ =\frac{( 1-S_{x}) \times TO_{x}}{S_{x}}\\\\
 \\\\
 TR_{y} \ =\frac{( 1-S_{y}) \times TO_{y}}{S_{y}}
-\]</span></p>
+</span></p>
 <p>带缩放修正值的 transform 计算方法改为：</p>
-<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">   const scales = d.scale</span><br><span class="line">   const scaleX = scales[0]</span><br><span class="line">   const scaleY = scales[1]</span><br><span class="line"><span class="deletion">-  return `translate($&#123;d.x&#125;,$&#123;d.y&#125;) scale($&#123;scaleX&#125;,$&#123;scaleY&#125;)`</span></span><br><span class="line"><span class="addition">+</span></span><br><span class="line"><span class="addition">+  let xToOrigin = d.width / 2</span></span><br><span class="line"><span class="addition">+  let yToOrigin = d.height / 2</span></span><br><span class="line"><span class="addition">+  if (d.transformOrigin) &#123;</span></span><br><span class="line"><span class="addition">+    xToOrigin = d.transformOrigin[0]</span></span><br><span class="line"><span class="addition">+    yToOrigin = d.transformOrigin[1]</span></span><br><span class="line"><span class="addition">+  &#125;</span></span><br><span class="line"><span class="addition">+  const revisedX = (1 - scaleX) * xToOrigin</span></span><br><span class="line"><span class="addition">+  const revisedY = (1 - scaleY) * yToOrigin</span></span><br><span class="line"><span class="addition">+</span></span><br><span class="line"><span class="addition">+  return `translate($&#123;d.x&#125;,$&#123;d.y&#125;) scale($&#123;scaleX&#125;,$&#123;scaleY&#125;) translate($&#123;revisedX&#125;,$&#123;revisedY&#125;)`</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs diff">   const scales = d.scale
+   const scaleX = scales[0]
+   const scaleY = scales[1]
+<span class="hljs-deletion">-  return `translate($&#123;d.x&#125;,$&#123;d.y&#125;) scale($&#123;scaleX&#125;,$&#123;scaleY&#125;)`</span>
+<span class="hljs-addition">+</span>
+<span class="hljs-addition">+  let xToOrigin = d.width / 2</span>
+<span class="hljs-addition">+  let yToOrigin = d.height / 2</span>
+<span class="hljs-addition">+  if (d.transformOrigin) &#123;</span>
+<span class="hljs-addition">+    xToOrigin = d.transformOrigin[0]</span>
+<span class="hljs-addition">+    yToOrigin = d.transformOrigin[1]</span>
+<span class="hljs-addition">+  &#125;</span>
+<span class="hljs-addition">+  const revisedX = (1 - scaleX) * xToOrigin</span>
+<span class="hljs-addition">+  const revisedY = (1 - scaleY) * yToOrigin</span>
+<span class="hljs-addition">+</span>
+<span class="hljs-addition">+  return `translate($&#123;d.x&#125;,$&#123;d.y&#125;) scale($&#123;scaleX&#125;,$&#123;scaleY&#125;) translate($&#123;revisedX&#125;,$&#123;revisedY&#125;)`</span>
+ &#125;</code></pre>
 <p>例如一个缩放为2倍，</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> r3 = <span class="keyword">new</span> Rect(&#123;</span><br><span class="line">  x: <span class="number">50</span>,</span><br><span class="line">  y: <span class="number">50</span>,</span><br><span class="line">  width: <span class="number">100</span>,</span><br><span class="line">  height: <span class="number">50</span>,</span><br><span class="line">  scale: [<span class="number">2</span>, <span class="number">2</span>],</span><br><span class="line">  transformOrigin: [<span class="number">50</span>, <span class="number">25</span>],</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs typescript"><span class="hljs-keyword">const</span> r3 = <span class="hljs-keyword">new</span> Rect(&#123;
+  x: <span class="hljs-number">50</span>,
+  y: <span class="hljs-number">50</span>,
+  width: <span class="hljs-number">100</span>,
+  height: <span class="hljs-number">50</span>,
+  scale: [<span class="hljs-number">2</span>, <span class="hljs-number">2</span>],
+  transformOrigin: [<span class="hljs-number">50</span>, <span class="hljs-number">25</span>],
+&#125;)</code></pre>
 <p>对应于缩放的变换应该是 <code>scale(2,2) translate(-25,-12.5)</code>，再加上元素本身的位移，最后得到：</p>
-<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">svg</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">rect</span> <span class="attr">name</span>=<span class="string">"r3"</span> <span class="attr">transform</span>=<span class="string">"translate(50,50) scale(2,2) translate(-25,-12.5)"</span> <span class="attr">width</span>=<span class="string">"100"</span> <span class="attr">height</span>=<span class="string">"50"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">svg</span>&gt;</span>
+   <span class="hljs-tag">&lt;<span class="hljs-name">rect</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"r3"</span> <span class="hljs-attr">transform</span>=<span class="hljs-string">"translate(50,50) scale(2,2) translate(-25,-12.5)"</span> <span class="hljs-attr">width</span>=<span class="hljs-string">"100"</span> <span class="hljs-attr">height</span>=<span class="hljs-string">"50"</span>/&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span></code></pre>
 <p>变换过程示意:</p>
 <img src="//images-hikerpig.oss-cn-beijing.aliyuncs.com/image/trans-demo-1.svg" alt="变换过程示意" title="变换过程示意">
 <h2 id="参考">参考</h2>
@@ -60,8 +137,9 @@ TR_{y} \ =\frac{( 1-S_{y}) \times TO_{y}}{S_{y}}
 })
 
 gitalk.render('gitalk-container')
-</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
+</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'UA-49433257-1');
-</script><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.css"><script src="//cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.js"></script><script src="//cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script></body></html>
+</script><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.css"><script src="//cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/katex.min.js"></script><script src="//cdn.jsdelivr.net/npm/katex@0.10.0-rc.1/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/styles/atom-one-dark.css"><script src="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/lib/highlight.js"></script><script>hljs.initHighlightingOnLoad();
+</script></body></html>

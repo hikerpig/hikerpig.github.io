@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://hikerpig.github.io/2018/07/03/2018-07-03-Vuex-Dynamic-Module-Hints/</loc>
+    
+    <lastmod>2019-01-07T05:50:06.415Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://hikerpig.github.io/2018/11/15/2018-11-15-font-metrics-in-browser/</loc>
     
-    <lastmod>2018-11-16T01:05:56.795Z</lastmod>
+    <lastmod>2019-01-06T02:58:47.755Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2018/12/22/2018-12-22-svg-blur-and-css-text-shadow/</loc>
+    
+    <lastmod>2018-12-30T04:23:40.503Z</lastmod>
     
   </url>
   
@@ -194,13 +208,6 @@
     <loc>http://hikerpig.github.io/2018/05/03/2018-05-03-Try-Rust-Webassemly/</loc>
     
     <lastmod>2018-08-26T08:50:19.060Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2018/07/03/2018-07-03-Vuex-Dynamic-Module-Hints/</loc>
-    
-    <lastmod>2018-08-26T08:50:04.217Z</lastmod>
     
   </url>
   

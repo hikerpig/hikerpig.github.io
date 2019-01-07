@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>Try Rust WebAssembly · HP goes FE</title><meta name="description" content="在公司项目里的一个小角落，尝试使用 Rust + WebAssembly 加速应用里部分计算
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>Try Rust WebAssembly · HP goes FE</title><meta name="description" content="在公司项目里的一个小角落，尝试使用 Rust + WebAssembly 加速应用里部分计算
 选择
 首先要分清项目里 WebAssembly 的定位
 
@@ -13,7 +13,7 @@
 <p>此次小 Demo 属于第 2 种情况</p>
 <h3 id="选择-rust-target">选择 Rust Target</h3>
 <p>rust 支持 <code>wasm32-unknown-unknown</code> 和 <code>wasm32-unknown-emscripten</code> 两种编译目标，后者除了wasm 外，还生成了 emscripten 风格的 JS 作为入口，与 asm.js 的调用风格统一。不过会添加好些运行时代码，与 wasm 之间也隔着一层封装。基于上一项的选择，我们选择前者</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rustup target add wasm32-unknown-unknown</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs bash">rustup target add wasm32-unknown-unknown</code></pre>
 <h1 id="webassembly-考量">WebAssembly 考量</h1>
 <h2 id="数据类型问题">数据类型问题</h2>
 <p>WebAssembly 当前只支持几种<a href="https://developer.mozilla.org/en-US/docs/WebAssembly/Understanding_the_text_format#Signatures_and_parameters" target="_blank" rel="noopener">有限的数字类型</a>，i32/i64/f32/f64，JS 与之交互时，除了 number 以外的值都要有序列化/反序列化处理。</p>
@@ -21,21 +21,146 @@
 <p>可使用 <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/TextEncoder" target="_blank" rel="noopener">TextEncoder/TextDecoder</a> 将 JS 字符串序列化为 utf-8 字节流，在 Rust 端先将字节流解析为字符串，再使用。</p>
 <h3 id="数组">数组</h3>
 <p>JS 直接操作 wasm 示例的内存，将数组数据写入，调用 wasm 方法时，将数组起始的指针以及数组长度作为参数。</p>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// rust 部分</span></span><br><span class="line"><span class="keyword">pub</span> <span class="keyword">unsafe</span> <span class="function"><span class="keyword">fn</span> <span class="title">load_image_data</span></span>(in_image_ptr: *<span class="keyword">mut</span> <span class="built_in">u8</span>, width: <span class="built_in">i32</span>, height: <span class="built_in">i32</span>) -\&gt; *<span class="keyword">const</span> <span class="built_in">u8</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> arr_len = (width * height * <span class="number">4</span>) <span class="keyword">as</span> <span class="built_in">usize</span>;</span><br><span class="line">  <span class="keyword">let</span> in_image_data = <span class="built_in">Vec</span>::from_raw_parts(in_image_ptr, arr_len, arr_len);</span><br><span class="line">  <span class="keyword">return</span> in_image_data.as_ptr();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// js 部分</span></span><br><span class="line"><span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>)</span><br><span class="line"><span class="keyword">const</span> imageData = ctx.getImageData(<span class="number">0</span>, <span class="number">0</span>, <span class="number">100</span>, <span class="number">50</span>)</span><br><span class="line"><span class="keyword">const</span> imgDataVecPtr = copyJsArrayToRust(<span class="keyword">this</span>.instanceExports, imageData.data)</span><br><span class="line">wasmExports.load_image_data(imgDataVecPtr, <span class="number">100</span>, <span class="number">50</span>)</span><br><span class="line"><span class="string">`</span></span><br></pre></td></tr></table></figure>
+<pre><code class="hljs rust"><span class="hljs-comment">// rust 部分</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-keyword">unsafe</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">load_image_data</span></span>(in_image_ptr: *<span class="hljs-keyword">mut</span> <span class="hljs-built_in">u8</span>, width: <span class="hljs-built_in">i32</span>, height: <span class="hljs-built_in">i32</span>) -\&gt; *<span class="hljs-keyword">const</span> <span class="hljs-built_in">u8</span> &#123;
+  <span class="hljs-keyword">let</span> arr_len = (width * height * <span class="hljs-number">4</span>) <span class="hljs-keyword">as</span> <span class="hljs-built_in">usize</span>;
+  <span class="hljs-keyword">let</span> in_image_data = <span class="hljs-built_in">Vec</span>::from_raw_parts(in_image_ptr, arr_len, arr_len);
+  <span class="hljs-keyword">return</span> in_image_data.as_ptr();
+&#125;</code></pre>
+<pre><code class="hljs ts"><span class="hljs-comment">// js 部分</span>
+<span class="hljs-keyword">const</span> ctx = canvas.getContext(<span class="hljs-string">'2d'</span>)
+<span class="hljs-keyword">const</span> imageData = ctx.getImageData(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>, <span class="hljs-number">100</span>, <span class="hljs-number">50</span>)
+<span class="hljs-keyword">const</span> imgDataVecPtr = copyJsArrayToRust(<span class="hljs-keyword">this</span>.instanceExports, imageData.data)
+wasmExports.load_image_data(imgDataVecPtr, <span class="hljs-number">100</span>, <span class="hljs-number">50</span>)
+<span class="hljs-string">`</span></code></pre>
 <h2 id="上代码">上代码</h2>
 <h3 id="rust-端">Rust 端</h3>
-<figure class="highlight rust"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// main.rs</span></span><br><span class="line"><span class="keyword">use</span> std::&#123;mem&#125;;</span><br><span class="line"><span class="keyword">use</span> std::ffi::CString;</span><br><span class="line"><span class="keyword">use</span> std::os::raw::&#123;c_char&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">extern</span> &#123;</span><br><span class="line">  <span class="function"><span class="keyword">fn</span> <span class="title">clog</span></span>(ptr: *<span class="keyword">const</span> <span class="built_in">u8</span>, number: <span class="built_in">usize</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">js_log</span></span>(s: <span class="built_in">String</span>) &#123;</span><br><span class="line">  <span class="keyword">let</span> <span class="keyword">mut</span> _s = s.clone();</span><br><span class="line">  <span class="keyword">unsafe</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> m = _s.as_mut_vec().as_mut_ptr();</span><br><span class="line">  clog(m <span class="keyword">as</span> *<span class="keyword">const</span> <span class="built_in">u8</span>, _s.len());</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[no_mangle]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">alloc</span></span>(size: <span class="built_in">usize</span>) -&gt; *<span class="keyword">const</span> <span class="built_in">u8</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> buf = <span class="built_in">Vec</span>::with_capacity(size);</span><br><span class="line">  <span class="keyword">let</span> ptr = buf.as_ptr();</span><br><span class="line">  mem::forget(buf); <span class="comment">// 让 rust 放弃对此段内存的控制权，此函数结束后该段内存对于 rust 来说是泄漏的状态，分配和管理权交给 JS</span></span><br><span class="line">  <span class="keyword">return</span> ptr;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">#[no_mangle]</span></span><br><span class="line"><span class="keyword">pub</span> <span class="function"><span class="keyword">fn</span> <span class="title">log_something</span></span>(text_ptr: *<span class="keyword">mut</span> c_char) -&gt; *<span class="keyword">const</span> <span class="built_in">u8</span> &#123;</span><br><span class="line">  <span class="keyword">let</span> text = CString::from_raw(text_ptr).into_string().unwrap();</span><br><span class="line">  js_log(text);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">fn</span> <span class="title">main</span></span>() &#123;&#125;  <span class="comment">// 留一个 main 确保 rust 能正常编译</span></span><br></pre></td></tr></table></figure>
+<pre><code class="hljs rust"><span class="hljs-comment">// main.rs</span>
+<span class="hljs-keyword">use</span> std::&#123;mem&#125;;
+<span class="hljs-keyword">use</span> std::ffi::CString;
+<span class="hljs-keyword">use</span> std::os::raw::&#123;c_char&#125;;
+
+<span class="hljs-keyword">extern</span> &#123;
+  <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">clog</span></span>(ptr: *<span class="hljs-keyword">const</span> <span class="hljs-built_in">u8</span>, number: <span class="hljs-built_in">usize</span>);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">js_log</span></span>(s: <span class="hljs-built_in">String</span>) &#123;
+  <span class="hljs-keyword">let</span> <span class="hljs-keyword">mut</span> _s = s.clone();
+  <span class="hljs-keyword">unsafe</span> &#123;
+  <span class="hljs-keyword">let</span> m = _s.as_mut_vec().as_mut_ptr();
+  clog(m <span class="hljs-keyword">as</span> *<span class="hljs-keyword">const</span> <span class="hljs-built_in">u8</span>, _s.len());
+  &#125;
+&#125;
+
+<span class="hljs-meta">#[no_mangle]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">alloc</span></span>(size: <span class="hljs-built_in">usize</span>) -&gt; *<span class="hljs-keyword">const</span> <span class="hljs-built_in">u8</span> &#123;
+  <span class="hljs-keyword">let</span> buf = <span class="hljs-built_in">Vec</span>::with_capacity(size);
+  <span class="hljs-keyword">let</span> ptr = buf.as_ptr();
+  mem::forget(buf); <span class="hljs-comment">// 让 rust 放弃对此段内存的控制权，此函数结束后该段内存对于 rust 来说是泄漏的状态，分配和管理权交给 JS</span>
+  <span class="hljs-keyword">return</span> ptr;
+&#125;
+
+<span class="hljs-meta">#[no_mangle]</span>
+<span class="hljs-keyword">pub</span> <span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">log_something</span></span>(text_ptr: *<span class="hljs-keyword">mut</span> c_char) -&gt; *<span class="hljs-keyword">const</span> <span class="hljs-built_in">u8</span> &#123;
+  <span class="hljs-keyword">let</span> text = CString::from_raw(text_ptr).into_string().unwrap();
+  js_log(text);
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">fn</span> <span class="hljs-title">main</span></span>() &#123;&#125;  <span class="hljs-comment">// 留一个 main 确保 rust 能正常编译</span></code></pre>
 <h3 id="js-端">JS 端</h3>
-<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// wasm-util.ts</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">interface</span> ModuleExports &#123;</span><br><span class="line">  memory: WebAssembly.Memory</span><br><span class="line">  alloc(len: <span class="built_in">number</span>): WasmMemPtr</span><br><span class="line">  log_something(text_ptr: <span class="built_in">number</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">loadWebAssembly</span>&lt;<span class="title">T</span> <span class="title">extends</span> <span class="title">ModuleExports</span>&gt;(<span class="params">input: <span class="built_in">string</span>, imports: <span class="built_in">any</span></span>) </span>&#123;</span><br><span class="line">  <span class="comment">// Fetch the file and compile it</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> fetch(input).then(<span class="function"><span class="params">response</span> =&gt;</span> response.arrayBuffer())</span><br><span class="line">  .then(<span class="function"><span class="params">buffer</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// Create the imports for the module, including the</span></span><br><span class="line">    <span class="comment">// standard dynamic library imports</span></span><br><span class="line">    imports = imports || &#123;&#125;</span><br><span class="line">    imports.env = imports.env || &#123;&#125;</span><br><span class="line">    <span class="keyword">if</span> (!imports.env.memory) &#123;</span><br><span class="line">  	imports.env.memory = <span class="keyword">new</span> WebAssembly.Memory(&#123; initial: <span class="number">1</span> &#125;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create the instance.</span></span><br><span class="line">    <span class="keyword">return</span> WebAssembly.instantiate(buffer, imports)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">copyJsStringToRust</span>(<span class="params"><span class="built_in">module</span>: ModuleExports, str: <span class="built_in">string</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> utf8Encoder = <span class="keyword">new</span> TextEncoder()</span><br><span class="line">  <span class="keyword">const</span> string_buffer = utf8Encoder.encode(str)</span><br><span class="line">  <span class="keyword">const</span> len = string_buffer.length</span><br><span class="line">  <span class="keyword">const</span> ptr = <span class="built_in">module</span>.alloc(len + <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> memory = <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(<span class="built_in">module</span>.memory.buffer, ptr)</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; len; i++) &#123;</span><br><span class="line">    memory[i] = string_buffer[i]</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  memory[len] = <span class="number">0</span> <span class="comment">// cstring end</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> ptr</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">decodeRustString</span>(<span class="params"><span class="built_in">module</span>: ModuleExports, ptr: WasmMemPtr</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> collectCString = <span class="function"><span class="keyword">function</span>*(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> memory = <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(<span class="built_in">module</span>.memory.buffer)</span><br><span class="line">  <span class="keyword">while</span> (memory[ptr] !== <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">if</span> (memory[ptr] === <span class="literal">undefined</span>) &#123;</span><br><span class="line">  	<span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'Tried to read undef mem'</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">yield</span> memory[ptr]</span><br><span class="line">    ptr += <span class="number">1</span></span><br><span class="line">  &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> buffer_as_u8 = <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(collectCString())</span><br><span class="line">  <span class="keyword">const</span> utf8Decoder = <span class="keyword">new</span> TextDecoder()</span><br><span class="line">  <span class="keyword">const</span> buffer_as_utf8 = utf8Decoder.decode(buffer_as_u8)</span><br><span class="line">  <span class="keyword">return</span> buffer_as_utf8</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">copyJsArrayToRust</span>(<span class="params">exports: ModuleExports, arr: <span class="built_in">number</span>[] | <span class="built_in">Uint8ClampedArray</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; memory, alloc &#125; = exports</span><br><span class="line">  <span class="keyword">const</span> rVecPtr = alloc(arr.length)</span><br><span class="line">  <span class="keyword">const</span> asBytes = <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(memory.buffer, rVecPtr, arr.length)</span><br><span class="line">  asBytes.set(arr)</span><br><span class="line">  <span class="keyword">return</span> rVecPtr</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs ts"><span class="hljs-comment">// wasm-util.ts</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">interface</span> ModuleExports &#123;
+  memory: WebAssembly.Memory
+  alloc(len: <span class="hljs-built_in">number</span>): WasmMemPtr
+  log_something(text_ptr: <span class="hljs-built_in">number</span>)
+&#125;
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">loadWebAssembly</span>&lt;<span class="hljs-title">T</span> <span class="hljs-title">extends</span> <span class="hljs-title">ModuleExports</span>&gt;(<span class="hljs-params">input: <span class="hljs-built_in">string</span>, imports: <span class="hljs-built_in">any</span></span>) </span>&#123;
+  <span class="hljs-comment">// Fetch the file and compile it</span>
+
+  <span class="hljs-keyword">return</span> fetch(input).then(<span class="hljs-function"><span class="hljs-params">response</span> =&gt;</span> response.arrayBuffer())
+  .then(<span class="hljs-function"><span class="hljs-params">buffer</span> =&gt;</span> &#123;
+    <span class="hljs-comment">// Create the imports for the module, including the</span>
+    <span class="hljs-comment">// standard dynamic library imports</span>
+    imports = imports || &#123;&#125;
+    imports.env = imports.env || &#123;&#125;
+    <span class="hljs-keyword">if</span> (!imports.env.memory) &#123;
+  	imports.env.memory = <span class="hljs-keyword">new</span> WebAssembly.Memory(&#123; initial: <span class="hljs-number">1</span> &#125;)
+    &#125;
+
+    <span class="hljs-comment">// Create the instance.</span>
+    <span class="hljs-keyword">return</span> WebAssembly.instantiate(buffer, imports)
+  &#125;)
+&#125;
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">copyJsStringToRust</span>(<span class="hljs-params"><span class="hljs-built_in">module</span>: ModuleExports, str: <span class="hljs-built_in">string</span></span>) </span>&#123;
+  <span class="hljs-keyword">const</span> utf8Encoder = <span class="hljs-keyword">new</span> TextEncoder()
+  <span class="hljs-keyword">const</span> string_buffer = utf8Encoder.encode(str)
+  <span class="hljs-keyword">const</span> len = string_buffer.length
+  <span class="hljs-keyword">const</span> ptr = <span class="hljs-built_in">module</span>.alloc(len + <span class="hljs-number">1</span>)
+
+  <span class="hljs-keyword">const</span> memory = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>(<span class="hljs-built_in">module</span>.memory.buffer, ptr)
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; len; i++) &#123;
+    memory[i] = string_buffer[i]
+  &#125;
+
+  memory[len] = <span class="hljs-number">0</span> <span class="hljs-comment">// cstring end</span>
+
+  <span class="hljs-keyword">return</span> ptr
+&#125;
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">decodeRustString</span>(<span class="hljs-params"><span class="hljs-built_in">module</span>: ModuleExports, ptr: WasmMemPtr</span>) </span>&#123;
+  <span class="hljs-keyword">const</span> collectCString = <span class="hljs-function"><span class="hljs-keyword">function</span>*(<span class="hljs-params"></span>) </span>&#123;
+  <span class="hljs-keyword">const</span> memory = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>(<span class="hljs-built_in">module</span>.memory.buffer)
+  <span class="hljs-keyword">while</span> (memory[ptr] !== <span class="hljs-number">0</span>) &#123;
+    <span class="hljs-keyword">if</span> (memory[ptr] === <span class="hljs-literal">undefined</span>) &#123;
+  	<span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'Tried to read undef mem'</span>)
+    &#125;
+    <span class="hljs-keyword">yield</span> memory[ptr]
+    ptr += <span class="hljs-number">1</span>
+  &#125;
+  &#125;
+
+  <span class="hljs-keyword">const</span> buffer_as_u8 = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>(collectCString())
+  <span class="hljs-keyword">const</span> utf8Decoder = <span class="hljs-keyword">new</span> TextDecoder()
+  <span class="hljs-keyword">const</span> buffer_as_utf8 = utf8Decoder.decode(buffer_as_u8)
+  <span class="hljs-keyword">return</span> buffer_as_utf8
+&#125;
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">copyJsArrayToRust</span>(<span class="hljs-params">exports: ModuleExports, arr: <span class="hljs-built_in">number</span>[] | <span class="hljs-built_in">Uint8ClampedArray</span></span>) </span>&#123;
+  <span class="hljs-keyword">const</span> &#123; memory, alloc &#125; = exports
+  <span class="hljs-keyword">const</span> rVecPtr = alloc(arr.length)
+  <span class="hljs-keyword">const</span> asBytes = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>(memory.buffer, rVecPtr, arr.length)
+  asBytes.set(arr)
+  <span class="hljs-keyword">return</span> rVecPtr
+&#125;</code></pre>
 <p>demo.ts</p>
-<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> &#123;copyJsStringToRust, decodeRustString&#125; <span class="keyword">from</span> <span class="string">'./wasm-util'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> importObj = &#123;</span><br><span class="line">  env: &#123;</span><br><span class="line">    clog: <span class="function">(<span class="params">ptr: WasmMemPtr, <span class="built_in">number</span>: <span class="built_in">number</span></span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> str = decodeRustString(<span class="keyword">this</span>.rut.instanceExports, ptr)</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">"[rust] "</span> + str)</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">loadWebAssembly(<span class="string">'demo.wasm'</span>).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> strPtr = copyJsStringToRust(wasmExports, <span class="string">'Heyhey you you'</span>)</span><br><span class="line">  wasmExports.log_something(strPtr)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment">// '[rust] Heyhey you you'</span></span><br></pre></td></tr></table></figure>
+<pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123;copyJsStringToRust, decodeRustString&#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'./wasm-util'</span>
+
+<span class="hljs-keyword">const</span> importObj = &#123;
+  env: &#123;
+    clog: <span class="hljs-function">(<span class="hljs-params">ptr: WasmMemPtr, <span class="hljs-built_in">number</span>: <span class="hljs-built_in">number</span></span>) =&gt;</span> &#123;
+    <span class="hljs-keyword">const</span> str = decodeRustString(<span class="hljs-keyword">this</span>.rut.instanceExports, ptr)
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">"[rust] "</span> + str)
+    &#125;,
+  &#125;
+&#125;
+
+loadWebAssembly(<span class="hljs-string">'demo.wasm'</span>).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;
+  <span class="hljs-keyword">const</span> strPtr = copyJsStringToRust(wasmExports, <span class="hljs-string">'Heyhey you you'</span>)
+  wasmExports.log_something(strPtr)
+&#125;)
+
+<span class="hljs-comment">// '[rust] Heyhey you you'</span></code></pre>
 <h2 id="编译-wasm">编译 WASM</h2>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cargo rustc --release --target=wasm32-unknown-unknown</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs bash">cargo rustc --release --target=wasm32-unknown-unknown</code></pre>
 <h2 id="wasm-瘦身">WASM 瘦身</h2>
 <p>参见<a href="https://rust-lang-nursery.github.io/rust-wasm/game-of-life/code-size.html" title="WASM 瘦身" target="_blank" rel="noopener">此文</a></p>
 <h3 id="cargo.toml-中一些设定">Cargo.toml 中一些设定</h3>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[profile.release]</span><br><span class="line">debug = false</span><br><span class="line">lto = true</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs undefined">[profile.release]
+debug = false
+lto = true</code></pre>
 <h1 id="例子">例子</h1>
 <ul>
 <li><a href="https://www.hellorust.com/demos/" target="_blank" rel="noopener">Hello Rust</a></li>
@@ -57,8 +182,9 @@
 })
 
 gitalk.render('gitalk-container')
-</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
+</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'UA-49433257-1');
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/styles/atom-one-dark.css"><script src="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/lib/highlight.js"></script><script>hljs.initHighlightingOnLoad();
 </script></body></html>

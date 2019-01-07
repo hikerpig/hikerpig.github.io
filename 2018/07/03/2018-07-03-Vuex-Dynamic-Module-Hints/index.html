@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>Vuex 模块动态注册的一些实践经验 · HP goes FE</title><meta name="description" content="前言
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>Vuex 模块动态注册的一些实践经验 · HP goes FE</title><meta name="description" content="前言
 构建大型 SPA 应用时，代码分割和懒加载是比较常用的优化手段，在 Vue 生态下，使用 vue-router 很容易实现组件的懒加载。
 但应用里除了组件，还有庞大的业务逻辑，这部分如何分割和懒加载比较合适呢？
 使用 Vuex 管理状态的话，其提供了方法 registerModule 用于动态"><meta name="keywords" content="Front-End,Programming,Hexo"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/https://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>Vuex 模块动态注册的一些实践经验</a></h1></div><div class="post-content"><h1 id="前言">前言</h1>
@@ -7,29 +7,106 @@
 <p>使用 Vuex 管理状态的话，其提供了方法 <code>registerModule</code> 用于<a href="https://vuex.vuejs.org/guide/modules.html#dynamic-module-registration" target="_blank" rel="noopener">动态注册</a> Module。</p>
 <p>因此某个页面独有的业务逻辑和状态管理，在初始化全局 store 的时候可以不用引入，之后在该页面路由组件中再引入和注册 Vuex 模块。</p>
 <h1 id="简单的示例">简单的示例</h1>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> PageA = <span class="function"><span class="params">()</span> =&gt;</span> <span class="keyword">import</span>(<span class="string">'./views/PageA.js'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> VueRouter(&#123;</span><br><span class="line">  routes: [</span><br><span class="line">    &#123; <span class="attr">path</span>: <span class="string">'/page-a'</span>, <span class="attr">component</span>: PageA &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs javascript"><span class="hljs-keyword">const</span> PageA = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">'./views/PageA.js'</span>)
+
+<span class="hljs-keyword">const</span> router = <span class="hljs-keyword">new</span> VueRouter(&#123;
+  <span class="hljs-attr">routes</span>: [
+    &#123; <span class="hljs-attr">path</span>: <span class="hljs-string">'/page-a'</span>, <span class="hljs-attr">component</span>: PageA &#125;
+  ]
+&#125;)</code></pre>
 <p>简单的 Vuex 模块：</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// store/modules/page-a.js</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> VUEX_NS = <span class="string">'page-a'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  namespaced: <span class="literal">true</span>,</span><br><span class="line">  state() &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      inventory: &#123;</span><br><span class="line">        list: []</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  getters: &#123;</span><br><span class="line">    inventoryList(state) &#123;</span><br><span class="line">      <span class="keyword">return</span> state.inventory.list</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs javascript"><span class="hljs-comment">// store/modules/page-a.js</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> VUEX_NS = <span class="hljs-string">'page-a'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> &#123;
+  <span class="hljs-attr">namespaced</span>: <span class="hljs-literal">true</span>,
+  state() &#123;
+    <span class="hljs-keyword">return</span> &#123;
+      <span class="hljs-attr">inventory</span>: &#123;
+        <span class="hljs-attr">list</span>: []
+      &#125;
+    &#125;
+  &#125;,
+  <span class="hljs-attr">getters</span>: &#123;
+    inventoryList(state) &#123;
+      <span class="hljs-keyword">return</span> state.inventory.list
+    &#125;
+  &#125;
+&#125;</code></pre>
 <p>实践时遭遇了几个问题：</p>
 <h2 id="问题-1服务器客户端-在尚未注册-module-时调用其下的-actionmutation-vuex-因找不到对应函数而出错">问题 1：服务器/客户端 在尚未注册 Module 时，调用其下的 action/mutation ，Vuex 因找不到对应函数而出错</h2>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// views/PageA.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> PAGE_A_MODULE, &#123; VUEX_NS &#125; <span class="keyword">from</span> <span class="string">'store/modules/page-a'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  name: <span class="string">'PageA'</span>,</span><br><span class="line">  beforeCreate() &#123;</span><br><span class="line">    <span class="keyword">this</span>.$store.registerModule(VUEX_NS, PAGE_A_MODULE)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.$store.dispatch(<span class="string">`<span class="subst">$&#123;VUEX_NS&#125;</span>/fetchInventory`</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs javascript"><span class="hljs-comment">// views/PageA.js</span>
+
+<span class="hljs-keyword">import</span> PAGE_A_MODULE, &#123; VUEX_NS &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'store/modules/page-a'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> &#123;
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'PageA'</span>,
+  beforeCreate() &#123;
+    <span class="hljs-keyword">this</span>.$store.registerModule(VUEX_NS, PAGE_A_MODULE)
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.$store.dispatch(<span class="hljs-string">`<span class="hljs-subst">$&#123;VUEX_NS&#125;</span>/fetchInventory`</span>)
+  &#125;,
+&#125;</code></pre>
 <h3 id="考虑服务器端预取数据注入给客户端的时候">考虑服务器端预取数据注入给客户端的时候</h3>
 <p>客户（浏览器）端初始化代码，在初始化 router 之前，给 Vuex 全局 store 注入数据：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// entry-client.js</span></span><br><span class="line">store.replaceState(<span class="built_in">window</span>.__INITIAL_STATE__)</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs js"><span class="hljs-comment">// entry-client.js</span>
+store.replaceState(<span class="hljs-built_in">window</span>.__INITIAL_STATE__)</code></pre>
 <p>此处的 <code>__INITIAL_STATE__</code> 是 Vue SSR 提供的一个功能，使得浏览器端可以复用服务器端已经预取过的数据。</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在所有预取钩子(preFetch hook) resolve 后，</span></span><br><span class="line"><span class="comment">// 我们的 store 现在已经填充入渲染应用程序所需的状态。</span></span><br><span class="line"><span class="comment">// 当我们将状态附加到上下文，</span></span><br><span class="line"><span class="comment">// 并且 `template` 选项用于 renderer 时，</span></span><br><span class="line"><span class="comment">// 状态将自动序列化为 `window.__INITIAL_STATE__`，并注入 HTML。</span></span><br><span class="line">context.state = store.state</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs js"><span class="hljs-comment">// 在所有预取钩子(preFetch hook) resolve 后，</span>
+<span class="hljs-comment">// 我们的 store 现在已经填充入渲染应用程序所需的状态。</span>
+<span class="hljs-comment">// 当我们将状态附加到上下文，</span>
+<span class="hljs-comment">// 并且 `template` 选项用于 renderer 时，</span>
+<span class="hljs-comment">// 状态将自动序列化为 `window.__INITIAL_STATE__`，并注入 HTML。</span>
+context.state = store.state</code></pre>
 <p>此处的 <code>asyncData</code> 与 <a href="https://ssr.vuejs.org/zh/guide/data.html#%E6%95%B0%E6%8D%AE%E9%A2%84%E5%8F%96%E5%AD%98%E5%82%A8%E5%AE%B9%E5%99%A8-data-store" target="_blank" rel="noopener">Vue SSR 文档中的例子</a>类似，与 Nuxt.js 中的同名函数用法略有不同。</p>
 <p><code>prepareVuex</code> 为自定义的组件钩子函数，会先于 asyncData 调用，具体过程之后探讨。</p>
-<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> export default &#123;</span><br><span class="line">   name: 'PageA',</span><br><span class="line"><span class="deletion">-  beforeCreate() &#123;</span></span><br><span class="line"><span class="deletion">-    this.$store.registerModule(VUEX_NS, PAGE_A_MODULE)</span></span><br><span class="line"><span class="deletion">-    return this.$store.dispatch(`$&#123;VUEX_NS&#125;/fetchInventory`)</span></span><br><span class="line"><span class="addition">+  prepareVuex(&#123; store &#125;) &#123;</span></span><br><span class="line"><span class="addition">+    store.registerModule(VUEX_NS, PAGE_A_MODULE)</span></span><br><span class="line"><span class="addition">+  &#125;,</span></span><br><span class="line"><span class="addition">+  asyncData(&#123; store &#125;) &#123;</span></span><br><span class="line"><span class="addition">+    return store.dispatch(`$&#123;VUEX_NS&#125;/fetchInventory`)</span></span><br><span class="line">   &#125;,</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs diff"> export default &#123;
+   name: 'PageA',
+<span class="hljs-deletion">-  beforeCreate() &#123;</span>
+<span class="hljs-deletion">-    this.$store.registerModule(VUEX_NS, PAGE_A_MODULE)</span>
+<span class="hljs-deletion">-    return this.$store.dispatch(`$&#123;VUEX_NS&#125;/fetchInventory`)</span>
+<span class="hljs-addition">+  prepareVuex(&#123; store &#125;) &#123;</span>
+<span class="hljs-addition">+    store.registerModule(VUEX_NS, PAGE_A_MODULE)</span>
+<span class="hljs-addition">+  &#125;,</span>
+<span class="hljs-addition">+  asyncData(&#123; store &#125;) &#123;</span>
+<span class="hljs-addition">+    return store.dispatch(`$&#123;VUEX_NS&#125;/fetchInventory`)</span>
+   &#125;,
+ &#125;</code></pre>
 <p>此时会遇见</p>
 <h2 id="问题2-客户端没有用上服务器端预取的数据">问题2: 客户端没有用上服务器端预取的数据</h2>
 <p>解决方式：</p>
-<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> export default &#123;</span><br><span class="line">   name: 'PageA',</span><br><span class="line"><span class="deletion">-  prepareVuex(&#123; store &#125;) &#123;</span></span><br><span class="line"><span class="deletion">-    store.registerModule(VUEX_NS, PAGE_A_MODULE)</span></span><br><span class="line"><span class="addition">+  prepareVuex(&#123; store, isClientInitialRoute &#125;) &#123;</span></span><br><span class="line"><span class="addition">+    store.registerModule(VUEX_NS, PAGE_A_MODULE, &#123; preserveState: isClientInitialRoute &#125;)</span></span><br><span class="line">   &#125;,</span><br><span class="line">   asyncData(&#123; store &#125;) &#123;</span><br><span class="line">     return store.dispatch(`$&#123;VUEX_NS&#125;/fetchInventory`)</span><br><span class="line">   &#125;,</span><br><span class="line"><span class="addition">+  beforeDestroy() &#123;</span></span><br><span class="line"><span class="addition">+    // 销毁该模块</span></span><br><span class="line"><span class="addition">+    this.$store.unregisterModule(VUEX_NS)</span></span><br><span class="line"><span class="addition">+  &#125;</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs diff"> export default &#123;
+   name: 'PageA',
+<span class="hljs-deletion">-  prepareVuex(&#123; store &#125;) &#123;</span>
+<span class="hljs-deletion">-    store.registerModule(VUEX_NS, PAGE_A_MODULE)</span>
+<span class="hljs-addition">+  prepareVuex(&#123; store, isClientInitialRoute &#125;) &#123;</span>
+<span class="hljs-addition">+    store.registerModule(VUEX_NS, PAGE_A_MODULE, &#123; preserveState: isClientInitialRoute &#125;)</span>
+   &#125;,
+   asyncData(&#123; store &#125;) &#123;
+     return store.dispatch(`$&#123;VUEX_NS&#125;/fetchInventory`)
+   &#125;,
+<span class="hljs-addition">+  beforeDestroy() &#123;</span>
+<span class="hljs-addition">+    // 销毁该模块</span>
+<span class="hljs-addition">+    this.$store.unregisterModule(VUEX_NS)</span>
+<span class="hljs-addition">+  &#125;</span>
+ &#125;</code></pre>
 <p>注册 Vuex 模块的时候使用了 <code>preserveState</code> ，若启用此选项，注册 Module 时若 <code>store.state[namespace]</code> 下已存在数据，便不会使用声明 vuex 模块时的初始 state 覆盖已有数据。但需要注意，若 state 中没有 namespace 相应数据却开启了此选项，Vuex 还是会报错。因此此处添加了一个输入参数 <code>isClientInitialRoute</code> ， 只有在客户端初次进入页面（可以使用服务器预取数据）时才开启 <code>preserveState</code> 选项。</p>
 <h2 id="问题3-组件热更新时vuex-模块被销毁">问题3: 组件热更新时，Vuex 模块被销毁</h2>
 <p>开发期间使用 HotModuleReplacementPlugin 和 vue-loader，若改变了 PageA.js 中的代码，会触发热更新。在 <a href="https://github.com/vuejs/vue-hot-reload-api/blob/master/src/index.js" target="_blank" rel="noopener">vue-hot-reload-api</a> 中，当使用 vue-hot-reload-api 的 <code>reload</code> 方法处理组件实例时，该实例会被销毁而后重新创建。<code>beforeDestroy</code> 中销毁了 Vuex 的 <code>page-a</code> 模块，却没有调用 <code>prepareVuex</code> 方法重新注册，因此热更新之后，使用该模块也会报错。</p>
 <p>解决方案：</p>
-<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">   asyncData(&#123; store &#125;) &#123;</span><br><span class="line">     return store.dispatch(`$&#123;VUEX_NS&#125;/fetchInventory`)</span><br><span class="line">   &#125;,</span><br><span class="line"><span class="deletion">-  beforeDestroy() &#123;</span></span><br><span class="line"><span class="deletion">-    // 销毁该模块</span></span><br><span class="line"><span class="deletion">-    this.$store.unregisterModule(VUEX_NS)</span></span><br><span class="line"><span class="addition">+  beforeRouteLeave(to, from, next) &#123;</span></span><br><span class="line"><span class="addition">+    this.$once('hook:beforeDestroy', () =&gt; &#123;</span></span><br><span class="line"><span class="addition">+      // 销毁该模块</span></span><br><span class="line"><span class="addition">+      this.$store.unregisterModule(VUEX_NS)</span></span><br><span class="line"><span class="addition">+    &#125;)</span></span><br><span class="line"><span class="addition">+    next()</span></span><br><span class="line">   &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs diff">   asyncData(&#123; store &#125;) &#123;
+     return store.dispatch(`$&#123;VUEX_NS&#125;/fetchInventory`)
+   &#125;,
+<span class="hljs-deletion">-  beforeDestroy() &#123;</span>
+<span class="hljs-deletion">-    // 销毁该模块</span>
+<span class="hljs-deletion">-    this.$store.unregisterModule(VUEX_NS)</span>
+<span class="hljs-addition">+  beforeRouteLeave(to, from, next) &#123;</span>
+<span class="hljs-addition">+    this.$once('hook:beforeDestroy', () =&gt; &#123;</span>
+<span class="hljs-addition">+      // 销毁该模块</span>
+<span class="hljs-addition">+      this.$store.unregisterModule(VUEX_NS)</span>
+<span class="hljs-addition">+    &#125;)</span>
+<span class="hljs-addition">+    next()</span>
+   &#125;
+ &#125;</code></pre>
 <p>仔细想想，注册模块的时机是与路由相关的（进入页面之前），那么销毁的时机也可以与路由相关。不过并不适合在 <code>beforeRouteLeave</code> 钩子中立刻销毁模块。因为根据以下 vue-router 文档内容，在此钩子被调用完成时，整个页面还是在正常工作的（第2步到第11步中间），仍未进入组件的 destroy 过程，此时销毁模块会导致依赖其的所有组件异常。</p>
 <blockquote>
 <p><cite><a href="https://router.vuejs.org/zh/guide/advanced/navigation-guards.html#%E5%AE%8C%E6%95%B4%E7%9A%84%E5%AF%BC%E8%88%AA%E8%A7%A3%E6%9E%90%E6%B5%81%E7%A8%8B" target="_blank" rel="noopener">vue-router 文档中关于导航解析流程的部分</a></cite></p>
@@ -51,11 +128,93 @@
 <p>因此安全的模块销毁时机需要在 DOM 更新中或后，旧的页面组件实例销毁过程调用时。</p>
 <h1 id="相关代码">相关代码</h1>
 <p>最后的 PageA.js：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> PAGE_A_MODULE, &#123; VUEX_NS &#125; <span class="keyword">from</span> <span class="string">'store/modules/page-a'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  name: <span class="string">'PageA'</span>,</span><br><span class="line">  prepareVuex(&#123; store, isClientInitialRoute &#125;) &#123;</span><br><span class="line">    store.registerModule(VUEX_NS, PAGE_A_MODULE, &#123; <span class="attr">preserveState</span>: isClientInitialRoute &#125;)</span><br><span class="line">  &#125;,</span><br><span class="line">  asyncData(&#123; store &#125;) &#123;</span><br><span class="line">    <span class="keyword">return</span> store.dispatch(<span class="string">`<span class="subst">$&#123;VUEX_NS&#125;</span>/fetchInventory`</span>)</span><br><span class="line">  &#125;,</span><br><span class="line">  beforeRouteLeave(to, <span class="keyword">from</span>, next) &#123;</span><br><span class="line">    <span class="keyword">this</span>.$once(<span class="string">'hook:beforeDestroy'</span>, () =&gt; &#123;</span><br><span class="line">      <span class="comment">// 销毁该模块</span></span><br><span class="line">      <span class="keyword">this</span>.$store.unregisterModule(VUEX_NS)</span><br><span class="line">    &#125;)</span><br><span class="line">    next()</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs js"><span class="hljs-keyword">import</span> PAGE_A_MODULE, &#123; VUEX_NS &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'store/modules/page-a'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> &#123;
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'PageA'</span>,
+  prepareVuex(&#123; store, isClientInitialRoute &#125;) &#123;
+    store.registerModule(VUEX_NS, PAGE_A_MODULE, &#123; <span class="hljs-attr">preserveState</span>: isClientInitialRoute &#125;)
+  &#125;,
+  asyncData(&#123; store &#125;) &#123;
+    <span class="hljs-keyword">return</span> store.dispatch(<span class="hljs-string">`<span class="hljs-subst">$&#123;VUEX_NS&#125;</span>/fetchInventory`</span>)
+  &#125;,
+  beforeRouteLeave(to, <span class="hljs-keyword">from</span>, next) &#123;
+    <span class="hljs-keyword">this</span>.$once(<span class="hljs-string">'hook:beforeDestroy'</span>, () =&gt; &#123;
+      <span class="hljs-comment">// 销毁该模块</span>
+      <span class="hljs-keyword">this</span>.$store.unregisterModule(VUEX_NS)
+    &#125;)
+    next()
+  &#125;
+&#125;</code></pre>
 <p>两端的入口文件中相关代码如下：</p>
-<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// router-util.ts</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> Vue, &#123; VueConstructor &#125; <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> VueCtor = VueConstructor&lt;<span class="built_in">any</span>&gt;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">getHookFromComponent</span>(<span class="params">compo: <span class="built_in">any</span>, name: <span class="built_in">string</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> compo[name] || (compo.options &amp;&amp; compo.options[name])</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="function"><span class="keyword">function</span> <span class="title">callComponentsHookWith</span>(<span class="params">compoList: VueCtor[], hookName: <span class="built_in">string</span>, context: <span class="built_in">any</span></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> compoList.map(<span class="function">(<span class="params">component</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> hook = getHookFromComponent(component, hookName)</span><br><span class="line">    <span class="keyword">if</span> (hook) &#123;</span><br><span class="line">      <span class="keyword">return</span> hook(context)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).filter(_ =&gt; _)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// entry-server.js</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> context =&gt; &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// set router's location</span></span><br><span class="line">    router.push(context.url)</span><br><span class="line"></span><br><span class="line">    router.onReady(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> matchedComponents = router.getMatchedComponents()</span><br><span class="line"></span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 加上 try/catch 避免此 block 内抛出的错误造成 promise unhandledRejection</span></span><br><span class="line">        callComponentsHookWith(matchedComponents, <span class="string">'prepareVuex'</span>, &#123; store &#125;)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> asyncDataResults = callComponentsHookWith(matchedComponents, <span class="string">'asyncData'</span>,</span><br><span class="line">          &#123;</span><br><span class="line">            store,</span><br><span class="line">            route: router.currentRoute,</span><br><span class="line">          &#125;</span><br><span class="line">        )</span><br><span class="line">        <span class="built_in">Promise</span>.all(asyncDataResults).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">          context.state = store.state</span><br><span class="line">          resolve(app)</span><br><span class="line">        &#125;).catch(reject)</span><br><span class="line"></span><br><span class="line">      &#125; <span class="keyword">catch</span>(err) &#123;</span><br><span class="line">        reject(err)</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;, reject)</span><br><span class="line">  &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// entry-client.js</span></span><br><span class="line"></span><br><span class="line">router.onReady(<span class="function">(<span class="params">initialRoute</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> initialMatched = router.getMatchedComponents(initialRoute)</span><br><span class="line">  callComponentsHookWith(initialMatched, <span class="string">'prepareVuex'</span>, &#123; store, <span class="attr">isClientInitialRoute</span>: <span class="literal">true</span> &#125;)</span><br><span class="line"></span><br><span class="line">  router.beforeResolve(<span class="function">(<span class="params">to, <span class="keyword">from</span>, next</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> matched = router.getMatchedComponents(to)</span><br><span class="line"></span><br><span class="line">    callComponentsHookWith(matched, <span class="string">'prepareVuex'</span>, &#123; store &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Promise</span>.all(callComponentsHookWith(activated, <span class="string">'asyncData'</span>, &#123; store, <span class="attr">route</span>: to &#125;))</span><br><span class="line">      .then(next)</span><br><span class="line">      .catch(next)</span><br><span class="line">  &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="comment">// actually mount to DOM</span></span><br><span class="line">  app.$mount(<span class="string">'#app'</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs typescript"><span class="hljs-comment">// router-util.ts</span>
+
+<span class="hljs-keyword">import</span> Vue, &#123; VueConstructor &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'vue'</span>
+
+<span class="hljs-keyword">type</span> VueCtor = VueConstructor&lt;<span class="hljs-built_in">any</span>&gt;
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getHookFromComponent</span>(<span class="hljs-params">compo: <span class="hljs-built_in">any</span>, name: <span class="hljs-built_in">string</span></span>) </span>&#123;
+  <span class="hljs-keyword">return</span> compo[name] || (compo.options &amp;&amp; compo.options[name])
+&#125;
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">callComponentsHookWith</span>(<span class="hljs-params">compoList: VueCtor[], hookName: <span class="hljs-built_in">string</span>, context: <span class="hljs-built_in">any</span></span>) </span>&#123;
+  <span class="hljs-keyword">return</span> compoList.map(<span class="hljs-function">(<span class="hljs-params">component</span>) =&gt;</span> &#123;
+    <span class="hljs-keyword">const</span> hook = getHookFromComponent(component, hookName)
+    <span class="hljs-keyword">if</span> (hook) &#123;
+      <span class="hljs-keyword">return</span> hook(context)
+    &#125;
+  &#125;).filter(_ =&gt; _)
+&#125;</code></pre>
+<pre><code class="hljs js"><span class="hljs-comment">// entry-server.js</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> context =&gt; &#123;
+  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> &#123;
+    <span class="hljs-comment">// set router's location</span>
+    router.push(context.url)
+
+    router.onReady(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;
+      <span class="hljs-keyword">const</span> matchedComponents = router.getMatchedComponents()
+
+      <span class="hljs-keyword">try</span> &#123;
+        <span class="hljs-comment">// 加上 try/catch 避免此 block 内抛出的错误造成 promise unhandledRejection</span>
+        callComponentsHookWith(matchedComponents, <span class="hljs-string">'prepareVuex'</span>, &#123; store &#125;)
+
+        <span class="hljs-keyword">const</span> asyncDataResults = callComponentsHookWith(matchedComponents, <span class="hljs-string">'asyncData'</span>,
+          &#123;
+            store,
+            <span class="hljs-attr">route</span>: router.currentRoute,
+          &#125;
+        )
+        <span class="hljs-built_in">Promise</span>.all(asyncDataResults).then(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;
+          context.state = store.state
+          resolve(app)
+        &#125;).catch(reject)
+
+      &#125; <span class="hljs-keyword">catch</span>(err) &#123;
+        reject(err)
+      &#125;
+    &#125;, reject)
+  &#125;)
+&#125;</code></pre>
+<pre><code class="hljs js"><span class="hljs-comment">// entry-client.js</span>
+
+router.onReady(<span class="hljs-function">(<span class="hljs-params">initialRoute</span>) =&gt;</span> &#123;
+  <span class="hljs-keyword">const</span> initialMatched = router.getMatchedComponents(initialRoute)
+  callComponentsHookWith(initialMatched, <span class="hljs-string">'prepareVuex'</span>, &#123; store, <span class="hljs-attr">isClientInitialRoute</span>: <span class="hljs-literal">true</span> &#125;)
+
+  router.beforeResolve(<span class="hljs-function">(<span class="hljs-params">to, <span class="hljs-keyword">from</span>, next</span>) =&gt;</span> &#123;
+    <span class="hljs-keyword">const</span> matched = router.getMatchedComponents(to)
+
+    callComponentsHookWith(matched, <span class="hljs-string">'prepareVuex'</span>, &#123; store &#125;)
+
+    <span class="hljs-built_in">Promise</span>.all(callComponentsHookWith(activated, <span class="hljs-string">'asyncData'</span>, &#123; store, <span class="hljs-attr">route</span>: to &#125;))
+      .then(next)
+      .catch(next)
+  &#125;)
+
+  <span class="hljs-comment">// actually mount to DOM</span>
+  app.$mount(<span class="hljs-string">'#app'</span>)
+&#125;)</code></pre>
 </div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-07-03</span><i class="fa fa-tag"></i><a href="/categories/前端/" title="前端" class="tag">前端 </a><a href="/tags/Vue/" title="Vue" class="tag">Vue </a></div></div></div></div><div id="toc"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#简单的示例"><span class="toc-text">简单的示例</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题-1服务器客户端-在尚未注册-module-时调用其下的-actionmutation-vuex-因找不到对应函数而出错"><span class="toc-text">问题 1：服务器/客户端 在尚未注册 Module 时，调用其下的 action/mutation ，Vuex 因找不到对应函数而出错</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#考虑服务器端预取数据注入给客户端的时候"><span class="toc-text">考虑服务器端预取数据注入给客户端的时候</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题2-客户端没有用上服务器端预取的数据"><span class="toc-text">问题2: 客户端没有用上服务器端预取的数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#问题3-组件热更新时vuex-模块被销毁"><span class="toc-text">问题3: 组件热更新时，Vuex 模块被销毁</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#相关代码"><span class="toc-text">相关代码</span></a></li></ol></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://hikerpig.github.io/2018/07/03/2018-07-03-Vuex-Dynamic-Module-Hints/,HP goes FE,Vuex 模块动态注册的一些实践经验,;" class="fa fa-twitter"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a role="navigation" href="/2018/07/31/2018-07-31-Goodbye My Santa Monica Dream/" title="Goodbye My Santa Monica Dream 🎵" class="btn">上一篇</a></li><li class="next pagbuttons"><a role="navigation" href="/2018/05/03/2018-05-03-Try-Rust-Webassemly/" title="Try Rust WebAssembly" class="btn">下一篇</a></li></ul></div><div id="comments"><div id="gitalk-container"></div></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
   clientID: '0b21579fda2f1d2e73f4',
   clientSecret: 'abc0351a314cc46bb3d58b6dad62c670c2d1e8f9',
@@ -70,8 +229,9 @@
 })
 
 gitalk.render('gitalk-container')
-</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
+</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'UA-49433257-1');
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/styles/atom-one-dark.css"><script src="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/lib/highlight.js"></script><script>hljs.initHighlightingOnLoad();
 </script></body></html>

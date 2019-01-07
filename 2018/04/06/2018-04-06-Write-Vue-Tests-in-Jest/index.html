@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>用 Jest 单元测试基于 Vue 的项目 · HP goes FE</title><meta name="description" content="为一个基于 Vue 的项目搭建测试框架，有两个比较成熟的选择，Mocha + Webpack + Karma，或是 Jest。
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>用 Jest 单元测试基于 Vue 的项目 · HP goes FE</title><meta name="description" content="为一个基于 Vue 的项目搭建测试框架，有两个比较成熟的选择，Mocha + Webpack + Karma，或是 Jest。
 前者也是 vue-cli 默认脚手架里的测试方案，我们之前的项目也用了它，实际使用起来，感觉成也 Karma，败也 Karma，配置起来不是很顺手，导致测试必须在完整打包后"><meta name="keywords" content="Front-End,Programming,Hexo"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/https://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>用 Jest 单元测试基于 Vue 的项目</a></h1></div><div class="post-content"><p>为一个基于 Vue 的项目搭建测试框架，有两个比较成熟的选择，Mocha + Webpack + Karma，或是 Jest。</p>
 <p>前者也是 vue-cli 默认脚手架里的测试方案，我们之前的项目也用了它，实际使用起来，感觉成也 Karma，败也 Karma，配置起来不是很顺手，导致测试必须在完整打包后才能进行，测试时间随着用例增加飞速增长。而且调试单个测试用例的时候冷启动时间太长。</p>
 <p>最后采用了功能强大的 Jest。</p>
@@ -13,7 +13,35 @@
 <p>采用 Jest 一方面是因为它具有很方便的 Mock 方案，框架会自动探测 <code>__mocks__</code> 文件夹中的文件，例如如果新建 <code>__mocks__/axios.js</code>，测试中所有源码的 <code>require('axios')</code> 返回的对象都会是该文件的导出内容。详见文档中的 <a href="https://facebook.github.io/jest/docs/en/manual-mocks.html" target="_blank" rel="noopener">Manual Mocks</a> 一章。</p>
 <h2 id="调试测试">调试测试</h2>
 <p>以在 VSCode 中 Debug 的配置为例，以下为 <code>.vscode/launch.json</code> 示例，参考文章<a href="https://segmentfault.com/a/1190000011852541" target="_blank" rel="noopener">《在VS Code中调试Jest单元测试》</a>：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"version"</span>: <span class="string">"0.2.0"</span>,</span><br><span class="line">  <span class="attr">"configurations"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"type"</span>: <span class="string">"node"</span>,</span><br><span class="line">      <span class="attr">"request"</span>: <span class="string">"launch"</span>,</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"Debug Current Jest Test"</span>,</span><br><span class="line">      <span class="attr">"program"</span>: <span class="string">"$&#123;workspaceRoot&#125;/node_modules/jest/bin/jest"</span>,</span><br><span class="line">      <span class="attr">"cwd"</span>: <span class="string">"$&#123;workspaceRoot&#125;"</span>,</span><br><span class="line">      <span class="attr">"env"</span>: &#123;</span><br><span class="line">        <span class="attr">"NODE_ENV"</span>: <span class="string">"test"</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="attr">"args"</span>: [<span class="string">"--runInBand"</span>, <span class="string">"--env=jsdom"</span>, <span class="string">"$&#123;fileBasename&#125;"</span>],</span><br><span class="line">      <span class="attr">"runtimeArgs"</span>: [</span><br><span class="line">        <span class="string">"--inspect-brk"</span>,</span><br><span class="line">      ],</span><br><span class="line">      <span class="attr">"sourceMaps"</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">"console"</span>: <span class="string">"integratedTerminal"</span>,</span><br><span class="line">      <span class="attr">"internalConsoleOptions"</span>: <span class="string">"neverOpen"</span>,</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"type"</span>: <span class="string">"node"</span>,</span><br><span class="line">      <span class="attr">"request"</span>: <span class="string">"attach"</span>,</span><br><span class="line">      <span class="attr">"stopOnEntry"</span>: <span class="literal">false</span>,</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"Attach to node inspect-brk"</span>,</span><br><span class="line">      <span class="attr">"port"</span>: <span class="number">9229</span></span><br><span class="line">    &#125;,</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs json">&#123;
+  <span class="hljs-attr">"version"</span>: <span class="hljs-string">"0.2.0"</span>,
+  <span class="hljs-attr">"configurations"</span>: [
+    &#123;
+      <span class="hljs-attr">"type"</span>: <span class="hljs-string">"node"</span>,
+      <span class="hljs-attr">"request"</span>: <span class="hljs-string">"launch"</span>,
+      <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Debug Current Jest Test"</span>,
+      <span class="hljs-attr">"program"</span>: <span class="hljs-string">"$&#123;workspaceRoot&#125;/node_modules/jest/bin/jest"</span>,
+      <span class="hljs-attr">"cwd"</span>: <span class="hljs-string">"$&#123;workspaceRoot&#125;"</span>,
+      <span class="hljs-attr">"env"</span>: &#123;
+        <span class="hljs-attr">"NODE_ENV"</span>: <span class="hljs-string">"test"</span>
+      &#125;,
+      <span class="hljs-attr">"args"</span>: [<span class="hljs-string">"--runInBand"</span>, <span class="hljs-string">"--env=jsdom"</span>, <span class="hljs-string">"$&#123;fileBasename&#125;"</span>],
+      <span class="hljs-attr">"runtimeArgs"</span>: [
+        <span class="hljs-string">"--inspect-brk"</span>,
+      ],
+      <span class="hljs-attr">"sourceMaps"</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">"console"</span>: <span class="hljs-string">"integratedTerminal"</span>,
+      <span class="hljs-attr">"internalConsoleOptions"</span>: <span class="hljs-string">"neverOpen"</span>,
+    &#125;,
+    &#123;
+      <span class="hljs-attr">"type"</span>: <span class="hljs-string">"node"</span>,
+      <span class="hljs-attr">"request"</span>: <span class="hljs-string">"attach"</span>,
+      <span class="hljs-attr">"stopOnEntry"</span>: <span class="hljs-literal">false</span>,
+      <span class="hljs-attr">"name"</span>: <span class="hljs-string">"Attach to node inspect-brk"</span>,
+      <span class="hljs-attr">"port"</span>: <span class="hljs-number">9229</span>
+    &#125;,
+  ]
+&#125;</code></pre>
 <h3 id="使用-vscode-启动测试">使用 VSCode 启动测试</h3>
 <p>args 中的 <code>--runInBand</code> 和 <code>--env=jsdom</code> 都是 Jest 的配置项，详细的可查阅 <a href="https://facebook.github.io/jest/docs/en/cli.html" target="_blank" rel="noopener">jest cli 文档</a></p>
 <p><code>${fileBasename}</code> 为 VSCode 配置提供的变量，在此处表明只让 Jest 运行当前打开文件描述的用例。</p>
@@ -36,8 +64,9 @@
 })
 
 gitalk.render('gitalk-container')
-</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
+</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'UA-49433257-1');
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/styles/atom-one-dark.css"><script src="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/lib/highlight.js"></script><script>hljs.initHighlightingOnLoad();
 </script></body></html>

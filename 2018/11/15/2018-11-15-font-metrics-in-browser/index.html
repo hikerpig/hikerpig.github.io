@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>浏览器中的字体信息测量 · HP goes FE</title><meta name="description" content="题图来自 http://iamvdo.me/en/blog/css-font-metrics-line-height-and-vertical-align
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>浏览器中的字体信息测量 · HP goes FE</title><meta name="description" content="题图来自 http://iamvdo.me/en/blog/css-font-metrics-line-height-and-vertical-align
 
 为什么同样的 font-size ，文字高度不一样？
 每个字体在设计的时候，都是基于一个 EM Square，这是活字印刷中字模的高度。
@@ -22,19 +22,55 @@
 <h1 id="代码片段">代码片段</h1>
 <p>可以在<a href="https://jsfiddle.net/hikerpig/xkt3o4sd/4/" target="_blank" rel="noopener">这个 fiddle</a> 里看到结果。</p>
 <h2 id="使用-canvas-度量文字宽度">使用 canvas 度量文字宽度</h2>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getMetricsByCanvas</span>(<span class="params">canvas, str, font</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> ctx = canvas.getContext(<span class="string">'2d'</span>)</span><br><span class="line">  ctx.font = font</span><br><span class="line">  <span class="built_in">console</span>.log(str, font, ctx.measureText(str))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">window</span>.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">const</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">'canvas'</span>)</span><br><span class="line">  <span class="built_in">document</span>.body.appendChild(canvas)</span><br><span class="line">  <span class="built_in">window</span>.canvas = canvas</span><br><span class="line"></span><br><span class="line">  getMetricsByCanvas(canvas, <span class="string">'字'</span>, <span class="string">'30px  Noto Sans JP'</span>) <span class="comment">// 字 30px  Noto Sans JP TextMetrics &#123;width: 30&#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>不过此 API 是拿不到字符的高度的。就有一些比较黑的方法来估算字体的内容高度，例如使用大写字母 ‘M’ 的宽度作为内功高度的近似。这些技巧其实都与字形设计的惯例有关，在拉丁字母中，’M’ 是字形最为饱满和方正的字符，高度与宽度近似。</p>
-<p>不过明显这个惯例对于以上两个日文字体并不适用。</p>
+<pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getMetricsByCanvas</span>(<span class="hljs-params">canvas, str, font</span>) </span>&#123;
+  <span class="hljs-keyword">const</span> ctx = canvas.getContext(<span class="hljs-string">'2d'</span>)
+  ctx.font = font
+  <span class="hljs-built_in">console</span>.log(str, font, ctx.measureText(str))
+&#125;
+
+<span class="hljs-built_in">window</span>.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;
+  <span class="hljs-keyword">const</span> canvas = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'canvas'</span>)
+  <span class="hljs-built_in">document</span>.body.appendChild(canvas)
+  <span class="hljs-built_in">window</span>.canvas = canvas
+
+  getMetricsByCanvas(canvas, <span class="hljs-string">'字'</span>, <span class="hljs-string">'30px  Noto Sans JP'</span>) <span class="hljs-comment">// 字 30px  Noto Sans JP TextMetrics &#123;width: 30&#125;</span>
+&#125;</code></pre>
+<p>不过此 API 是拿不到字符的高度的。就有一些比较黑的方法来估算字体的内容高度，例如使用大写字母 ‘M’ 的宽度作为内功高度的近似。这些技巧其实都与字形设计的惯例有关，在拉丁字母中，‘M’ 是字形最为饱满和方正的字符，高度与宽度近似。</p>
+<p>不过明显这个惯例对于以上两个日文字体<em>并不适用</em>。</p>
 <p>汉字因为字形多数为饱满的方块字，用宽度去估计内容高度其实更容易，例如 ‘人’ 和 ‘口’ 就很好用。</p>
 <h2 id="创建临时-dom-元素用于度量高度">创建临时 dom 元素用于度量高度</h2>
 <p>能拿到更全的字形盒信息</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getMetricsBySpan</span>(<span class="params">str, font</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> d = <span class="built_in">document</span>.createElement(<span class="string">"span"</span>);</span><br><span class="line">  d.style.font = font;</span><br><span class="line">  d.textContent = str;</span><br><span class="line">  <span class="built_in">document</span>.body.appendChild(d);</span><br><span class="line">  <span class="keyword">const</span> emHeight = d.offsetHeight;</span><br><span class="line">  <span class="keyword">const</span> emWidth = d.offsetWidth;</span><br><span class="line"></span><br><span class="line">  <span class="built_in">console</span>.log(str, font, &#123; emWidth, emHeight &#125;)</span><br><span class="line"></span><br><span class="line">  <span class="built_in">document</span>.body.removeChild(d);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">getMetricsBySpan(<span class="string">'字'</span>, <span class="string">'30px  Noto Sans JP'</span>) <span class="comment">// 字 30px  Noto Sans JP &#123;emWidth: 30, emHeight: 45&#125;</span></span><br></pre></td></tr></table></figure>
+<pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getMetricsBySpan</span>(<span class="hljs-params">str, font</span>) </span>&#123;
+  <span class="hljs-keyword">var</span> d = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"span"</span>);
+  d.style.font = font;
+  d.textContent = str;
+  <span class="hljs-built_in">document</span>.body.appendChild(d);
+  <span class="hljs-keyword">const</span> emHeight = d.offsetHeight;
+  <span class="hljs-keyword">const</span> emWidth = d.offsetWidth;
+
+  <span class="hljs-built_in">console</span>.log(str, font, &#123; emWidth, emHeight &#125;)
+
+  <span class="hljs-built_in">document</span>.body.removeChild(d);
+&#125;
+
+getMetricsBySpan(<span class="hljs-string">'字'</span>, <span class="hljs-string">'30px  Noto Sans JP'</span>) <span class="hljs-comment">// 字 30px  Noto Sans JP &#123;emWidth: 30, emHeight: 45&#125;</span></code></pre>
+<h1 id="稍微不那么简单但准确的方法">稍微不那么简单但准确的方法</h1>
+<h2 id="基于-canvas-的-fontmetrics">基于 canvas 的 FontMetrics</h2>
+<p><a href="https://github.com/soulwire/FontMetrics" target="_blank" rel="noopener">FontMetrics</a> 这个库，先清空 canvas，将文字渲染至 canvas 上，然后逐行统计 canvas 上的像素，由此可以知道文字的上下内容边界，再与 font size 换算，便可以得到字符的高度。</p>
+<h2 id="opentype.js">opentype.js</h2>
+<figure>
+<img src="https://camo.githubusercontent.com/2eae816a7d7ec3155c6136a50cc7a939eee608ca/68747470733a2f2f7261772e6769746875622e636f6d2f6f70656e747970656a732f6f70656e747970652e6a732f6d61737465722f672f68656c6c6f2d776f726c642e706e67" alt="opentype.js"><figcaption>opentype.js</figcaption>
+</figure>
+<p><a href="https://opentype.js.org/" target="_blank" rel="noopener">opentype.js</a> 是一个优秀的解析 OpenType 字体的 js 库。以 ArrayBuffer 传入字体的数据，解析出所有 OpenType 标准数据，完全可以基于此写出符合自己需求的排版引擎。</p>
+<pre><code class="hljs typescript"><span class="hljs-keyword">const</span> font = parse(buffer)
+<span class="hljs-keyword">const</span> g = font.charToGlyph(<span class="hljs-string">'字'</span>)
+<span class="hljs-keyword">const</span> bb = g.getBoundingBox()  <span class="hljs-comment">// 得出 &#123; x1, x2 , y1, y2 &#125;</span></code></pre>
 <h1 id="参考">参考</h1>
 <p><a href="https://stackoverflow.com/questions/1134586/how-can-you-find-the-height-of-text-on-an-html-canvas" target="_blank" rel="noopener">SO 上的一个问题</a></p>
 <p><a href="https://www.freetype.org/freetype2/docs/glyphs/glyphs-3.html" target="_blank" rel="noopener">FreeType Glyph Metrics</a></p>
 <p><a href="https://www.html5rocks.com/en/tutorials/canvas/texteffects/#toc-text-shadow-clipping" target="_blank" rel="noopener">Typographic effects in canvas</a></p>
 <p><a href="http://iamvdo.me/en/blog/css-font-metrics-line-height-and-vertical-align" target="_blank" rel="noopener">Deep dive CSS: font metrics, line-height and vertical-align</a></p>
-</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-11-15</span><i class="fa fa-tag"></i><a href="/categories/前端/" title="前端" class="tag">前端 </a><a href="/tags/浏览器/" title="浏览器" class="tag">浏览器 </a><a href="/tags/字体/" title="字体" class="tag">字体 </a></div></div></div></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://hikerpig.github.io/2018/11/15/2018-11-15-font-metrics-in-browser/,HP goes FE,浏览器中的字体信息测量,;" class="fa fa-twitter"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a role="navigation" href="/2018/08/26/2018-08-26-beware-of-svg-transform/" title="SVG 元素的自定义  transform origin" class="btn">下一篇</a></li></ul></div><div id="comments"><div id="gitalk-container"></div></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-11-15</span><i class="fa fa-tag"></i><a href="/categories/前端/" title="前端" class="tag">前端 </a><a href="/tags/浏览器/" title="浏览器" class="tag">浏览器 </a><a href="/tags/字体/" title="字体" class="tag">字体 </a></div></div></div></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://hikerpig.github.io/2018/11/15/2018-11-15-font-metrics-in-browser/,HP goes FE,浏览器中的字体信息测量,;" class="fa fa-twitter"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a role="navigation" href="/2018/12/22/2018-12-22-svg-blur-and-css-text-shadow/" title="CSS 中的两种模糊半径" class="btn">上一篇</a></li><li class="next pagbuttons"><a role="navigation" href="/2018/08/26/2018-08-26-beware-of-svg-transform/" title="SVG 元素的自定义  transform origin" class="btn">下一篇</a></li></ul></div><div id="comments"><div id="gitalk-container"></div></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
   clientID: '0b21579fda2f1d2e73f4',
   clientSecret: 'abc0351a314cc46bb3d58b6dad62c670c2d1e8f9',
   repo: 'hikerpig.github.io',
@@ -48,8 +84,9 @@
 })
 
 gitalk.render('gitalk-container')
-</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
+</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'UA-49433257-1');
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/styles/atom-one-dark.css"><script src="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/lib/highlight.js"></script><script>hljs.initHighlightingOnLoad();
 </script></body></html>

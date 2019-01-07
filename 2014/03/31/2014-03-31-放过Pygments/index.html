@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>放过Pygments,让Prism来给Jekyll博客加上代码高亮 · HP goes FE</title><meta name="description" content="jekyll目前至少支持Redcarpet和RDiscount以及kramadown几种类markdown引擎，
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>放过Pygments,让Prism来给Jekyll博客加上代码高亮 · HP goes FE</title><meta name="description" content="jekyll目前至少支持Redcarpet和RDiscount以及kramadown几种类markdown引擎，
 
 rdiscount 是基于C实现的 markdown 引擎 discount 的ruby调用，优点不用说也知道就是快。缺点是扩展性差(不过要扩展的功能也能通过jekyll的插件来实现)"><meta name="keywords" content="Front-End,Programming,Hexo"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/https://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>放过Pygments,让Prism来给Jekyll博客加上代码高亮</a></h1></div><div class="post-content"><p>jekyll目前至少支持Redcarpet和RDiscount以及kramadown几种类markdown引擎，</p>
 <ul>
@@ -7,9 +7,13 @@ rdiscount 是基于C实现的 markdown 引擎 discount 的ruby调用，优点不
 </ul>
 <p>kramadown没有了解，不过估计应该像前两者一样都支持Fenced code block, 我选择的是Redcarpet, 在用一对三个反引号包裹代码块上附加的文本会被认为是代码高亮的提示，输出html的时候它会被转为class属性。</p>
 <p>例如：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">console</span>.log(<span class="string">'测试code block'</span>);</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs js"><span class="hljs-built_in">console</span>.log(<span class="hljs-string">'测试code block'</span>);</code></pre>
 <p>输出结果为:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;pre&gt;</span><br><span class="line">  &lt;code class=&quot;js&quot;&gt;</span><br><span class="line">    console.log(&apos;测试code block&apos;);</span><br><span class="line">  &lt;/code&gt;</span><br><span class="line">&lt;/pre&gt;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs text">&lt;pre&gt;
+  &lt;code class=&quot;js&quot;&gt;
+    console.log(&apos;测试code block&apos;);
+  &lt;/code&gt;
+&lt;/pre&gt;</code></pre>
 <h2 id="后端的处理">后端的处理</h2>
 <p>首先在jekyll的站点设置文件<code>_config.yml</code>里关闭pygment:</p>
 <pre><code>pygment:  false</code></pre>
@@ -18,9 +22,19 @@ rdiscount 是基于C实现的 markdown 引擎 discount 的ruby调用，优点不
 <p>Prism内置多种主题都挺好看，我选择了prism-okaidia的样式文件。</p>
 <p>Prism在处理完高亮的时候，是根据代码块的<code>language-*</code>类名来选择对应语言的语法的。难道我们写文章的时候还要在每个高亮文法前都加上这个后缀么？No no，因为我们是懒人，绝对没门。因此在让Prism执行高亮之前，我们还得做一些小小的处理:</p>
 <h3 id="javascript">javascript</h3>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">_prismHandler = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  $(<span class="string">'code'</span>).not(<span class="string">'[class*="language-"]'</span>).addClass(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> _lang = $(<span class="keyword">this</span>).attr(<span class="string">'class'</span>)  || <span class="string">'markup'</span>; <span class="comment">// 默认为markdown语法</span></span><br><span class="line">    _lang = _lang.replace(<span class="regexp">/(language|lang)+\-/gi</span>, <span class="string">''</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'language-'</span> + (Prism.languages.hasOwnProperty(_lang) ? _lang : <span class="string">'markup'</span>);</span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  Prism.highlightAll();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs js">_prismHandler = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;
+  $(<span class="hljs-string">'code'</span>).not(<span class="hljs-string">'[class*="language-"]'</span>).addClass(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;
+    <span class="hljs-keyword">var</span> _lang = $(<span class="hljs-keyword">this</span>).attr(<span class="hljs-string">'class'</span>)  || <span class="hljs-string">'markup'</span>; <span class="hljs-comment">// 默认为markdown语法</span>
+    _lang = _lang.replace(<span class="hljs-regexp">/(language|lang)+\-/gi</span>, <span class="hljs-string">''</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-string">'language-'</span> + (Prism.languages.hasOwnProperty(_lang) ? _lang : <span class="hljs-string">'markup'</span>);
+  &#125;);
+
+  Prism.highlightAll();
+&#125;;</code></pre>
 <p>激动人心的时刻到来了：</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$(<span class="built_in">document</span>).ready(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">  _prismHandler();</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs js">$(<span class="hljs-built_in">document</span>).ready(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>&#123;
+  _prismHandler();
+&#125;)</code></pre>
 <h1 id="为什么折腾">为什么折腾</h1>
 <p>除了因为作为菜鸟前端的局限外(感觉自己捅自己好轻松啊),折腾一番的好处当然就是，把代码高亮的任务转移给了客户端，每次重新生成网站的时候速度就xiu xiu xiu地上去了。</p>
 <p>选择Prism是因为当初看<a href="https://developer.mozilla.org" target="_blank" rel="noopener">MDN</a>教程的时候觉得代码块的配色实在是太美丽（因为作者也是个美丽的程序媛？）, 等宽字体Consolas非常舒适。</p>
@@ -47,8 +61,9 @@ rdiscount 是基于C实现的 markdown 引擎 discount 的ruby调用，优点不
 })
 
 gitalk.render('gitalk-container')
-</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
+</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'UA-49433257-1');
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/styles/atom-one-dark.css"><script src="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/lib/highlight.js"></script><script>hljs.initHighlightingOnLoad();
 </script></body></html>

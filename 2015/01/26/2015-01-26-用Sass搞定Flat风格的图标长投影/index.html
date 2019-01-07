@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>用Sass搞定Flat风格的图标长投影 · HP goes FE</title><meta name="description" content="Hello
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>用Sass搞定Flat风格的图标长投影 · HP goes FE</title><meta name="description" content="Hello
 
 让我们来学习Hugo Giraudel老师的这篇文章
 亲爱的童鞋们如果过去两年没有长眠不醒的话一定知道这个长长的投影的故事(2015应该是Material Design的时代了,长江后浪推前浪啊消费者是残酷的掩面嘤嘤嘤…)
@@ -12,7 +12,13 @@
 <p>用图片或者SVG实现都OK，但是绝对没有用CSS指挥浏览器感觉有成就感啊。</p>
 <p>不过手写这个的话真的是要你命，浪费时间，现在捡起Sass，用15行代码打造智能投影新时代..新时代..时代..代..</p>
 <h2 id="先确定api">先确定API</h2>
-<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.foo</span> &#123;</span><br><span class="line">    <span class="attribute">box-shadow</span>: long-shadow(<span class="variable">$args</span>...);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.bar</span> &#123;</span><br><span class="line">    <span class="attribute">text-shadow</span>: long-shadow(<span class="variable">$args</span>...);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs scss"><span class="hljs-selector-class">.foo</span> &#123;
+    <span class="hljs-attribute">box-shadow</span>: long-shadow(<span class="hljs-variable">$args</span>...);
+&#125;
+
+<span class="hljs-selector-class">.bar</span> &#123;
+    <span class="hljs-attribute">text-shadow</span>: long-shadow(<span class="hljs-variable">$args</span>...);
+&#125;</code></pre>
 <p><code>box-shadow</code>跟<code>text-shadow</code>区别在于前者有一个跟模糊有关的参数(不过这里也没用到…), 说到文字阴影, IE 10+支持它的模糊哦酷不酷炫!我真的不是在骗你哟!</p>
 <p>我们这个函数需要几个参数：</p>
 <ul>
@@ -22,14 +28,79 @@
 <li>投影是否需要渐隐效果(默认是false)</li>
 <li>需要计算的投影层数</li>
 </ul>
-<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// 纯扁平已经out啦,长长的影子是我滴爱</span></span><br><span class="line"><span class="comment">/// 支持 `box-shadow` 和 `text-shadow`.</span></span><br><span class="line"><span class="comment">/// `cos` 和 `sin` 函数可以用Compass或者其他库支持(SassyMath之类，要不然看下面链接也行)</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// @author Hugo Giraudel</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// @link https://unindented.org/articles/trigonometry-in-sass/ 用Sass实现三角函数 `cos` 和 `sin`</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// @param &#123;Direction&#125; $direction</span></span><br><span class="line"><span class="comment">///     投影方向，可以是角度也可以是方向的关键字</span></span><br><span class="line"><span class="comment">/// @param &#123;Length&#125; $length</span></span><br><span class="line"><span class="comment">///     投影长度</span></span><br><span class="line"><span class="comment">/// @param &#123;Color&#125; $color</span></span><br><span class="line"><span class="comment">///     投影颜色</span></span><br><span class="line"><span class="comment">/// @param &#123;Bool | Color&#125; $fade [false]</span></span><br><span class="line"><span class="comment">///     投影是否需要变化:</span></span><br><span class="line"><span class="comment">///     - `false` means no fading, shadow is `$color`</span></span><br><span class="line"><span class="comment">///     - `true`  means fading from `$color` to transparent</span></span><br><span class="line"><span class="comment">///     - a color means fading from `$color` to `$fade`</span></span><br><span class="line"><span class="comment">/// @param &#123;Number&#125; $shadow-count [100]</span></span><br><span class="line"><span class="comment">///     需要计算的投影层数</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// @return &#123;List&#125; - List of shadows</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// @require &#123;function&#125; Compass/helpers/math/cos</span></span><br><span class="line"><span class="comment">///     http://compass-style.org/reference/compass/helpers/math/#cos</span></span><br><span class="line"><span class="comment">/// @require &#123;function&#125; Compass/helpers/math/sin</span></span><br><span class="line"><span class="comment">///     http://compass-style.org/reference/compass/helpers/math/#sin</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// @example scss - 用法</span></span><br><span class="line"><span class="comment">/// .foo &#123;</span></span><br><span class="line"><span class="comment">///   text-shadow: long-shadow(42deg, 1em, #16a085);</span></span><br><span class="line"><span class="comment">/// &#125;</span></span><br><span class="line"><span class="comment">/// .bar &#123;</span></span><br><span class="line"><span class="comment">///   box-shadow: long-shadow(to top left, 150px, hotpink, tomato);</span></span><br><span class="line"><span class="comment">/// &#125;</span></span><br><span class="line">@function long-shadow(<span class="variable">$direction</span>, <span class="variable">$length</span>, <span class="variable">$color</span>, <span class="variable">$fade</span>: false, <span class="variable">$shadow-count</span>: 100) &#123;&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs scss"><span class="hljs-comment">/// 纯扁平已经out啦,长长的影子是我滴爱</span>
+<span class="hljs-comment">/// 支持 `box-shadow` 和 `text-shadow`.</span>
+<span class="hljs-comment">/// `cos` 和 `sin` 函数可以用Compass或者其他库支持(SassyMath之类，要不然看下面链接也行)</span>
+<span class="hljs-comment">///</span>
+<span class="hljs-comment">/// @author Hugo Giraudel</span>
+<span class="hljs-comment">///</span>
+<span class="hljs-comment">/// @link https://unindented.org/articles/trigonometry-in-sass/ 用Sass实现三角函数 `cos` 和 `sin`</span>
+<span class="hljs-comment">///</span>
+<span class="hljs-comment">/// @param &#123;Direction&#125; $direction</span>
+<span class="hljs-comment">///     投影方向，可以是角度也可以是方向的关键字</span>
+<span class="hljs-comment">/// @param &#123;Length&#125; $length</span>
+<span class="hljs-comment">///     投影长度</span>
+<span class="hljs-comment">/// @param &#123;Color&#125; $color</span>
+<span class="hljs-comment">///     投影颜色</span>
+<span class="hljs-comment">/// @param &#123;Bool | Color&#125; $fade [false]</span>
+<span class="hljs-comment">///     投影是否需要变化:</span>
+<span class="hljs-comment">///     - `false` means no fading, shadow is `$color`</span>
+<span class="hljs-comment">///     - `true`  means fading from `$color` to transparent</span>
+<span class="hljs-comment">///     - a color means fading from `$color` to `$fade`</span>
+<span class="hljs-comment">/// @param &#123;Number&#125; $shadow-count [100]</span>
+<span class="hljs-comment">///     需要计算的投影层数</span>
+<span class="hljs-comment">///</span>
+<span class="hljs-comment">/// @return &#123;List&#125; - List of shadows</span>
+<span class="hljs-comment">///</span>
+<span class="hljs-comment">/// @require &#123;function&#125; Compass/helpers/math/cos</span>
+<span class="hljs-comment">///     http://compass-style.org/reference/compass/helpers/math/#cos</span>
+<span class="hljs-comment">/// @require &#123;function&#125; Compass/helpers/math/sin</span>
+<span class="hljs-comment">///     http://compass-style.org/reference/compass/helpers/math/#sin</span>
+<span class="hljs-comment">///</span>
+<span class="hljs-comment">/// @example scss - 用法</span>
+<span class="hljs-comment">/// .foo &#123;</span>
+<span class="hljs-comment">///   text-shadow: long-shadow(42deg, 1em, #16a085);</span>
+<span class="hljs-comment">/// &#125;</span>
+<span class="hljs-comment">/// .bar &#123;</span>
+<span class="hljs-comment">///   box-shadow: long-shadow(to top left, 150px, hotpink, tomato);</span>
+<span class="hljs-comment">/// &#125;</span>
+@function long-shadow(<span class="hljs-variable">$direction</span>, <span class="hljs-variable">$length</span>, <span class="hljs-variable">$color</span>, <span class="hljs-variable">$fade</span>: false, <span class="hljs-variable">$shadow-count</span>: 100) &#123;&#125;</code></pre>
 <h2 id="开始code">开始code</h2>
 <p>转换一下<code>$direction</code>这个参数, 定义一个map让我们可以用关键字映射角度。</p>
-<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$conversion-map</span>: (</span><br><span class="line">  to top: <span class="number">180deg</span>,</span><br><span class="line">  to top right: <span class="number">135deg</span>,</span><br><span class="line">  to right top: <span class="number">135deg</span>,</span><br><span class="line">  to right: <span class="number">90deg</span>,</span><br><span class="line">  to bottom right: <span class="number">45deg</span>,</span><br><span class="line">  to right bottom: <span class="number">45deg</span>,</span><br><span class="line">  to bottom: <span class="number">0deg</span>,</span><br><span class="line">  to bottom left: <span class="number">315deg</span>,</span><br><span class="line">  to left bottom: <span class="number">315deg</span>,</span><br><span class="line">  to left: <span class="number">270deg</span>,</span><br><span class="line">  to left top: <span class="number">225deg</span>,</span><br><span class="line">  to top left: <span class="number">225deg</span></span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">@<span class="keyword">if</span> map-has-key(<span class="variable">$conversion-map</span>, <span class="variable">$direction</span>) &#123;</span><br><span class="line">  <span class="variable">$direction</span>: map-get(<span class="variable">$conversion-map</span>, <span class="variable">$direction</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs scss"><span class="hljs-variable">$conversion-map</span>: (
+  to top: <span class="hljs-number">180deg</span>,
+  to top right: <span class="hljs-number">135deg</span>,
+  to right top: <span class="hljs-number">135deg</span>,
+  to right: <span class="hljs-number">90deg</span>,
+  to bottom right: <span class="hljs-number">45deg</span>,
+  to right bottom: <span class="hljs-number">45deg</span>,
+  to bottom: <span class="hljs-number">0deg</span>,
+  to bottom left: <span class="hljs-number">315deg</span>,
+  to left bottom: <span class="hljs-number">315deg</span>,
+  to left: <span class="hljs-number">270deg</span>,
+  to left top: <span class="hljs-number">225deg</span>,
+  to top left: <span class="hljs-number">225deg</span>
+);
+
+@<span class="hljs-keyword">if</span> map-has-key(<span class="hljs-variable">$conversion-map</span>, <span class="hljs-variable">$direction</span>) &#123;
+  <span class="hljs-variable">$direction</span>: map-get(<span class="hljs-variable">$conversion-map</span>, <span class="hljs-variable">$direction</span>);
+&#125;</code></pre>
 <p>然后我们就只剩下一件事要做了（节奏有点快啊(｡◕ˇ∀ˇ◕）)）：从1循环到<code>$shadow-count</code>这么多次, 每次做出一层阴影。</p>
-<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$shadows</span>: ();</span><br><span class="line"></span><br><span class="line">@<span class="keyword">for</span> <span class="variable">$i</span> from 1 through <span class="variable">$shadow-count</span> &#123;</span><br><span class="line">  <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">  <span class="variable">$shadow</span>: ...;</span><br><span class="line">  <span class="variable">$shadows</span>: append(<span class="variable">$shadows</span>, <span class="variable">$shadow</span>, <span class="string">'comma'</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@return <span class="variable">$shadows</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs scss"><span class="hljs-comment">// ...</span>
+
+<span class="hljs-variable">$shadows</span>: ();
+
+@<span class="hljs-keyword">for</span> <span class="hljs-variable">$i</span> from 1 through <span class="hljs-variable">$shadow-count</span> &#123;
+  <span class="hljs-comment">// ...</span>
+
+  <span class="hljs-variable">$shadow</span>: ...;
+  <span class="hljs-variable">$shadows</span>: append(<span class="hljs-variable">$shadows</span>, <span class="hljs-variable">$shadow</span>, <span class="hljs-string">'comma'</span>);
+&#125;
+
+@return <span class="hljs-variable">$shadows</span>;</code></pre>
 <p>来来来看下$shadow怎么算。非常非常简单哟就两个三角函数哟。用角度的正弦值算出X轴位移，用余弦值算出Y轴位移。</p>
-<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$x</span>: sin(<span class="number">0deg</span> + <span class="variable">$direction</span>) * (<span class="variable">$i</span> * <span class="variable">$length</span> / <span class="variable">$shadow-count</span>);</span><br><span class="line"><span class="variable">$y</span>: cos(<span class="number">0deg</span> + <span class="variable">$direction</span>) * (<span class="variable">$i</span> * <span class="variable">$length</span> / <span class="variable">$shadow-count</span>);</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs scss"><span class="hljs-variable">$x</span>: sin(<span class="hljs-number">0deg</span> + <span class="hljs-variable">$direction</span>) * (<span class="hljs-variable">$i</span> * <span class="hljs-variable">$length</span> / <span class="hljs-variable">$shadow-count</span>);
+<span class="hljs-variable">$y</span>: cos(<span class="hljs-number">0deg</span> + <span class="hljs-variable">$direction</span>) * (<span class="hljs-variable">$i</span> * <span class="hljs-variable">$length</span> / <span class="hljs-variable">$shadow-count</span>);</code></pre>
 <p>这里用<code>0deg</code>和<code>$direction</code>相加的用意在于使得结果自动转化为前者的单位表示, 就是说<code>$direction</code>是渐变或者弧度也没关系，会自动转换成角度(deg)。</p>
 <p>颜色的话事就比较多了，根据<code>$fade</code>的不同有三种情况, 如果<code>$fade</code>是:</p>
 <ul>
@@ -38,21 +109,94 @@
 <li>一个颜色, 那么输出就是<code>$color</code>到<code>$fade</code>的一个中间值</li>
 </ul>
 <p>除了第一种情况，我们在每次循环中都要重新计算颜色.</p>
-<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// If `$fade` is `false`</span></span><br><span class="line"><span class="variable">$current-color</span>: <span class="variable">$color</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// If `$fade` is a color</span></span><br><span class="line">@<span class="keyword">if</span> type-of(<span class="variable">$fade</span>) == <span class="string">'color'</span> &#123;</span><br><span class="line">  <span class="variable">$current-color</span>: mix(<span class="variable">$fade</span>, <span class="variable">$color</span>, (<span class="variable">$i</span> / <span class="variable">$shadow-count</span> * <span class="number">100</span>);</span><br><span class="line"><span class="comment">// If `$fade` is `true`</span></span><br><span class="line">)&#125; @<span class="keyword">else</span> if <span class="variable">$fade</span> &#123;</span><br><span class="line">  <span class="variable">$current-color</span>: rgba(<span class="variable">$color</span>, <span class="number">1</span> - <span class="variable">$i</span> / <span class="variable">$shadow-count</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs scss"><span class="hljs-comment">// If `$fade` is `false`</span>
+<span class="hljs-variable">$current-color</span>: <span class="hljs-variable">$color</span>;
+
+<span class="hljs-comment">// If `$fade` is a color</span>
+@<span class="hljs-keyword">if</span> type-of(<span class="hljs-variable">$fade</span>) == <span class="hljs-string">'color'</span> &#123;
+  <span class="hljs-variable">$current-color</span>: mix(<span class="hljs-variable">$fade</span>, <span class="hljs-variable">$color</span>, (<span class="hljs-variable">$i</span> / <span class="hljs-variable">$shadow-count</span> * <span class="hljs-number">100</span>);
+<span class="hljs-comment">// If `$fade` is `true`</span>
+)&#125; @<span class="hljs-keyword">else</span> if <span class="hljs-variable">$fade</span> &#123;
+  <span class="hljs-variable">$current-color</span>: rgba(<span class="hljs-variable">$color</span>, <span class="hljs-number">1</span> - <span class="hljs-variable">$i</span> / <span class="hljs-variable">$shadow-count</span>);
+&#125;</code></pre>
 <p>这样一层的<code>$shadow</code>就算出来了。</p>
-<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$shadow</span>: <span class="variable">$x</span> <span class="variable">$y</span> <span class="number">0</span> <span class="variable">$current-color</span>;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs scss"><span class="hljs-variable">$shadow</span>: <span class="hljs-variable">$x</span> <span class="hljs-variable">$y</span> <span class="hljs-number">0</span> <span class="hljs-variable">$current-color</span>;</code></pre>
 <h2 id="完成版函数">完成版函数</h2>
-<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">@function long-shadow(<span class="variable">$direction</span>, <span class="variable">$length</span>, <span class="variable">$color</span>, <span class="variable">$fade</span>: false, <span class="variable">$shadow-count</span>: 100) &#123;</span><br><span class="line">  <span class="variable">$shadows</span>: ();</span><br><span class="line">  <span class="variable">$conversion-map</span>: (</span><br><span class="line">    to top: <span class="number">180deg</span>,</span><br><span class="line">    to top right: <span class="number">135deg</span>,</span><br><span class="line">    to right top: <span class="number">135deg</span>,</span><br><span class="line">    to right: <span class="number">90deg</span>,</span><br><span class="line">    to bottom right: <span class="number">45deg</span>,</span><br><span class="line">    to right bottom: <span class="number">45deg</span>,</span><br><span class="line">    to bottom: <span class="number">0deg</span>,</span><br><span class="line">    to bottom left: <span class="number">315deg</span>,</span><br><span class="line">    to left bottom: <span class="number">315deg</span>,</span><br><span class="line">    to left: <span class="number">270deg</span>,</span><br><span class="line">    to left top: <span class="number">225deg</span>,</span><br><span class="line">    to top left: <span class="number">225deg</span></span><br><span class="line">  );</span><br><span class="line"></span><br><span class="line">  @<span class="keyword">if</span> map-has-key(<span class="variable">$conversion-map</span>, <span class="variable">$direction</span>) &#123;</span><br><span class="line">    <span class="variable">$direction</span>: map-get(<span class="variable">$conversion-map</span>, <span class="variable">$direction</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  @<span class="keyword">for</span> <span class="variable">$i</span> from 1 through <span class="variable">$shadow-count</span> &#123;</span><br><span class="line">    <span class="variable">$current-step</span>: (<span class="variable">$i</span> * <span class="variable">$length</span> / <span class="variable">$shadow-count</span>);</span><br><span class="line">    <span class="variable">$current-color</span>: if(not <span class="variable">$fade</span>, <span class="variable">$color</span>, if(type-of(<span class="variable">$fade</span>) == <span class="string">'color'</span>,  mix(<span class="variable">$fade</span>, <span class="variable">$color</span>, (<span class="variable">$i</span> / <span class="variable">$shadow-count</span> * <span class="number">100</span>)), rgba(<span class="variable">$color</span>, <span class="number">1</span> - <span class="variable">$i</span> / <span class="variable">$shadow-count</span>)));</span><br><span class="line"></span><br><span class="line">    <span class="variable">$shadows</span>: append(<span class="variable">$shadows</span>, (sin(<span class="number">0deg</span> + <span class="variable">$direction</span>) * <span class="variable">$current-step</span>) (cos(<span class="number">0deg</span> + <span class="variable">$direction</span>) * <span class="variable">$current-step</span>) <span class="number">0</span> <span class="variable">$current-color</span>, <span class="string">'comma'</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  @return <span class="variable">$shadows</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs scss">@function long-shadow(<span class="hljs-variable">$direction</span>, <span class="hljs-variable">$length</span>, <span class="hljs-variable">$color</span>, <span class="hljs-variable">$fade</span>: false, <span class="hljs-variable">$shadow-count</span>: 100) &#123;
+  <span class="hljs-variable">$shadows</span>: ();
+  <span class="hljs-variable">$conversion-map</span>: (
+    to top: <span class="hljs-number">180deg</span>,
+    to top right: <span class="hljs-number">135deg</span>,
+    to right top: <span class="hljs-number">135deg</span>,
+    to right: <span class="hljs-number">90deg</span>,
+    to bottom right: <span class="hljs-number">45deg</span>,
+    to right bottom: <span class="hljs-number">45deg</span>,
+    to bottom: <span class="hljs-number">0deg</span>,
+    to bottom left: <span class="hljs-number">315deg</span>,
+    to left bottom: <span class="hljs-number">315deg</span>,
+    to left: <span class="hljs-number">270deg</span>,
+    to left top: <span class="hljs-number">225deg</span>,
+    to top left: <span class="hljs-number">225deg</span>
+  );
+
+  @<span class="hljs-keyword">if</span> map-has-key(<span class="hljs-variable">$conversion-map</span>, <span class="hljs-variable">$direction</span>) &#123;
+    <span class="hljs-variable">$direction</span>: map-get(<span class="hljs-variable">$conversion-map</span>, <span class="hljs-variable">$direction</span>);
+  &#125;
+
+  @<span class="hljs-keyword">for</span> <span class="hljs-variable">$i</span> from 1 through <span class="hljs-variable">$shadow-count</span> &#123;
+    <span class="hljs-variable">$current-step</span>: (<span class="hljs-variable">$i</span> * <span class="hljs-variable">$length</span> / <span class="hljs-variable">$shadow-count</span>);
+    <span class="hljs-variable">$current-color</span>: if(not <span class="hljs-variable">$fade</span>, <span class="hljs-variable">$color</span>, if(type-of(<span class="hljs-variable">$fade</span>) == <span class="hljs-string">'color'</span>,  mix(<span class="hljs-variable">$fade</span>, <span class="hljs-variable">$color</span>, (<span class="hljs-variable">$i</span> / <span class="hljs-variable">$shadow-count</span> * <span class="hljs-number">100</span>)), rgba(<span class="hljs-variable">$color</span>, <span class="hljs-number">1</span> - <span class="hljs-variable">$i</span> / <span class="hljs-variable">$shadow-count</span>)));
+
+    <span class="hljs-variable">$shadows</span>: append(<span class="hljs-variable">$shadows</span>, (sin(<span class="hljs-number">0deg</span> + <span class="hljs-variable">$direction</span>) * <span class="hljs-variable">$current-step</span>) (cos(<span class="hljs-number">0deg</span> + <span class="hljs-variable">$direction</span>) * <span class="hljs-variable">$current-step</span>) <span class="hljs-number">0</span> <span class="hljs-variable">$current-color</span>, <span class="hljs-string">'comma'</span>);
+  &#125;
+
+  @return <span class="hljs-variable">$shadows</span>;
+&#125;</code></pre>
 <h2 id="举几个栗子">举几个栗子</h2>
-<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.foo</span> &#123;</span><br><span class="line">  <span class="attribute">text-shadow</span>: long-shadow(</span><br><span class="line">    // Shadow should have an angle of <span class="number">42</span> degrees</span><br><span class="line">    <span class="variable">$direction</span>: <span class="number">42deg</span>,</span><br><span class="line">    // Shadow should be contain within a <span class="number">100</span>x100 box</span><br><span class="line">    <span class="variable">$length</span>: <span class="number">100px</span>,</span><br><span class="line">    // Shadow should start this color</span><br><span class="line">    <span class="variable">$color</span>: <span class="number">#16a085</span>,</span><br><span class="line">    // To finish this color</span><br><span class="line">    <span class="variable">$fade</span>: <span class="number">#1abc9c</span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs scss"><span class="hljs-selector-class">.foo</span> &#123;
+  <span class="hljs-attribute">text-shadow</span>: long-shadow(
+    // Shadow should have an angle of <span class="hljs-number">42</span> degrees
+    <span class="hljs-variable">$direction</span>: <span class="hljs-number">42deg</span>,
+    // Shadow should be contain within a <span class="hljs-number">100</span>x100 box
+    <span class="hljs-variable">$length</span>: <span class="hljs-number">100px</span>,
+    // Shadow should start this color
+    <span class="hljs-variable">$color</span>: <span class="hljs-number">#16a085</span>,
+    // To finish this color
+    <span class="hljs-variable">$fade</span>: <span class="hljs-number">#1abc9c</span>
+  );
+&#125;</code></pre>
 <figure>
 <img src="http://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2015/01/1421924364kpHbb6e.png" alt="Hello"><figcaption>Hello</figcaption>
 </figure>
-<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.bar</span> &#123;</span><br><span class="line">  <span class="attribute">box-shadow</span>: long-shadow(</span><br><span class="line">    // Shadow should go to bottom right (<span class="number">45deg</span>)</span><br><span class="line">    <span class="variable">$direction</span>: to left,</span><br><span class="line">    // With a length of <span class="number">15em</span></span><br><span class="line">    <span class="variable">$length</span>: <span class="number">15em</span>,</span><br><span class="line">    // From this color</span><br><span class="line">    <span class="variable">$color</span>: <span class="number">#2980b9</span>,</span><br><span class="line">    // To this color</span><br><span class="line">    <span class="variable">$fade</span>: <span class="number">#e67e22</span></span><br><span class="line">  );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs scss"><span class="hljs-selector-class">.bar</span> &#123;
+  <span class="hljs-attribute">box-shadow</span>: long-shadow(
+    // Shadow should go to bottom right (<span class="hljs-number">45deg</span>)
+    <span class="hljs-variable">$direction</span>: to left,
+    // With a length of <span class="hljs-number">15em</span>
+    <span class="hljs-variable">$length</span>: <span class="hljs-number">15em</span>,
+    // From this color
+    <span class="hljs-variable">$color</span>: <span class="hljs-number">#2980b9</span>,
+    // To this color
+    <span class="hljs-variable">$fade</span>: <span class="hljs-number">#e67e22</span>
+  );
+&#125;</code></pre>
 <figure>
 <img src="http://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2015/01/1421924374uo6625L.png" alt="example 2"><figcaption>example 2</figcaption>
 </figure>
-<figure class="highlight scss"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.baz</span> &#123;</span><br><span class="line">  <span class="attribute">box-shadow</span>: long-shadow(</span><br><span class="line">    // Shadow should have an angle of <span class="number">25deg</span></span><br><span class="line">    <span class="variable">$direction</span>: -<span class="number">125deg</span>,</span><br><span class="line">    // Spread on <span class="number">120px</span></span><br><span class="line">    <span class="variable">$length</span>: <span class="number">120px</span>,</span><br><span class="line">    // From this color</span><br><span class="line">    <span class="variable">$color</span>: <span class="number">#8e44ad</span>,</span><br><span class="line">    // To transparent</span><br><span class="line">    <span class="variable">$fade</span>: true,</span><br><span class="line">    // With only <span class="number">10</span> shadows</span><br><span class="line">    <span class="variable">$shadow-count</span>: <span class="number">10</span></span><br><span class="line">  )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre><code class="hljs scss"><span class="hljs-selector-class">.baz</span> &#123;
+  <span class="hljs-attribute">box-shadow</span>: long-shadow(
+    // Shadow should have an angle of <span class="hljs-number">25deg</span>
+    <span class="hljs-variable">$direction</span>: -<span class="hljs-number">125deg</span>,
+    // Spread on <span class="hljs-number">120px</span>
+    <span class="hljs-variable">$length</span>: <span class="hljs-number">120px</span>,
+    // From this color
+    <span class="hljs-variable">$color</span>: <span class="hljs-number">#8e44ad</span>,
+    // To transparent
+    <span class="hljs-variable">$fade</span>: true,
+    // With only <span class="hljs-number">10</span> shadows
+    <span class="hljs-variable">$shadow-count</span>: <span class="hljs-number">10</span>
+  )
+&#125;</code></pre>
 <figure>
 <img src="http://dab1nmslvvntp.cloudfront.net/wp-content/uploads/2015/01/1421924369ECeMqZF.png" alt="example 3"><figcaption>example 3</figcaption>
 </figure>
@@ -76,8 +220,9 @@
 })
 
 gitalk.render('gitalk-container')
-</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
+</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'UA-49433257-1');
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/styles/atom-one-dark.css"><script src="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/lib/highlight.js"></script><script>hljs.initHighlightingOnLoad();
 </script></body></html>
