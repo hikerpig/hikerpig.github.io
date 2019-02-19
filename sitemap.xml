@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://hikerpig.github.io/2019/02/15/2019-02-14-Setup-CI-in-docker/</loc>
+    
+    <lastmod>2019-02-18T11:52:23.883Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://hikerpig.github.io/2018/07/03/2018-07-03-Vuex-Dynamic-Module-Hints/</loc>
     
     <lastmod>2019-01-07T05:50:06.415Z</lastmod>

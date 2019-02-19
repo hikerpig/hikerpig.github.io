@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://hikerpig.github.io/"/>
-  <updated>2018-12-30T04:23:40.503Z</updated>
+  <updated>2019-02-18T11:52:23.883Z</updated>
   <id>http://hikerpig.github.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>使用 docker 构造前端构建环境</title>
+    <link href="http://hikerpig.github.io/2019/02/15/2019-02-14-Setup-CI-in-docker/"/>
+    <id>http://hikerpig.github.io/2019/02/15/2019-02-14-Setup-CI-in-docker/</id>
+    <published>2019-02-14T16:00:00.000Z</published>
+    <updated>2019-02-18T11:52:23.883Z</updated>
+    
+    <content type="html"><![CDATA[<p>托管在公司 gitlab 上的一个前端项目，最近在尝试 docker 化。</p><h1 id="准备阶段">准备阶段</h1><h2 id="gitlab-上的一些问题">Gitlab 上的一些问题</h2><p>如果项目不是公开的，从 docker 环境中拉取代码会有些许权限问题，可一一解决。</p><h3 id="clone-with-deploy-token">clone with deploy token</h3><p>到 Gitlab 中对应项目的 settings/repository 页面，生成 Deploy Tokens, 便可以使用 https clone 项目，不用输入用户密码，也不必使用设置相对比较麻烦的 ssh deploy key 方式。</p><p>克隆项目的命令为</p><pre><code class="hljs bash">git <span class="hljs-built_in">clone</span> https://&lt;name&gt;:&lt;token&gt;@gitlab.com/&lt;USER&gt;/&lt;REPO&gt;.git</code></pre><p>此处的 <code>name</code> 是 token name, 不是用户名。只对此项目生效，避免使用权限较高的用户 token。</p><h3 id="git-lfs-拉取文件出错">git-lfs 拉取文件出错</h3><p>即便使用了 deploy token 可以克隆项目文件，但其中使用 git-lfs 追踪的一些文件会失败：</p><pre><code class="hljs txt">Error downloading object: some/filename/blah: Smudge error: https://&lt;name&gt;:&lt;token&gt;@gitlab.com/some/repo.git/info/lfs/objects/batch</code></pre><p>应该是权限问题，可以越过 git-lfs 的 smudge 步骤来规避此问题。</p><pre><code class="hljs bash">GIT_LFS_SKIP_SMUDGE=1 git <span class="hljs-built_in">clone</span> &lt;SERVER-REPOSITORY&gt;</code></pre><p>参考: https://stackoverflow.com/questions/42019529/how-to-clone-pull-a-git-repository-ignoring-lfs</p><h1 id="开始">开始</h1><h2 id="dockerfile">Dockerfile</h2><pre><code class="hljs undefined"><span class="hljs-keyword">FROM</span> node:<span class="hljs-number">8.15</span>.<span class="hljs-number">0</span>-slim<span class="hljs-comment"># install git-lfs</span><span class="hljs-keyword">RUN</span><span class="bash"> curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh |  bash</span><span class="hljs-keyword">RUN</span><span class="bash"> apt-get install -y git-lfs</span><span class="hljs-keyword">WORKDIR</span><span class="bash"> /app</span><span class="hljs-keyword">RUN</span><span class="bash"> GIT_LFS_SKIP_SMUDGE=1 git <span class="hljs-built_in">clone</span> https://&lt;name&gt;:&lt;token&gt;@gitlab.com/&lt;USER&gt;/&lt;REPO&gt;.git myrepo</span><span class="hljs-keyword">WORKDIR</span><span class="bash"> /app/myrepo</span><span class="hljs-keyword">RUN</span><span class="bash"> yarn</span></code></pre><h2 id="构建镜像">构建镜像</h2><p>在 Dockerfile 所在目录下:</p><pre><code class="hljs bash">docker build -t my-app .</code></pre><p>等待几分钟，构建完成便可使用 <code>docker inspect my-app</code> 命令看看新添加的镜像。</p><p>若 package.json 依赖较多，且可以接受在 docker host 和 vm 之间共享文件，可以去掉 <code>RUN yarn</code> 这一步，然后使用 <a href="https://docs.docker.com/storage/volumes/" target="_blank" rel="noopener">docker volume</a> 共享宿主环境中已经提前安装好的 node_modules 文件夹。</p><h2 id="启动容器">启动容器</h2><p>启动一个带 tty 的 interactive 容器并运行 bash，可以在容器里转一转，看看有什么东西:</p><pre><code class="hljs bash">docker run -v /path/to/current/node_modules:/app/myrepo/node_modules -it my-app  --name app-tty /bin/bash</code></pre><p>或是直接跑测试:</p><pre><code class="hljs bash">docker run -v /path/to/current/node_modules:/app/myrepo/node_modules -it my-app  --name <span class="hljs-built_in">test</span>-container /bin/bash -c <span class="hljs-string">'cd /app/myrepo &amp;&amp; npm run test'</span></code></pre>]]></content>
+    
+    <summary type="html">
+    
+      使用 docker 构造前端构建环境
+    
+    </summary>
+    
+      <category term="运维" scheme="http://hikerpig.github.io/categories/%E8%BF%90%E7%BB%B4/"/>
+    
+    
+      <category term="git" scheme="http://hikerpig.github.io/tags/git/"/>
+    
+      <category term="前端" scheme="http://hikerpig.github.io/tags/%E5%89%8D%E7%AB%AF/"/>
+    
+      <category term="docker" scheme="http://hikerpig.github.io/tags/docker/"/>
+    
+  </entry>
   
   <entry>
     <title>CSS 中的两种模糊半径</title>
@@ -526,32 +552,6 @@
       <category term="CSS" scheme="http://hikerpig.github.io/tags/CSS/"/>
     
       <category term="VIM" scheme="http://hikerpig.github.io/tags/VIM/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>用 JS 写简单的 CSS Parser</title>
-    <link href="http://hikerpig.github.io/2015/02/02/2015-02-02-simple-css-parser-with-js/"/>
-    <id>http://hikerpig.github.io/2015/02/02/2015-02-02-simple-css-parser-with-js/</id>
-    <published>2015-02-01T16:00:00.000Z</published>
-    <updated>2018-09-11T05:18:33.305Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="用正则表达式提取规则">用正则表达式提取规则</h2><p><a href="https://medium.com/jotform-form-builder/writing-a-css-parser-in-javascript-3ecaa1719a43" target="_blank" rel="noopener">JotForm团队的一篇文章</a></p><pre><code class="hljs js">([\\s\\S]*?)&#123;([\\s\\S]*?)&#125;</code></pre><p>分解一下</p><pre><code class="hljs js">([\\s\\S]*?) =&gt; any string <span class="hljs-keyword">as</span> selector&#123; =&gt; then an opening bracket([\\s\\S]*?) =&gt; any string <span class="hljs-keyword">as</span> CSS rules&#125; =&gt; then a closing bracket</code></pre><p>输入这个css文本:</p><pre><code class="hljs css"><span class="hljs-selector-class">.someClass</span> &#123;  <span class="hljs-attribute">margin </span>: <span class="hljs-number">20px</span>;&#125;</code></pre><p>得到结果是这样:</p><pre><code class="hljs js">[  &#123;    <span class="hljs-string">"selector"</span> : <span class="hljs-string">".someClass"</span>,    <span class="hljs-string">"rules"</span> : [      &#123;        <span class="hljs-string">"directive"</span> : <span class="hljs-string">"margin"</span>,        <span class="hljs-string">"value"</span> : <span class="hljs-string">"20px"</span>      &#125;    ]  &#125;]</code></pre><p>好吧其实没那么容易, 例如Media Query就没考虑到吧</p><pre><code class="hljs js">((\\s*?@media[\\s\\S]*?)&#123;([\\s\\S]*?)&#125;\\s*?))|(([\\s\\S]*?)&#123;([\\s\\S]*?)&#125;)</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;h2 id=&quot;用正则表达式提取规则&quot;&gt;用正则表达式提取规则&lt;/h2&gt;
-&lt;p&gt;&lt;a href=&quot;https://medium.com/jotform-form-builder/writing-a-css-parser-in-javascript-3ecaa1719a43&quot; tar
-      
-    
-    </summary>
-    
-      <category term="前端" scheme="http://hikerpig.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
-    
-    
-      <category term="CSS" scheme="http://hikerpig.github.io/tags/CSS/"/>
     
   </entry>
   
