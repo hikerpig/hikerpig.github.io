@@ -3,7 +3,7 @@
 首先要分清项目里 WebAssembly 的定位
 
 应用主体：完成绝大多数逻辑，JS 只作为加载入口和少部分事件绑定桥梁
-工具库：分担一些复杂和耗时的计算，由 JS 决定什么时候调用 wasm 模块函"><meta name="keywords" content="Front-End,Programming,Hexo"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/https://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>Try Rust WebAssembly</a></h1></div><div class="post-content"><p>在公司项目里的一个小角落，尝试使用 Rust + WebAssembly 加速应用里部分计算</p>
+工具库：分担一些复杂和耗时的计算，由 JS 决定什么时候调用 wasm 模块函"><meta name="keywords" content="WebAssembly,Rust"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/https://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>Try Rust WebAssembly</a></h1></div><div class="post-content"><p>在公司项目里的一个小角落，尝试使用 Rust + WebAssembly 加速应用里部分计算</p>
 <h2 id="选择">选择</h2>
 <p>首先要分清项目里 WebAssembly 的定位</p>
 <ol type="1">
@@ -158,9 +158,9 @@ loadWebAssembly(<span class="hljs-string">'demo.wasm'</span>).then(<span class="
 <h2 id="wasm-瘦身">WASM 瘦身</h2>
 <p>参见<a href="https://rust-lang-nursery.github.io/rust-wasm/game-of-life/code-size.html" title="WASM 瘦身" target="_blank" rel="noopener">此文</a></p>
 <h3 id="cargo.toml-中一些设定">Cargo.toml 中一些设定</h3>
-<pre><code class="hljs undefined">[profile.release]
-debug = false
-lto = true</code></pre>
+<pre><code class="hljs undefined"><span class="hljs-section">[profile.release]</span>
+<span class="hljs-attr">debug</span> = <span class="hljs-literal">false</span>
+<span class="hljs-attr">lto</span> = <span class="hljs-literal">true</span></code></pre>
 <h1 id="例子">例子</h1>
 <ul>
 <li><a href="https://www.hellorust.com/demos/" target="_blank" rel="noopener">Hello Rust</a></li>
@@ -186,5 +186,7 @@ gitalk.render('gitalk-container')
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'UA-49433257-1');
-</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/styles/atom-one-dark.css"><script src="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/lib/highlight.js"></script><script>hljs.initHighlightingOnLoad();
+</script><script src="https://cdn.jsdelivr.net/npm/mermaid@8.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({theme: "default"});
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/styles/atom-one-dark.css"><script src="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/lib/highlight.js"></script><script>hljs.initHighlightingOnLoad();
 </script></body></html>

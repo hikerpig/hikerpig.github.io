@@ -668,3 +668,7 @@ table tr td:first-child {
 table tr th:last-child,
 table tr td:last-child {
   margin-bottom: 0; }
+
+.hljs.mermaid {
+  background-color: #FCFCFC;
+}

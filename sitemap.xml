@@ -2,6 +2,27 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://hikerpig.github.io/2019/03/06/2019-03-06-Decode-Video-Using-FFMpeg-In-Browser/</loc>
+    
+    <lastmod>2019-04-02T13:29:30.755Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2019/03/14/2019-03-13-Handy-Video-Analyze-Tool/</loc>
+    
+    <lastmod>2019-04-02T13:07:16.131Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2019/03/08/2019-03-08-Tips-On-Viewing-Logs/</loc>
+    
+    <lastmod>2019-03-08T06:00:52.239Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://hikerpig.github.io/2019/02/15/2019-02-14-Setup-CI-in-docker/</loc>
     
     <lastmod>2019-02-18T11:52:23.883Z</lastmod>

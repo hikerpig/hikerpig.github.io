@@ -1,0 +1,314 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>Decode Video Using ffmpeg In Browser · HP goes FE</title><meta name="description" content="借助 Emscripten，基于 ffmpeg 二次开发前端音视频功能"><meta name="keywords" content="Avtech,Webassembly,Emscripten"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/https://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>Decode Video Using ffmpeg In Browser</a></h1></div><div class="post-content"><p>音视频开发入门，可能绕不开 ffmpeg 这个项目，最近看了篇 <a href="https://zhuanlan.zhihu.com/p/40786748" target="_blank" rel="noopener">知乎专栏</a>，觉得这个事情很有意思。</p>
+<p>比起直接编辑整个 ffmpeg 项目的 CLI 到前端，更符合实际需求的方式，是先基于 ffmpeg 各种 lib二次开发出合适的功能，然后再使用 Emscripten 编译到 Webassembly。</p>
+<p>跟着教程实现一个功能：解析出视频任意一帧的图像并绘制到 canvas 上。</p>
+<h2 id="web-demo-应用流程">Web demo 应用流程</h2>
+<p>demo 页的简单流程</p>
+<pre><code class="hljs mermaid">graph TD
+    P1[获取视频 buffer 并写入wasm将要使用的线性内存空间] -- 进入wasm调用 --&gt; A
+
+subgraph C 程序转成的 wasm
+    A[avcodec 解析视频文件 buffer] --&gt; B[解出指定时间的图像并转成 RGB 格式数据]
+    B --&gt; C[将图像等数据写入内存, 并将指针返给 js 端]
+end
+
+    C  -- 回到 js --&gt;  D[根据指针读出数据, 构建 ImageData, 绘制到 canvas 上]</code></pre>
+<h2 id="从源码编译-ffmpeg">从源码编译 ffmpeg</h2>
+<p>本文写就的时候使用的是 ffmpeg <code>n4.2-dev</code> 版，将其源码置于项目相对目录 <code>lib/ffmpeg</code> 下。</p>
+<p>ffmpeg 是一个很大的项目，包含的很多功能对于我们的需求来说，都用不上，可以通过 <a href="https://github.com/FFmpeg/FFmpeg/blob/master/configure" target="_blank" rel="noopener">configure</a> 配置留下合适的功能集。以前用 c 写的比较复杂的项目，通常在实际编译之前，可以使用 configure 根据参数和环境生成实际编译过程需要的 Makefile。</p>
+<h3 id="项目-makefile">项目 Makefile</h3>
+<p>参考 <a href="https://github.com/Kagami/ffmpeg.js/" target="_blank" rel="noopener">ffmpeg.js</a> 项目的一些配置</p>
+<pre><code class="hljs makefile">COMMON_FILTERS = scale crop overlay
+COMMON_DEMUXERS = matroska ogg avi mov flv mpegps image2 mp3 concat
+COMMON_DECODERS = \
+	mpeg2video mpeg4 h264 hevc \
+	png mjpeg \
+	mp3 ac3 aac
+
+MUXERS = mp4 null image2
+ENCODERS = mjpeg
+
+FFMPEG_CONFIGURE_ARGS = \
+	--cc=emcc \
+	--ar=emar \
+	--enable-cross-compile \
+	--target-os=none \
+	--cpu=generic \
+	--arch=x86 \
+	--disable-runtime-cpudetect \
+	--disable-asm \
+	--disable-fast-unaligned \
+	--disable-pthreads \
+	--disable-w32threads \
+	--disable-os2threads \
+	--disable-debug \
+	--disable-stripping \
+	\
+	--disable-all \
+	--enable-avcodec \
+	--enable-avformat \
+	--enable-avutil \
+	--enable-swscale \
+	--enable-shared \
+	--enable-protocol=file \
+	<span class="hljs-variable">$(<span class="hljs-built_in">addprefix</span> --enable-decoder=,<span class="hljs-variable">$(COMMON_DECODERS)</span>)</span> \
+	<span class="hljs-variable">$(<span class="hljs-built_in">addprefix</span> --enable-demuxer=,<span class="hljs-variable">$(COMMON_DEMUXERS)</span>)</span> \
+	<span class="hljs-variable">$(<span class="hljs-built_in">addprefix</span> --enable-encoder=,<span class="hljs-variable">$(ENCODERS)</span>)</span> \
+	<span class="hljs-variable">$(<span class="hljs-built_in">addprefix</span> --enable-muxer=,<span class="hljs-variable">$(MUXERS)</span>)</span> \
+	<span class="hljs-variable">$(<span class="hljs-built_in">addprefix</span> --enable-<span class="hljs-built_in">filter</span>=,<span class="hljs-variable">$(COMMON_FILTERS)</span>)</span> 
+
+<span class="hljs-comment"># to run ffmpeg configure and emmake</span>
+<span class="hljs-section">lib/ffmpeg/libavcodec/libavcodec.a:</span>
+	cd lib/ffmpeg &amp;&amp; \
+	patch -p1 &lt; ../swscale.c.patch &amp;&amp; \
+	emconfigure ./configure \
+		<span class="hljs-variable">$(FFMPEG_CONFIGURE_ARGS)</span> \
+		&amp;&amp; \
+	emmake make</code></pre>
+<p>说下 <code>lib/ffmpeg/libavcodec/libavcodec.a</code> 这个目标，分成几步:</p>
+<ul>
+<li><code>emconfigure</code> 是 emsdk 提供的工具，执行完这一步之后，会生成 <code>lib/ffmpeg/Makefile</code></li>
+<li><code>emmake make</code> 便是开始编译了，由于我们在前一步 configure 的时候有 <code>--enable-avcodec</code>，所以用这个 Makefile 编译，会生成 <code>lib/ffmpeg/libavcodec/libavcodec.a</code> 这个静态库文件</li>
+<li>编译原本的 ffmpeg 代码会报错，定位到 <code>libswscale/swscale.c</code> 文件里，为了编译通过，在编译前加了个不影响主要功能的简单的 patch</li>
+</ul>
+<p>运行 <code>make lib/ffmpeg/libavcodec/libavcodec.a</code>，等待大约一两分钟，emscripten 编译 ffmpeg 静态库完成，闪过了一堆 warning 可以优雅地无视掉。接下来就是编写我们的应用接口代码并编译到 WebAssembly 了。</p>
+<h2 id="编译和使用">编译和使用</h2>
+<h3 id="生成-js-和-wasm-文件">生成 JS 和 WASM 文件</h3>
+<pre><code class="hljs makefile"><span class="hljs-section">dist/vidy-standalone.js:</span>
+    emcc transcoder/web.c transcoder/process.c \
+                lib/ffmpeg/libavformat/libavformat.a \
+                lib/ffmpeg/libavcodec/libavcodec.a \
+                lib/ffmpeg/libswscale/libswscale.a \
+                lib/ffmpeg/libavutil/libavutil.a \
+                -s TOTAL_MEMORY=33554432 \
+                -s MODULARIZE=1 \
+                -O1 -s WASM=1 -s EXTRA_EXPORTED_RUNTIME_METHODS='[<span class="hljs-string">"ccall"</span>, <span class="hljs-string">"cwrap"</span>]' -s ALLOW_MEMORY_GROWTH=1  \
+                -Ilib/ffmpeg \
+                --post-js transcoder/js/post.js \
+                -o dist/vidy-standalone.js</code></pre>
+<p>使用 <code>emcc</code> 编译：</p>
+<ul>
+<li>存放暴露给浏览器的相关接口的 <code>web.c</code></li>
+<li>存放通用的 ffmpeg 方法调用的 <code>process.c</code></li>
+<li>以及之前生成个几个静态库文件 <code>.a</code></li>
+</ul>
+<p>一起生成目标文件 <code>dist/vidy-standalone.js</code>，由于传递了 <code>-s WASM=1</code>，还会生成同名的 <code>dist/vidy-standalone.wasm</code> 文件。JS 是一个一千来行的胶水代码，负责 WASM 模块的初始化和调用适配。WASM 文件大概 4.7M。</p>
+<p>查看 <a href="%5Bhttps://emscripten.org/docs/tools_reference/emcc.html">emcc文档</a> 和 <a href="https://github.com/emscripten-core/emscripten/blob/master/src/settings.js" target="_blank" rel="noopener">关于 <code>-s</code> 的全部可选 setting</a>。</p>
+<h3 id="使用方法">使用方法</h3>
+<h4 id="简单的例子">简单的例子</h4>
+<pre><code class="hljs js"><span class="hljs-keyword">import</span> Module <span class="hljs-keyword">from</span> <span class="hljs-string">'../dist/vidy-standalone'</span>
+
+<span class="hljs-keyword">let</span> vidyModule
+
+fetch(<span class="hljs-string">'//path/to/dist/vidy-standalone.wasm'</span>)
+    .then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> res.arrayBuffer())
+    .then(<span class="hljs-function">(<span class="hljs-params">arrayBuffer</span>) =&gt;</span> &#123;
+        vidyModule = Module(&#123;
+            <span class="hljs-attr">wasmBinary</span>: arrayBuffer
+        &#125;)
+        decodeVideoFrameImage(<span class="hljs-string">'some.mp4'</span>, <span class="hljs-number">1.2</span>)
+    &#125;)
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">decodeVideoFrameImage</span>(<span class="hljs-params">videoPath, timeStamp</span>) </span>&#123;
+    fetch(videoPath).then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> res.arrayBuffer())
+        .then(<span class="hljs-function">(<span class="hljs-params">videoBuffer</span>) =&gt;</span> &#123;
+            <span class="hljs-keyword">const</span> imageResult = vidyModule.getImage(<span class="hljs-keyword">this</span>.result, <span class="hljs-built_in">parseFloat</span>(timeStamp))
+            <span class="hljs-comment">// ...</span>
+        &#125;)
+&#125;</code></pre>
+<h4 id="稍微复杂点的例子">稍微复杂点的例子</h4>
+<p>为了将模块更好地整合到前端工程中，有必要考虑在使用 webpack 的情况下如何引入。</p>
+<p>参考 <a href="https://github.com/GoogleChromeLabs/squoosh/" target="_blank" rel="noopener">GoogleChromeLabs/squoosh</a> 项目中的一些经验，首先看下 webpack 配置。webpack 团队在 v4 以后做了很多努力，想要让 WASM 模块的引入和使用与 js 文件一样方便，但实际实用中有很多边边角角<a href="https://github.com/webpack/webpack/issues/6725" target="_blank" rel="noopener">奇怪的问题和报错</a>，而且处理一个好几兆的 wasm 文件拖慢 webpack 冷启动许多，我们可以用一下配置让 webpack 不去读取 WASM 文件。使用 file-loader 也可以简单地配置带哈希的文件名，比起在项目中硬编码 WASM 文件路径，少去一些缓存问题。</p>
+<pre><code class="hljs js"><span class="hljs-comment">// webpack config</span>
+    rules: [
+    ...
+      &#123;
+        <span class="hljs-attr">test</span>: <span class="hljs-regexp">/\.wasm$/</span>,
+        <span class="hljs-comment">// This is needed to make webpack NOT process wasm files.</span>
+        type: <span class="hljs-string">'javascript/auto'</span>,
+        <span class="hljs-attr">loader</span>: <span class="hljs-string">'file-loader'</span>,
+        <span class="hljs-attr">options</span>: &#123;
+          <span class="hljs-attr">name</span>: <span class="hljs-string">'[name].[hash:5].[ext]'</span>,
+        &#125;,
+      &#125;,
+    ...
+    ]</code></pre>
+<p>跟上面简单例子里效果相似的写法可以变成这样:</p>
+<pre><code class="hljs js"><span class="hljs-keyword">import</span> Module <span class="hljs-keyword">from</span> <span class="hljs-string">'../dist/vidy-standalone'</span>
+<span class="hljs-keyword">import</span> vidyWasmUrl <span class="hljs-keyword">from</span> <span class="hljs-string">'../dist/vidy-standalone.wasm'</span> <span class="hljs-comment">// 会被 file-loader 处理成一个静态文件的 url</span>
+
+<span class="hljs-keyword">const</span> vidyModule = Module(&#123;
+    locateFile(url) &#123;
+        <span class="hljs-comment">// Redirect the request for the wasm binary to whatever webpack gave us.</span>
+        <span class="hljs-keyword">if</span> (url.endsWith(<span class="hljs-string">'.wasm'</span>)) <span class="hljs-keyword">return</span> vidyWasmUrl;
+        <span class="hljs-keyword">return</span> url;
+    &#125;,
+&#125;)</code></pre>
+<p>emcc 生成的胶水代码里，默认请求的 WASM 文件路径是 <code>vidy-standalone.wasm</code>，但看看 <a href="https://github.com/emscripten-core/emscripten/blob/master/emcc.py#L2800" target="_blank" rel="noopener">emcc 这一部分实现</a> 知道，如果给模块工厂函数 Module 传递了 <code>locateFile</code> 函数，就可以改写其内部会去请求的 WASM 文件路径。使用模块工厂函数的话，也不用自己去调用 <code>fetch</code> 了。</p>
+<h2 id="一些具体实现的代码">一些具体实现的代码</h2>
+<p>首先看看 <code>web.c</code> 里暴露出的方法签名：</p>
+<pre><code class="hljs c"><span class="hljs-function">EMSCRIPTEN_KEEPALIVE MyImageData *<span class="hljs-title">seek_video_to</span><span class="hljs-params">(<span class="hljs-keyword">uint8_t</span> *buff, <span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> buff_length, <span class="hljs-keyword">float</span> time_stamp)</span></span></code></pre>
+<p>buffer 数组头指针 <code>buff</code>，buffer 长度 <code>buff_length</code>，以及用单精度浮点数表示的需要提取图像的时间。返回数据为我们自定义的结构。</p>
+<h3 id="js-将视频数据写入-wasm-线性内存">[JS] 将视频数据写入 WASM 线性内存</h3>
+<p>在 <code>post.js</code> 里，添加的一部分代码。</p>
+<ul>
+<li>根据 C 的方法签名，使用 emscripten 的胶水代码工具函数 <code>Module.cwrap</code> 包装一个 JS 的调用方法</li>
+<li>给 emscripten 模块加上了 <code>Module.getImage</code> 方法，供外部调用</li>
+</ul>
+<pre><code class="hljs js"><span class="hljs-keyword">let</span> seek_video_to = <span class="hljs-literal">null</span>
+
+Module.onRuntimeInitialized = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;
+  seek_video_to = Module.cwrap(<span class="hljs-string">'seek_video_to'</span>, <span class="hljs-string">'number'</span>, [<span class="hljs-string">'number'</span>, <span class="hljs-string">'number'</span>, <span class="hljs-string">'number'</span>]);
+&#125;;
+
+Module.getImage = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">buffer, timeStamp</span>) </span>&#123;
+  <span class="hljs-keyword">if</span> (!seek_video_to) &#123;
+    <span class="hljs-keyword">return</span> &#123; <span class="hljs-attr">errcode</span>: <span class="hljs-number">1</span> &#125;
+  &#125;
+  <span class="hljs-keyword">let</span> ptr = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">let</span> offset = <span class="hljs-number">0</span>;
+  <span class="hljs-keyword">try</span> &#123;
+    <span class="hljs-keyword">const</span> before = <span class="hljs-built_in">Date</span>.now()
+    <span class="hljs-keyword">let</span> data_arr = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>(buffer);
+    offset = Module._malloc(data_arr.length);
+    Module.HEAP8.set(data_arr, offset);
+    ptr = seek_video_to(offset, data_arr.length, timeStamp);
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'seek_video_to costs'</span>, <span class="hljs-built_in">Date</span>.now() - before)
+  &#125; <span class="hljs-keyword">catch</span> (e) &#123;
+    <span class="hljs-keyword">throw</span> e;
+  &#125;
+  ...</code></pre>
+<h3 id="c-程序头部">[C] 程序头部</h3>
+<p>首先声明一些方便数据读取的全局变量:</p>
+<pre><code class="hljs c"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span>
+&#123;</span>
+    <span class="hljs-keyword">uint8_t</span> *ptr;
+    <span class="hljs-keyword">size_t</span> size;
+&#125; BufferData;
+
+<span class="hljs-comment">/**
+ * some global variables
+ */</span>
+BufferData global_buffer_data;
+
+<span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span>
+    <span class="hljs-keyword">uint32_t</span> width;
+    <span class="hljs-keyword">uint32_t</span> height;
+    <span class="hljs-keyword">uint8_t</span> *data;
+&#125; MyImageData;</code></pre>
+<p>全局变量 <code>global_buffer_data</code> 留作存放原始视频数据的结构，它所在的内存区域会被 JS 直接写入。</p>
+<h3 id="c-avcodec-解析视频文件">[C] avcodec 解析视频文件</h3>
+<p>我们需要让 ffmpeg 能够从内存（而不是文件）中读取视频数据。</p>
+<pre><code class="hljs c">...
+  <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span> *avio_ctx_buffer = <span class="hljs-literal">NULL</span>;
+  <span class="hljs-comment">// 对于普通的mp4文件，这个size只要1MB就够了，但是对于mov/m4v需要和buff一样大</span>
+  <span class="hljs-keyword">size_t</span> avio_ctx_buffer_size = buff_length;
+
+  global_buffer_data.ptr = buff;         <span class="hljs-comment">/* will be grown as needed by the realloc above */</span>
+  global_buffer_data.size = buff_length; <span class="hljs-comment">/* no data at this point */</span>
+
+  AVFormatContext *pFormatCtx = avformat_alloc_context();
+
+  <span class="hljs-keyword">uint8_t</span> *avio_ctx_buffer = (<span class="hljs-keyword">uint8_t</span> *)av_malloc(avio_ctx_buffer_size);
+
+  <span class="hljs-comment">/* 读内存数据 */</span>
+  AVIOContext *avio_ctx = avio_alloc_context(avio_ctx_buffer, avio_ctx_buffer_size, <span class="hljs-number">0</span>, <span class="hljs-literal">NULL</span>, read_packet, <span class="hljs-literal">NULL</span>, <span class="hljs-literal">NULL</span>);
+
+  pFormatCtx-&gt;pb = avio_ctx;
+  pFormatCtx-&gt;flags = AVFMT_FLAG_CUSTOM_IO;
+...</code></pre>
+<p>新建 <code>AVIOContext *avio_ctx</code>，指定目标 buffer 指针，目标 buffer 大小，以及我们提供的读取数据的 <code>read_packet</code> 函数，该 iocontext 需要读下一段数据时， <code>read_packet</code> 函数就将 <code>global_buffer_data</code> 中指定大小的数据写入目标 <code>*buf</code> 位置</p>
+<pre><code class="hljs c"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">read_packet</span><span class="hljs-params">(<span class="hljs-keyword">void</span> *opaque, <span class="hljs-keyword">uint8_t</span> *buf, <span class="hljs-keyword">int</span> buf_size)</span>
+</span>&#123;
+    buf_size = FFMIN(buf_size, global_buffer_data.size);
+
+    <span class="hljs-comment">/* copy internal buffer data to buf */</span>
+    <span class="hljs-built_in">memcpy</span>(buf, global_buffer_data.ptr, buf_size);
+    global_buffer_data.ptr += buf_size;
+    global_buffer_data.size -= buf_size;
+
+    <span class="hljs-keyword">return</span> buf_size;
+&#125;</code></pre>
+<h3 id="c-获取图片rgb数据">[C] 获取图片rgb数据</h3>
+<p>这里内容太多，主要涉及 FFMpeg 的接口和视频编解码的知识，准备另写一篇。</p>
+<h3 id="c-将图像等数据写入内存">[C] 将图像等数据写入内存</h3>
+<p>当拿到包含 RGB 格式图像数据的 <code>AVFrame pFrameRGB</code> 后，是时候将其中的颜色信息取出，转化为线性存储的，利于 JS 中 Canvas 元素使用的数据格式。</p>
+<pre><code class="hljs c"><span class="hljs-keyword">uint8_t</span> *get_image_frame_buffer(AVFrame *pFrame, AVCodecContext *pCodecCtx)
+&#123;
+    <span class="hljs-keyword">int</span> width = pCodecCtx-&gt;width;
+    <span class="hljs-keyword">int</span> height = pCodecCtx-&gt;height;
+
+    <span class="hljs-keyword">int</span> buffer_size = height * width * <span class="hljs-number">3</span>;
+
+    <span class="hljs-keyword">uint8_t</span> *buffer = (<span class="hljs-keyword">uint8_t</span> *)<span class="hljs-built_in">malloc</span>(buffer_size);
+
+    <span class="hljs-comment">// Write pixel data</span>
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> y = <span class="hljs-number">0</span>; y &lt; height; y++)
+    &#123;
+        <span class="hljs-built_in">memcpy</span>(buffer + y * pFrame-&gt;linesize[<span class="hljs-number">0</span>], pFrame-&gt;data[<span class="hljs-number">0</span>] + y * pFrame-&gt;linesize[<span class="hljs-number">0</span>], width * <span class="hljs-number">3</span>);
+    &#125;
+    <span class="hljs-keyword">return</span> buffer;
+&#125;</code></pre>
+<p>此函数返回的 <code>buffer</code> 指针指向的内存区域，会按照 <code>rgbrgb...</code> 的顺序存储图像颜色数据。每个像素需要 3 个存储单元，所以整个的 <code>buffer_size</code> 会是 <code>height * width * 3</code>。</p>
+<p>接下来我们回到 JS 端。</p>
+<h3 id="js-根据指针读出数据-构建-imagedata">[JS] 根据指针读出数据, 构建 ImageData</h3>
+<p>WASM 返回的只是一个内存偏移量，此时我们手上有整个 WASM 实例的内存区域，得想办法把有用的数据读取出来。</p>
+<p>首先我们知道 <code>MyImageData</code> 结构体宽和高都是用 <code>uint32_t</code>，紧接着存放颜色信息的数组单元类型为 <code>uint8_t</code>。</p>
+<p>Emscripten 的胶水代码有提供 HEAPU(8/16/32/64) 几种步长的 dataviewer，可以按照以下方法读出数字和颜色数组。</p>
+<pre><code class="hljs ts"><span class="hljs-comment">// ...</span>
+  <span class="hljs-keyword">let</span> heap32Start = ptr / <span class="hljs-number">4</span>
+  <span class="hljs-keyword">let</span> width = Module.HEAPU32[heap32Start]
+  <span class="hljs-keyword">let</span> height = Module.HEAPU32[heap32Start + <span class="hljs-number">1</span>],
+    imgBufferPtr = Module.HEAPU32[heap32Start + <span class="hljs-number">2</span>],
+    imageBuffer = Module.HEAP.subarray(imgBufferPtr, imgBufferPtr + width * height * <span class="hljs-number">3</span>)
+
+  <span class="hljs-keyword">let</span> imageInfo = &#123; width, height, imageDataArr: imageBuffer &#125;
+  <span class="hljs-keyword">let</span> imageData = imageInfoToImageData(imageInfo)
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">imageInfoToImageData</span>(<span class="hljs-params">imageInfo: VidyImageInfo</span>) </span>&#123;
+  <span class="hljs-keyword">const</span> &#123; width, height, imageDataArr &#125; = imageInfo
+  <span class="hljs-keyword">const</span> imageData = <span class="hljs-keyword">new</span> ImageData(width, height)
+  <span class="hljs-comment">// 目前只返回 RGB24 格式的数据, 不处理透明度</span>
+  <span class="hljs-keyword">let</span> k = <span class="hljs-number">0</span>
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; imageDataArr.length; i++) &#123;
+    <span class="hljs-keyword">if</span> (i &amp;&amp; i % <span class="hljs-number">3</span> === <span class="hljs-number">0</span>) &#123;
+      imageData.data[k++] = <span class="hljs-number">255</span>
+    &#125;
+    imageData.data[k++] = imageDataArr[i]
+  &#125;
+  imageData.data[k] = <span class="hljs-number">255</span>
+  <span class="hljs-keyword">return</span> imageData
+&#125;</code></pre>
+<p>绘制到 canvas 上就很简单了</p>
+<pre><code class="hljs ts">canvas.width = width
+canvas.height = height
+<span class="hljs-keyword">let</span> ctx = canvas.getContext(<span class="hljs-string">'2d'</span>)
+ctx.drawImage(imageData, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>)</code></pre>
+<h2 id="总结">总结</h2>
+<p>跟着别人的文章思路，小小修改，跑通了一个 demo，大致熟悉一下 C 项目使用 Emscripten 转化为前端可用模块的方案。</p>
+<p>不是很熟悉 C 语言，同时在 JS 和 C 端手动管理内存虽然对于入门者来说很容易操作，但稍显繁琐。</p>
+<p>Emscripten 多用于翻译现有的 C/C++ 库代码，对于 Web API 和前端生态的支持，明显没有隔壁 Mozilla 的 Rust 社区积极。不过音视频技术实现，的确是 C 的传统强项领域，若想少造轮子，还是要好好学习的。</p>
+<h2 id="参考">参考</h2>
+<p>https://zhuanlan.zhihu.com/p/40786748</p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-03-06</span><i class="fa fa-tag"></i><a href="/categories/前端/" title="前端" class="tag">前端 </a><a href="/tags/Avtech/" title="Avtech" class="tag">Avtech </a><a href="/tags/Webassembly/" title="Webassembly" class="tag">Webassembly </a><a href="/tags/Emscripten/" title="Emscripten" class="tag">Emscripten </a></div></div></div></div><div id="toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#web-demo-应用流程"><span class="toc-text">Web demo 应用流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#从源码编译-ffmpeg"><span class="toc-text">从源码编译 ffmpeg</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#项目-makefile"><span class="toc-text">项目 Makefile</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译和使用"><span class="toc-text">编译和使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#生成-js-和-wasm-文件"><span class="toc-text">生成 JS 和 WASM 文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用方法"><span class="toc-text">使用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#简单的例子"><span class="toc-text">简单的例子</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#稍微复杂点的例子"><span class="toc-text">稍微复杂点的例子</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#一些具体实现的代码"><span class="toc-text">一些具体实现的代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#js-将视频数据写入-wasm-线性内存"><span class="toc-text">[JS] 将视频数据写入 WASM 线性内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#c-程序头部"><span class="toc-text">[C] 程序头部</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#c-avcodec-解析视频文件"><span class="toc-text">[C] avcodec 解析视频文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#c-获取图片rgb数据"><span class="toc-text">[C] 获取图片rgb数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#c-将图像等数据写入内存"><span class="toc-text">[C] 将图像等数据写入内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#js-根据指针读出数据-构建-imagedata"><span class="toc-text">[JS] 根据指针读出数据, 构建 ImageData</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://hikerpig.github.io/2019/03/06/2019-03-06-Decode-Video-Using-FFMpeg-In-Browser/,HP goes FE,Decode Video Using ffmpeg In Browser,;" class="fa fa-twitter"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a role="navigation" href="/2019/03/08/2019-03-08-Tips-On-Viewing-Logs/" title="Tips On Viewing Logs" class="btn">上一篇</a></li><li class="next pagbuttons"><a role="navigation" href="/2019/02/15/2019-02-14-Setup-CI-in-docker/" title="使用 docker 构造前端构建环境" class="btn">下一篇</a></li></ul></div><div id="comments"><div id="gitalk-container"></div></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+  clientID: '0b21579fda2f1d2e73f4',
+  clientSecret: 'abc0351a314cc46bb3d58b6dad62c670c2d1e8f9',
+  repo: 'hikerpig.github.io',
+  owner: 'hikerpig',
+  admin: 'hikerpig',
+  labels: ['Gitalk'],
+  id: '2019/03/06/2019-03-06-Decode-Video-Using-FFMpeg-In-Browser/',
+  title: 'Decode Video Using ffmpeg In Browser',
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+
+gitalk.render('gitalk-container')
+</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-49433257-1');
+</script><script src="https://cdn.jsdelivr.net/npm/mermaid@8.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({theme: "default"});
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/styles/atom-one-dark.css"><script src="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/lib/highlight.js"></script><script>hljs.initHighlightingOnLoad();
+</script></body></html>
