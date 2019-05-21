@@ -91,6 +91,7 @@ FFMPEG_CONFIGURE_ARGS = \
 <li>存放通用的 ffmpeg 方法调用的 <code>process.c</code></li>
 <li>以及之前生成个几个静态库文件 <code>.a</code></li>
 </ul>
+<p>其中一些参数说明一下： - <code>-s MODULARIZE=1</code> 让 emcc 生成模块工厂函数（而且还是 UMD 格式的），留待之后调用。否则默认情况下生成的 JS 会立刻执行，而且还会污染其所在全局环境（例如添加一个 self.Module 对象）</p>
 <p>一起生成目标文件 <code>dist/vidy-standalone.js</code>，由于传递了 <code>-s WASM=1</code>，还会生成同名的 <code>dist/vidy-standalone.wasm</code> 文件。JS 是一个一千来行的胶水代码，负责 WASM 模块的初始化和调用适配。WASM 文件大概 4.7M。</p>
 <p>查看 <a href="%5Bhttps://emscripten.org/docs/tools_reference/emcc.html">emcc文档</a> 和 <a href="https://github.com/emscripten-core/emscripten/blob/master/src/settings.js" target="_blank" rel="noopener">关于 <code>-s</code> 的全部可选 setting</a>。</p>
 <h3 id="使用方法">使用方法</h3>
