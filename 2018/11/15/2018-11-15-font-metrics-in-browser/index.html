@@ -35,9 +35,9 @@
 
   getMetricsByCanvas(canvas, <span class="hljs-string">'字'</span>, <span class="hljs-string">'30px  Noto Sans JP'</span>) <span class="hljs-comment">// 字 30px  Noto Sans JP TextMetrics &#123;width: 30&#125;</span>
 &#125;</code></pre>
-<p>不过此 API 是拿不到字符的高度的。就有一些比较黑的方法来估算字体的内容高度，例如使用大写字母 ‘M’ 的宽度作为内功高度的近似。这些技巧其实都与字形设计的惯例有关，在拉丁字母中，‘M’ 是字形最为饱满和方正的字符，高度与宽度近似。</p>
+<p>不过此 API 是拿不到字符的高度的。就有一些比较黑的方法来估算字体的内容高度，例如使用大写字母 'M' 的宽度作为内功高度的近似。这些技巧其实都与字形设计的惯例有关，在拉丁字母中，'M' 是字形最为饱满和方正的字符，高度与宽度近似。</p>
 <p>不过明显这个惯例对于以上两个日文字体<em>并不适用</em>。</p>
-<p>汉字因为字形多数为饱满的方块字，用宽度去估计内容高度其实更容易，例如 ‘人’ 和 ‘口’ 就很好用。</p>
+<p>汉字因为字形多数为饱满的方块字，用宽度去估计内容高度其实更容易，例如 '人' 和 '口' 就很好用。</p>
 <h2 id="创建临时-dom-元素用于度量高度">创建临时 dom 元素用于度量高度</h2>
 <p>能拿到更全的字形盒信息</p>
 <pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getMetricsBySpan</span>(<span class="hljs-params">str, font</span>) </span>&#123;

@@ -13,7 +13,7 @@ err <span class="hljs-keyword">instanceof</span> MyError  <span class="hljs-comm
         <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">d, b</span>) </span>&#123; <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> p <span class="hljs-keyword">in</span> b) <span class="hljs-keyword">if</span> (b.hasOwnProperty(p)) d[p] = b[p]; &#125;;
     <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">d, b</span>) </span>&#123;
         extendStatics(d, b);
-        <span class="hljs-function"><span class="hljs-keyword">function</span> __(<span class="hljs-params"></span>) </span>&#123; <span class="hljs-keyword">this</span>.constructor = d; &#125;
+        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__</span>(<span class="hljs-params"></span>) </span>&#123; <span class="hljs-keyword">this</span>.constructor = d; &#125;
         d.prototype = b === <span class="hljs-literal">null</span> ? <span class="hljs-built_in">Object</span>.create(b) : (__.prototype = b.prototype, <span class="hljs-keyword">new</span> __());
     &#125;;
 &#125;)();
@@ -39,7 +39,7 @@ err <span class="hljs-keyword">instanceof</span> MyError  <span class="hljs-comm
     <span class="hljs-built_in">Object</span>.setPrototypeOf(<span class="hljs-keyword">this</span>, FooError.prototype)
   &#125;
 &#125;</code></pre>
-<p>但是这个写法其实相当的傻，因为对于每一个子类的构建函数来说，在改变原型之前，是无法拿到正确的子类实例 ‘this.constructor’ 的，所以 <code>Object.setPrototypeOf</code> 需要出现在所有子类的构建函数中。</p>
+<p>但是这个写法其实相当的傻，因为对于每一个子类的构建函数来说，在改变原型之前，是无法拿到正确的子类实例 'this.constructor' 的，所以 <code>Object.setPrototypeOf</code> 需要出现在所有子类的构建函数中。</p>
 <h2 id="解决方案">解决方案</h2>
 <p>只好把原型继承拿回来了，最终解决方案：</p>
 <pre><code class="hljs typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> ExtensibleError <span class="hljs-keyword">implements</span> <span class="hljs-built_in">Error</span> &#123;

@@ -9,7 +9,7 @@
 <h3 id="使用重构件codemod加速-javascript-开发">使用重构件（Codemod）加速 JavaScript 开发</h3>
 <p>在花园里耕耘乐趣无穷，但如果除草不勤，最后收获可能是一团揪心。漏掉一次除草本身可能并无大碍，但积少成多最后会毁掉整座花园。没有杂草的花园让维护工作神清气爽。这个道理对代码库也类似。</p>
 <p>我通常讨厌除草，经常忘记这事的结果就是一团糟。谢天谢地在编程界有像 <a href="http://eslint.org/" target="_blank" rel="noopener">ESLint</a> 和 <a href="https://github.com/brigade/scss-lint" target="_blank" rel="noopener">SCSS-Lint</a> 这样的好东西提醒我们勤理代码。但是如果面对的是大段大段的历史代码，光是想想要手动调整成百十千万的空格和逗号，悲伤便逆流成河。</p>
-<p>8年来有几百万行 JavaScript 代码进入 Airbnb 的版本控制系统中。同时，前端界风起云涌。新功能，新框架，甚至 JavaScript 本身都在快速进化。尽管遵循<a href="https://github.com/airbnb/javascript" target="_blank" rel="noopener">良好的代码风格</a>会让变革少些疼痛，但还是很容易累积出不再遵循最新“最佳实践”的巨大代码库。每一处代码风格的不一致都是一棵杂草，唯一归宿就是被铲掉，化作春泥更护花，好让开发团队保持高效。来看看我们花园现在的样子：</p>
+<p>8年来有几百万行 JavaScript 代码进入 Airbnb 的版本控制系统中。同时，前端界风起云涌。新功能，新框架，甚至 JavaScript 本身都在快速进化。尽管遵循<a href="https://github.com/airbnb/javascript" target="_blank" rel="noopener">良好的代码风格</a>会让变革少些疼痛，但还是很容易累积出不再遵循最新"最佳实践"的巨大代码库。每一处代码风格的不一致都是一棵杂草，唯一归宿就是被铲掉，化作春泥更护花，好让开发团队保持高效。来看看我们花园现在的样子：</p>
 <p><img src="http://ww1.sinaimg.cn/large/005SiNxygw1f3j83hmmrij30jk0dvjsn.jpg"></p>
 <p>我执着于增加团队效率，也深知保持一致性的代码能增速团队反馈和减少无效沟通。我们最近开始了一个整理代码的项目，准备把许多陈旧的 JavaScript 代码转化得符合我们的代码风格，亦使我们的代码检验器有更多用武之地。若全都手动完成，会是件十分无聊和耗时的苦差，所以我们借助工具帮我们自动化此工作。虽说使用 <em><code>eslint -fix</code></em> 是个不错的开始，但<a href="https://github.com/eslint/eslint/issues/5329" target="_blank" rel="noopener">它现在所能有限</a>。尽管他们<a href="https://twitter.com/geteslint/status/723909416957829122" target="_blank" rel="noopener">最近开始接受修复所有规则的PR</a>，也准备<a href="https://github.com/cst/cst" target="_blank" rel="noopener">构建 JavaScript 的具体语法树</a>，但等这些功能完成还需要些时间。感谢上苍我们发现了 Facebook 的 <a href="https://github.com/facebook/jscodeshift" target="_blank" rel="noopener">jscodeshift</a>，这是一个重构工具（协助大型代码库的自动化重构）。如果代码库是个花园，那么 jscodeshift 就像个除草机器人。</p>
 <p>此工具将 JavaScript 解析为一棵 <a href="https://en.wikipedia.org/wiki/Abstract_syntax_tree" target="_blank" rel="noopener">抽象语法树</a>，并在其上进行变换，然后输出符合指定代码风格的新 JavaScript 代码。转换过程是用 JavaScript 本身实现的，所以我们团队很乐意使用此工具。寻找或是创建转换代码能加速我们乏味的重构，让我们团队能够专注于更有意义的工作。</p>
@@ -108,7 +108,7 @@ const welcome = &#39;home&#39;;</code></pre>
   }
 }</code></pre>
 <p><a href="https://github.com/cpojer/js-codemod#template-literals" target="_blank" rel="noopener"><strong>js-codemod/template-literals</strong></a><strong>:</strong> 把字符串的串联转换为字符串模板字面量表示。</p>
-<p>因为我们多处用到字符串串联，而且这个重构件尽其所能把所有字符串都转成模板，我发现很多转换结果其实并不合理。我之所以这个重构件放到“重量级”列表里，是因为它会改动很多文件，而且之后我们还得进行大量的手动修改才能得到满意的结果。</p>
+<p>因为我们多处用到字符串串联，而且这个重构件尽其所能把所有字符串都转成模板，我发现很多转换结果其实并不合理。我之所以这个重构件放到"重量级"列表里，是因为它会改动很多文件，而且之后我们还得进行大量的手动修改才能得到满意的结果。</p>
 <p>使用前:</p>
 <pre><code>const belong = &#39;anywhere &#39;+ welcomeHome;</code></pre>
 <p>使用后:</p>

@@ -2,7 +2,7 @@
 既想享受 mixin 的灵活和方便，又想收获 ts 的类型系统带来的安全保障和开发时使用 IntelliSense 的顺滑体验。
 vu"><meta name="keywords" content="Typescript,Vue"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/https://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>在 Typescript 中使用可被复用的 Vue Mixin</a></h1></div><div class="post-content"><p>转到用 Typescript 写 Vue 应用以后，经过一轮工具链和依赖的洗礼，总算蹒跚地能走起来了，不过有一个很常用的功能 mixin，似乎还没有官方的解决方案。</p>
 <p>既想享受 mixin 的灵活和方便，又想收获 ts 的类型系统带来的安全保障和开发时使用 IntelliSense 的顺滑体验。</p>
-<p>vuejs 官方组织里有一个 ‘vue-class-component’ 以及连带推荐的 ‘vue-property-decorator’，都没有相应实现。翻了下前者的 issue，有一条挂了好些时间的待做 feature 就是 mixin 的支持。</p>
+<p>vuejs 官方组织里有一个 'vue-class-component' 以及连带推荐的 'vue-property-decorator'，都没有相应实现。翻了下前者的 issue，有一条挂了好些时间的待做 feature 就是 mixin 的支持。</p>
 <p>也不是什么复杂的事，自己写一个吧。</p>
 <blockquote>
 <p>后注：vue-class-component 6.2.0 开始提供 <a href="https://github.com/vuejs/vue-class-component/commit/cdcbfe5bb1a4c9d59a4b3066477f49c9aae8e2fc" target="_blank" rel="noopener">mixins</a> 方法，和本文的实现思路相似。</p>
@@ -137,7 +137,7 @@ calling reidrectTo /otherpage
 &#125;</code></pre>
 <h2 id="使用-mixins">使用 Mixins</h2>
 <h3 id="坏方法欺骗以及注释">坏方法：欺骗，以及注释</h3>
-<p>但抽象类是无法被实例化的，并不满足 <code>{ new(): T }</code> 这个要求，因此只能被继承，而<strong>不能</strong>被混入，由于同样的原因，抽象类也无法被 ‘vue-class-component’ 的 <code>Component</code> 函数装饰。</p>
+<p>但抽象类是无法被实例化的，并不满足 <code>{ new(): T }</code> 这个要求，因此只能被继承，而<strong>不能</strong>被混入，由于同样的原因，抽象类也无法被 'vue-class-component' 的 <code>Component</code> 函数装饰。</p>
 <p>这时候只好将实现了的功能写入 Mixin 中，待实现的功能放到接口里，让具体类来实现。</p>
 <pre><code class="hljs typescriptvue-class-component">
 interface IMusicSourceProvider &#123;

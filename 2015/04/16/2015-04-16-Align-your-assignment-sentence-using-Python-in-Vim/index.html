@@ -11,14 +11,14 @@
 <li>以等号或冒号对齐语句</li>
 </ul>
 <p>平时VIM用的比较多，先下手这个。</p>
-<p>VIM有自己强大的DSL插件语言vimscript， 不过各种东西的学习曲线真的是… ( %&gt;_&lt;% )，折腾了一下发现最关键的正则模块我没搞清楚。</p>
+<p>VIM有自己强大的DSL插件语言vimscript， 不过各种东西的学习曲线真的是... ( %&gt;_&lt;% )，折腾了一下发现最关键的正则模块我没搞清楚。</p>
 <p>想想这个需求很简单，也不需要跟编辑器做很多交互，所以还是用一个顺手的语言实现吧。</p>
 <p>VIM具有lua, tcl, perl, ruby, python的编程接口，我就决定用python了，具体接口内容可以看文档:</p>
 <pre><code class="hljs vim">:<span class="hljs-keyword">help</span> if_pyth.txt</code></pre>
 <p>比较关键的几个对象是:</p>
 <ul>
 <li><code>vim.current.buffer</code> 当前缓冲区(也可以理解是存在内存里的当前编辑文件内容)</li>
-<li><code>vim.current.buffer.mark</code> 获取当前缓冲区的某个mark信息, 下面我使用的mark(‘&lt;’)和mark(‘&gt;’)是比较特殊的,上一次visual selection的起止位置</li>
+<li><code>vim.current.buffer.mark</code> 获取当前缓冲区的某个mark信息, 下面我使用的mark('&lt;')和mark('&gt;')是比较特殊的,上一次visual selection的起止位置</li>
 <li><code>vim.current.window.cursor</code> 当前窗口下输入光标所在位置</li>
 </ul>
 <pre><code class="hljs python">if exists("g:loaded_require_formatter")

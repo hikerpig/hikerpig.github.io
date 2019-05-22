@@ -58,7 +58,7 @@ SVG 支持 transform，而且写法似乎与 CSS 中相同，但是它的标准�
    <span class="hljs-tag">&lt;<span class="hljs-name">rect</span> <span class="hljs-attr">name</span>=<span class="hljs-string">"r2"</span> <span class="hljs-attr">transform</span>=<span class="hljs-string">"translate(10,10) scale(2,2)"</span> <span class="hljs-attr">width</span>=<span class="hljs-string">"100"</span> <span class="hljs-attr">height</span>=<span class="hljs-string">"50"</span> <span class="hljs-attr">fill</span>=<span class="hljs-string">"red"</span> <span class="hljs-attr">opacity</span>=<span class="hljs-string">"0.8"</span> /&gt;</span>
  <span class="hljs-tag">&lt;/<span class="hljs-name">svg</span>&gt;</span></code></pre>
 <svg style="background: #CCC">
-&lt;rect name=“r1” transform=“translate(10,10)” width=“100” height=“50” fill=“blue” opacity=“0.8” /&gt; <rect name="r2" transform="translate(10,10) scale(2,2)" width="100" height="50" fill="red" opacity="0.8"/>
+&lt;rect name="r1" transform="translate(10,10)" width="100" height="50" fill="blue" opacity="0.8" /&gt; <rect name="r2" transform="translate(10,10) scale(2,2)" width="100" height="50" fill="red" opacity="0.8"/>
 </svg>
 <p>r2 的变换，先平移再缩放，平移的结果就是缩放的原点。</p>
 <p>此处将 x/y 转为 translate 而不是 <code>x</code> 和 <code>y</code> 属性，是为了以统一的方式做坐标系的转换和运算，且考虑到许多元素没有 <code>x</code> 和 <code>y</code> 属性（如 <code>circle</code> 就只有 <code>cx</code> 和 <code>cy</code> ），但所有 SVG 元素都支持 transform 。</p>
@@ -70,23 +70,23 @@ SVG 支持 transform，而且写法似乎与 CSS 中相同，但是它的标准�
 &#125;</code></pre>
 <h2 id="带位移补偿的缩放">带位移补偿的缩放</h2>
 <p>计算缩放的位移补偿值，使得缩放再位移后效果就与以变换原点为中心缩放一样。</p>
-<p>假设在缩放系数为 S 时，我们需要的 translate 为 <span class="math inline">TR</span>，变换完的结果：</p>
-<p><span class="math display">
-x&#39;=(x+TR_x)\times S_x\\\\
-y&#39;=(y+TR_y)\times S_y
-</span></p>
+<p>假设在缩放系数为 S 时，我们需要的 translate 为 <span class="math inline"><em>T</em><em>R</em></span>，变换完的结果：</p>
+<p><br><span class="math display">$$
+x'=(x+TR_x)\times S_x\\\\
+y'=(y+TR_y)\times S_y
+$$</span><br></p>
 <p>当以变换原点为特征点时，方程易于构建与求解。</p>
-<p>令 <span class="math inline">T_x</span> 和 <span class="math inline">T_y</span> 为变换原点相对于原坐标系左上角的坐标，当 <span class="math inline">x=T_x,\  y=T_y</span> 时，代入得到：</p>
-<p><span class="math display">
+<p>令 <span class="math inline"><em>T</em><sub><em>x</em></sub></span> 和 <span class="math inline"><em>T</em><sub><em>y</em></sub></span> 为变换原点相对于原坐标系左上角的坐标，当 <span class="math inline"><em>x</em> = <em>T</em><sub><em>x</em></sub>, <em>y</em> = <em>T</em><sub><em>y</em></sub></span> 时，代入得到：</p>
+<p><br><span class="math display">$$
 TO_{x} \ \ =\ ( TO_{x} \ +TR_{x}) \times S_{x}\\\\
 TO_{y} \ \ =\ ( TO_{y} \ +TR_{y}) \times S_{y}
-</span></p>
+$$</span><br></p>
 <p>所以：</p>
-<p><span class="math display">
+<p><br><span class="math display">$$
 TR_{x} \ =\frac{( 1-S_{x}) \times TO_{x}}{S_{x}}\\\\
 \\\\
 TR_{y} \ =\frac{( 1-S_{y}) \times TO_{y}}{S_{y}}
-</span></p>
+$$</span><br></p>
 <p>带缩放修正值的 transform 计算方法改为：</p>
 <pre><code class="hljs diff">   const scales = d.scale
    const scaleX = scales[0]
