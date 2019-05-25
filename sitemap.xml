@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://hikerpig.github.io/2018/04/02/2018-04-02-Customize-Error-in-Typescript/</loc>
+    
+    <lastmod>2019-05-25T06:43:08.674Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2019/03/14/2019-03-13-Handy-Video-Analyze-Tool/</loc>
+    
+    <lastmod>2019-05-25T05:34:27.181Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://hikerpig.github.io/2018/08/26/2018-08-26-beware-of-svg-transform/</loc>
     
-    <lastmod>2019-05-22T03:22:21.562Z</lastmod>
+    <lastmod>2019-05-23T06:20:52.554Z</lastmod>
     
   </url>
   
@@ -26,13 +40,6 @@
     <loc>http://hikerpig.github.io/2019/03/06/2019-03-06-Decode-Video-Using-FFMpeg-In-Browser/</loc>
     
     <lastmod>2019-04-03T16:06:00.419Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2019/03/14/2019-03-13-Handy-Video-Analyze-Tool/</loc>
-    
-    <lastmod>2019-04-02T13:07:16.131Z</lastmod>
     
   </url>
   
@@ -229,13 +236,6 @@
     <loc>http://hikerpig.github.io/2017/09/25/2017-09-25-ES6+Babel-little-bug-under-IE11/</loc>
     
     <lastmod>2018-08-26T08:51:33.168Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2018/04/02/2018-04-02-Customize-Error-in-Typescript/</loc>
-    
-    <lastmod>2018-08-26T08:50:49.156Z</lastmod>
     
   </url>
   

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>使用 docker 构造前端构建环境 · HP goes FE</title><meta name="description" content="使用 docker 构造前端构建环境"><meta name="keywords" content="git,前端,docker"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/https://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>使用 docker 构造前端构建环境</a></h1></div><div class="post-content"><p>托管在公司 gitlab 上的一个前端项目，最近在尝试 docker 化。</p>
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>使用 docker 构造前端构建环境 · HP goes FE</title><meta name="description" content="使用 docker 构造前端构建环境"><meta name="keywords" content="git,前端,docker"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/https://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>使用 docker 构造前端构建环境</a></h1></div><div class="post-content"><p>托管在公司 gitlab 上的一个前端项目，最近在尝试 docker 化。</p>
 <h1 id="准备阶段">准备阶段</h1>
 <h2 id="gitlab-上的一些问题">Gitlab 上的一些问题</h2>
 <p>如果项目不是公开的，从 docker 环境中拉取代码会有些许权限问题，可一一解决。</p>
@@ -15,19 +15,19 @@
 <p>参考: https://stackoverflow.com/questions/42019529/how-to-clone-pull-a-git-repository-ignoring-lfs</p>
 <h1 id="开始">开始</h1>
 <h2 id="dockerfile">Dockerfile</h2>
-<pre><code class="hljs undefined"><span class="hljs-keyword">FROM</span> node:<span class="hljs-number">8.15</span>.<span class="hljs-number">0</span>-slim
+<pre><code class="hljs undefined">FROM node:8.15.0-slim
 
-<span class="hljs-comment"># install git-lfs</span>
-<span class="hljs-keyword">RUN</span><span class="bash"> curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh |  bash
-</span><span class="hljs-keyword">RUN</span><span class="bash"> apt-get install -y git-lfs
-</span>
-<span class="hljs-keyword">WORKDIR</span><span class="bash"> /app
-</span>
-<span class="hljs-keyword">RUN</span><span class="bash"> GIT_LFS_SKIP_SMUDGE=1 git <span class="hljs-built_in">clone</span> https://&lt;name&gt;:&lt;token&gt;@gitlab.com/&lt;USER&gt;/&lt;REPO&gt;.git myrepo
-</span>
-<span class="hljs-keyword">WORKDIR</span><span class="bash"> /app/myrepo
-</span>
-<span class="hljs-keyword">RUN</span><span class="bash"> yarn</span></code></pre>
+# install git-lfs
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh |  bash
+RUN apt-get install -y git-lfs
+
+WORKDIR /app
+
+RUN GIT_LFS_SKIP_SMUDGE=1 git clone https://&lt;name&gt;:&lt;token&gt;@gitlab.com/&lt;USER&gt;/&lt;REPO&gt;.git myrepo
+
+WORKDIR /app/myrepo
+
+RUN yarn</code></pre>
 <h2 id="构建镜像">构建镜像</h2>
 <p>在 Dockerfile 所在目录下:</p>
 <pre><code class="hljs bash">docker build -t my-app .</code></pre>
