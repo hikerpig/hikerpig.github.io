@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title> · HP goes FE</title><meta name="description" content="Luhn
+Given a number determine whether or not it is valid per the Luhn formula.
+The Luhn algorithm is a simple checksum formula used to validate a vari"><meta name="keywords" content><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a></a></h1></div><div class="post-content"><h1 id="luhn">Luhn</h1>
+<p>Given a number determine whether or not it is valid per the Luhn formula.</p>
+<p>The <a href="https://en.wikipedia.org/wiki/Luhn_algorithm" target="_blank" rel="noopener">Luhn algorithm</a> is a simple checksum formula used to validate a variety of identification numbers, such as credit card numbers and Canadian Social Insurance Numbers.</p>
+<p>The task is to check if a given string is valid.</p>
+<h2 id="validating-a-number">Validating a Number</h2>
+<p>Strings of length 1 or less are not valid. Spaces are allowed in the input, but they should be stripped before checking. All other non-digit characters are disallowed.</p>
+<h2 id="example-1-valid-credit-card-number">Example 1: valid credit card number</h2>
+<pre><code class="hljs text">4539 1488 0343 6467</code></pre>
+<p>The first step of the Luhn algorithm is to double every second digit, starting from the right. We will be doubling</p>
+<pre><code class="hljs text">4_3_ 1_8_ 0_4_ 6_6_</code></pre>
+<p>If doubling the number results in a number greater than 9 then subtract 9 from the product. The results of our doubling:</p>
+<pre><code class="hljs text">8569 2478 0383 3437</code></pre>
+<p>Then sum all of the digits:</p>
+<pre><code class="hljs text">8+5+6+9+2+4+7+8+0+3+8+3+3+4+3+7 = 80</code></pre>
+<p>If the sum is evenly divisible by 10, then the number is valid. This number is valid!</p>
+<h2 id="example-2-invalid-credit-card-number">Example 2: invalid credit card number</h2>
+<pre><code class="hljs text">8273 1232 7352 0569</code></pre>
+<p>Double the second digits, starting from the right</p>
+<pre><code class="hljs text">7253 2262 5312 0539</code></pre>
+<p>Sum the digits</p>
+<pre><code class="hljs text">7+2+5+3+2+2+6+2+5+3+1+2+0+5+3+9 = 57</code></pre>
+<p>57 is not evenly divisible by 10, so this number is not valid.</p>
+<h2 id="rust-installation">Rust Installation</h2>
+<p>Refer to the <a href="https://exercism.io/tracks/rust/learning" target="_blank" rel="noopener">exercism help page</a> for Rust installation and learning resources.</p>
+<h2 id="writing-the-code">Writing the Code</h2>
+<p>Execute the tests with:</p>
+<pre><code class="hljs bash">$ cargo <span class="hljs-built_in">test</span></code></pre>
+<p>All but the first test have been ignored. After you get the first test to pass, open the tests source file which is located in the <code>tests</code> directory and remove the <code>#[ignore]</code> flag from the next test and get the tests to pass again. Each separate test is a function with <code>#[test]</code> flag above it. Continue, until you pass every test.</p>
+<p>If you wish to run all tests without editing the tests source file, use:</p>
+<pre><code class="hljs bash">$ cargo <span class="hljs-built_in">test</span> -- --ignored</code></pre>
+<p>To run a specific test, for example <code>some_test</code>, you can use:</p>
+<pre><code class="hljs bash">$ cargo <span class="hljs-built_in">test</span> some_test</code></pre>
+<p>If the specific test is ignored use:</p>
+<pre><code class="hljs bash">$ cargo <span class="hljs-built_in">test</span> some_test -- --ignored</code></pre>
+<p>To learn more about Rust tests refer to the <a href="https://doc.rust-lang.org/book/ch11-02-running-tests.html" target="_blank" rel="noopener">online test documentation</a></p>
+<p>Make sure to read the <a href="https://doc.rust-lang.org/book/ch07-02-modules-and-use-to-control-scope-and-privacy.html" target="_blank" rel="noopener">Modules</a> chapter if you haven't already, it will help you with organizing your files.</p>
+<h2 id="feedback-issues-pull-requests">Feedback, Issues, Pull Requests</h2>
+<p>The <a href="https://github.com/exercism/rust" target="_blank" rel="noopener">exercism/rust</a> repository on GitHub is the home for all of the Rust exercises. If you have feedback about an exercise, or want to help implement new exercises, head over there and create an issue. Members of the rust track team are happy to help!</p>
+<p>If you want to know more about Exercism, take a look at the <a href="https://github.com/exercism/docs/blob/master/contributing-to-language-tracks/README.md" target="_blank" rel="noopener">contribution guide</a>.</p>
+<h2 id="source">Source</h2>
+<p>The Luhn Algorithm on Wikipedia <a href="http://en.wikipedia.org/wiki/Luhn_algorithm" target="_blank" rel="noopener">http://en.wikipedia.org/wiki/Luhn_algorithm</a></p>
+<h2 id="submitting-incomplete-solutions">Submitting Incomplete Solutions</h2>
+<p>It's possible to submit an incomplete solution so you can see how others have completed the exercise.</p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-12-20</span><i class="fa fa-tag"></i></div></div></div></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://hikerpig.github.io/2018/12/20/media/README/,HP goes FE,,;" class="fa fa-twitter"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a role="navigation" href="/2018/12/22/2018-12-22-svg-blur-and-css-text-shadow/" title="CSS 中的两种模糊半径" class="btn">上一篇</a></li><li class="next pagbuttons"><a role="navigation" href="/2018/11/15/2018-11-15-font-metrics-in-browser/" title="浏览器中的字体信息测量" class="btn">下一篇</a></li></ul></div><div id="comments"><div id="gitalk-container"></div></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+  clientID: '0b21579fda2f1d2e73f4',
+  clientSecret: 'abc0351a314cc46bb3d58b6dad62c670c2d1e8f9',
+  repo: 'hikerpig.github.io',
+  owner: 'hikerpig',
+  admin: 'hikerpig',
+  labels: ['Gitalk'],
+  id: '2018/12/20/media/README/',
+  title: '',
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+
+gitalk.render('gitalk-container')
+</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-49433257-1');
+</script><script src="https://cdn.jsdelivr.net/npm/mermaid@8.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({theme: "default"});
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/styles/atom-one-dark.css"><script src="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/lib/highlight.js"></script><script>hljs.initHighlightingOnLoad();
+</script></body></html>

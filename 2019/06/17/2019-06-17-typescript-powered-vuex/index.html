@@ -1,0 +1,171 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>使用 Typescript 加强 Vuex 使用体验 · HP goes FE</title><meta name="description" content="Typescript powered vuex, 使用 Typescript 加强 Vuex 使用体验"><meta name="keywords" content="Vuex,Typescript"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>使用 Typescript 加强 Vuex 使用体验</a></h1></div><div class="post-content"><h1 id="碰到的问题">碰到的问题</h1>
+<h2 id="如履针毡的状态管理和业务逻辑调用">如履针毡的状态管理和业务逻辑调用</h2>
+<p>Vuex 使用了统一的 <code>dispatch</code>/<code>commit</code> 方法去触发 Action 和 Mutation, 如果使用嵌套的 module, Vuex 还会解析命名空间，以找到正确的 Action/Mutation 函数。</p>
+<p>对于组件来说很友好，但是对于项目维护来说可能就稍显痛苦。虽然对状态的更改都从视图逻辑里分离出来放在了 store 文件夹下，一目了然，但是对于触发 Action 的组件来说，维持与 store 部分的函数签名和接口统一，就不得不靠全局搜索了（由此催发了一些 Vuex 下的最佳实践，例如动作名称都用 CAPITAL_SNAKE_CASE 命名法，或是抽取出 mutation-types.js 文件）。</p>
+<p>随着项目的推进，一旦 Action 有变动（增减参数数量或是改变类型等等），项目里有5个地方用到了它，而你粗心地只改了 4 个地方，在一个犄角旮旯的平时不会用到也没有测试覆盖的地方，一个炸弹默默地就冒了出来。</p>
+<p>在 Javascript 能力的限制下，只好靠命名规范和小心翼翼（不断搜索和确认修改）来规避的问题。其实借助 Typescript 强大的类型推断能力，这种心智负担是完全可以避免的。</p>
+<h1 id="解决方案">解决方案</h1>
+<p>vuex 的 d.ts 文件提供了一些很有用的类型，不过里面有好多 any, 我们其实可以在其之上再细化一下类型限制。</p>
+<h2 id="关键代码">关键代码</h2>
+<p>这个文件导出了一些类型，以及两个需要传入类型的高阶函数 <code>makeDispatcher</code> 和 <code>makeMutator</code>，具体使用可以看再之后的示例。</p>
+<pre><code class="hljs typescript"><span class="hljs-comment">// vuex-util.ts</span>
+<span class="hljs-keyword">import</span> &#123; ActionContext, Store, Module &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'vuex'</span>
+
+<span class="hljs-keyword">type</span> DictOf&lt;T&gt; = &#123;[key: <span class="hljs-built_in">string</span>]: T &#125;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> ActionDescriptor = [<span class="hljs-built_in">any</span>, <span class="hljs-built_in">any</span>]
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> ModuleActions&lt;Context, Descriptor <span class="hljs-keyword">extends</span> DictOf&lt;ActionDescriptor&gt;&gt; = &#123;
+  [K <span class="hljs-keyword">in</span> keyof Descriptor]: <span class="hljs-function">(<span class="hljs-params">ctx: Context, payload: Descriptor[K][0]</span>) =&gt;</span> Descriptor[K][<span class="hljs-number">1</span>]
+&#125;
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> ModuleMutations&lt;State, PayloadTree&gt; = &#123;
+  [K <span class="hljs-keyword">in</span> keyof PayloadTree]: <span class="hljs-function">(<span class="hljs-params">state: State, payload: PayloadTree[K]</span>) =&gt;</span> <span class="hljs-built_in">any</span>
+&#125;
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">isStore</span>(<span class="hljs-params">context: <span class="hljs-built_in">any</span></span>) </span>&#123;
+  <span class="hljs-keyword">return</span> (<span class="hljs-string">'strict'</span> <span class="hljs-keyword">in</span> context)
+&#125;
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeDispatcher</span>&lt;<span class="hljs-title">Context</span> <span class="hljs-title">extends</span> <span class="hljs-title">ActionContext</span>&lt;<span class="hljs-title">any</span>, <span class="hljs-title">any</span>&gt;, <span class="hljs-title">Descriptor</span> <span class="hljs-title">extends</span> <span class="hljs-title">DictOf</span>&lt;<span class="hljs-title">ActionDescriptor</span>&gt;&gt;(<span class="hljs-params">ns?: <span class="hljs-built_in">string</span></span>) </span>&#123;
+  <span class="hljs-keyword">return</span> &lt;K <span class="hljs-keyword">extends</span> keyof Descriptor&gt;(
+    context: Store&lt;<span class="hljs-built_in">any</span>&gt; | Context,
+    action: K,
+    payload: Descriptor[K][<span class="hljs-number">0</span>],
+  ) =&gt; &#123;
+    <span class="hljs-keyword">const</span> _context: <span class="hljs-built_in">any</span> = context
+    <span class="hljs-keyword">let</span> actionName = action <span class="hljs-keyword">as</span> <span class="hljs-built_in">string</span>
+    <span class="hljs-keyword">if</span> (ns &amp;&amp; isStore(context)) &#123;
+      actionName = <span class="hljs-string">`<span class="hljs-subst">$&#123;ns&#125;</span>/<span class="hljs-subst">$&#123;action&#125;</span>`</span>
+    &#125;
+    <span class="hljs-keyword">return</span> _context.dispatch(actionName, payload)
+  &#125;
+&#125;
+
+
+<span class="hljs-comment">/**
+ * 当此模块为 namespaced 的时候, `$store.commit(mutation)` 和在 action handler 内的 `ctx.commit(mutation)` 是不一样的
+ */</span>
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">makeMutator</span>&lt;<span class="hljs-title">Context</span> <span class="hljs-title">extends</span> <span class="hljs-title">ActionContext</span>&lt;<span class="hljs-title">any</span>, <span class="hljs-title">any</span>&gt;, <span class="hljs-title">MutationPayloadTree</span>&gt;(<span class="hljs-params">ns?: <span class="hljs-built_in">string</span></span>) </span>&#123;
+  <span class="hljs-keyword">return</span> &lt;K <span class="hljs-keyword">extends</span> keyof MutationPayloadTree&gt;(
+    context: Store&lt;<span class="hljs-built_in">any</span>&gt; | Context,
+    mutation: K,
+    payload: MutationPayloadTree[K],
+  ) =&gt; &#123;
+    <span class="hljs-keyword">let</span> mutationName = mutation <span class="hljs-keyword">as</span> <span class="hljs-built_in">string</span>
+    <span class="hljs-keyword">if</span> (ns &amp;&amp; isStore(context)) &#123;
+      mutationName = <span class="hljs-string">`<span class="hljs-subst">$&#123;ns&#125;</span>/<span class="hljs-subst">$&#123;mutation&#125;</span>`</span>
+    &#125;
+    <span class="hljs-keyword">return</span> context.commit(mutationName, payload)
+  &#125;
+&#125;</code></pre>
+<h2 id="使用示例-一个-todo-app">使用示例, 一个 Todo App</h2>
+<h3 id="导出-vuex-module">导出 Vuex Module</h3>
+<p>首先列一下最后导出的 Vuex Module 声明:</p>
+<pre><code class="hljs typescript"><span class="hljs-keyword">import</span> &#123; ActionContext, Module &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'vuex'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> VUEX_NS = <span class="hljs-string">'todo'</span>
+
+<span class="hljs-comment">/** 此对象接收类型变量, 分别代表 module state 和 rootState 类型 */</span>
+<span class="hljs-keyword">type</span> TodoContext = ActionContext&lt;TodosState, GlobalState&gt;
+
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> &#123;
+  namespaced: <span class="hljs-literal">true</span>,
+  state: &#123;...&#125;,
+  actions: ACTIONS,
+  mutations: MUTATIONS,
+&#125; <span class="hljs-keyword">as</span> Module&lt;TodosState, GlobalState&gt;</code></pre>
+<h3 id="简单的-actions-和-mutations">简单的 ACTIONS 和 MUTATIONS</h3>
+<p>声明 ACTIONS，非常简单地从 localStorage 里取出数据，然后调用 <code>SET_TODOS</code> mutation:</p>
+<pre><code class="hljs typescript"><span class="hljs-keyword">type</span> ActionDescriptors = &#123;
+  GET_USER_TODOS: [&#123;&#125;, <span class="hljs-built_in">void</span>]
+&#125;
+
+<span class="hljs-keyword">const</span> ACTIONS: ModuleActions&lt;TodoContext, ActionDescriptors&gt; = &#123;
+  GET_USER_TODOS(ctx) &#123;
+    <span class="hljs-keyword">const</span> todos = <span class="hljs-built_in">JSON</span>.parse(localStorage.getItem(<span class="hljs-string">'todoItems'</span>)) || []
+    ctx.dispatch(<span class="hljs-string">'SET_TODOS'</span>, &#123; todos &#125;)
+  &#125;,
+&#125;</code></pre>
+<p>接下来实现 MUTAIONS，先声明好所有 Mutation 需要的参数，并使用工具类型 <code>ModuleMutations</code> 标注即将给 Vuex Module 传递的 mutations 对象：</p>
+<pre><code class="hljs typescript"><span class="hljs-keyword">type</span> MutationPayloads = &#123;
+  SET_TODOS: &#123; todos: TodoItem[] &#125;
+&#125;
+
+<span class="hljs-keyword">const</span> MUTATIONS: ModuleMutations&lt;TodosState, MutationPayloads&gt; = &#123;
+&#125;</code></pre>
+<p>此时，TS 编译器会提示错误，是因为 <code>ModuleMutations</code> 这个工具类型要求包含第二个类型参数中所有的 key，一个空 Object 没有实现 <code>MutationPayloads</code> 所要求的 <code>SET_TODOS</code> 方法，因此会抛出 TS Error。</p>
+<pre><code class="hljs typescript"> <span class="hljs-keyword">const</span>  MUTATIONS:  ModuleMutations&lt;TodosState,  MutationPayloads&gt; 
+
+<span class="hljs-string">'MUTATIONS'</span> is declared but its value is never read.ts(<span class="hljs-number">6133</span>)
+
+Property <span class="hljs-string">'SET_TODOS'</span> is missing <span class="hljs-keyword">in</span> <span class="hljs-keyword">type</span> <span class="hljs-string">'&#123;&#125;'</span> but required <span class="hljs-keyword">in</span> <span class="hljs-keyword">type</span> <span class="hljs-string">'ModuleMutations&lt;TodosState, MutationPayloads&gt;'</span>.ts(<span class="hljs-number">2741</span>)</code></pre>
+<p>接下来可以看看顺滑的编辑器提示体验：</p>
+<figure>
+<img src="https://i.loli.net/2019/06/18/5d08ee57943b421476.gif" alt="实现 MUTATIONS"><figcaption>实现 MUTATIONS</figcaption>
+</figure>
+<p>声明好 <code>MutationPayloads</code> 以后，可以借助一个工具函数生成一个新的类似于 <code>commit</code> 的函数：</p>
+<pre><code class="hljs ts"><span class="hljs-comment">/**
+ * 一个带有类型变量的函数，使用示例 todoItemMutate(actionContext, 'mutationName', mutationPayload)
+ */</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> todoItemMutate = makeMutator&lt;TodoContext, MutationPayloads&gt;(VUEX_NS)</code></pre>
+<p>让我们来改一改 <code>GET_USER_TODOS</code> 里提交 mutation 的方式，同时享受到代码提示：</p>
+<figure>
+<img src="https://i.loli.net/2019/06/18/5d08f24166d5812315.gif" alt="调用 mutator"><figcaption>调用 mutator</figcaption>
+</figure>
+<p>好的，现在可以使用另一个工具函数，生成一个新的带有类型限制的类似于 <code>dispatch</code> 的函数，并在别处调用：</p>
+<pre><code class="hljs ts"><span class="hljs-comment">/**
+ * 一个带有类型变量的函数，使用示例 todoItemDispatch(actionContext, 'actionName', actionName)
+ */</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> todoItemDispatch = makeDispatcher&lt;TodoContext, ActionDescriptors&gt;(VUEX_NS)
+
+...
+
+todoItemDispatch(store, <span class="hljs-string">'GET_USER_TODOS'</span>, &#123;&#125;)</code></pre>
+<h3 id="然后需求改了">然后，需求改了！</h3>
+<p>此时你决定 TodoApp 需要能支持多用户，每个用户有自己的记录。那么 ACTIONS 接口说明需要更改：</p>
+<pre><code class="hljs undefined"><span class="hljs-keyword">type</span> <span class="hljs-type">ActionDescriptors</span> = &#123;
+  <span class="hljs-type">GET_USER_TODOS</span>: [&#123; userName: string &#125;, void]
+&#125;</code></pre>
+<p>此时编译器会报错，在上一节最后的 <code>todoItemDispatch</code> 调用处：</p>
+<pre><code class="hljs ts">Argument of <span class="hljs-keyword">type</span> <span class="hljs-string">'&#123;&#125;'</span> is not assignable to parameter of <span class="hljs-keyword">type</span> <span class="hljs-string">'&#123; userName: string; &#125;'</span>.
+  Property <span class="hljs-string">'userName'</span> is missing <span class="hljs-keyword">in</span> <span class="hljs-keyword">type</span> <span class="hljs-string">'&#123;&#125;'</span> but required <span class="hljs-keyword">in</span> <span class="hljs-keyword">type</span> <span class="hljs-string">'&#123; userName: string; &#125;'</span>.ts(<span class="hljs-number">2345</span>)
+todo.ts(., .): <span class="hljs-string">'userName'</span> is declared here.</code></pre>
+<p>好的，现在开心地来到出错地方，改一改:</p>
+<pre><code class="hljs ts">todoItemDispatch(store, <span class="hljs-string">'GET_USER_TODOS'</span>, &#123;&#125;)(store, <span class="hljs-string">'GET_USER_TODOS'</span>, &#123; userName: <span class="hljs-string">'hikerpig'</span> &#125;)</code></pre>
+<p>没有全局搜索，不用做无谓的参数检查单元测试。</p>
+<h1 id="总结">总结</h1>
+<h2 id="优点">优点</h2>
+<ul>
+<li>优化开发时的体验</li>
+<li>不改变原先 actions 和 mutations 成员函数实现的方式</li>
+</ul>
+<h2 id="缺点">缺点</h2>
+<ul>
+<li>接口描述的类型需要提前单独声明，没法直接使用函数的签名</li>
+<li>没法把所有类型增强合并为一个统一的 <code>dispath</code> 函数，其他文件里的代码若想享受这个类型增强，必须显式地 import <code>todoItemDispatch</code>/<code>todoItemMutate</code> 方法，略微麻烦</li>
+</ul>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-06-17</span><i class="fa fa-tag"></i><a href="/categories/前端/" title="前端" class="tag">前端 </a><a href="/tags/Vuex/" title="Vuex" class="tag">Vuex </a><a href="/tags/Typescript/" title="Typescript" class="tag">Typescript </a></div></div></div></div><div id="toc"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#碰到的问题"><span class="toc-text">碰到的问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#如履针毡的状态管理和业务逻辑调用"><span class="toc-text">如履针毡的状态管理和业务逻辑调用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#解决方案"><span class="toc-text">解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#关键代码"><span class="toc-text">关键代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用示例-一个-todo-app"><span class="toc-text">使用示例, 一个 Todo App</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#导出-vuex-module"><span class="toc-text">导出 Vuex Module</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#简单的-actions-和-mutations"><span class="toc-text">简单的 ACTIONS 和 MUTATIONS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#然后需求改了"><span class="toc-text">然后，需求改了！</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#总结"><span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#优点"><span class="toc-text">优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#缺点"><span class="toc-text">缺点</span></a></li></ol></li></ol></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://hikerpig.github.io/2019/06/17/2019-06-17-typescript-powered-vuex/,HP goes FE,使用 Typescript 加强 Vuex 使用体验,;" class="fa fa-twitter"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a role="navigation" href="/2019/05/13/2019-05-13-Fastblur-implemetation-with-rust/" title="图像近似高斯模糊的快速实现，以及 WebAssembly 模块的导出" class="btn">下一篇</a></li></ul></div><div id="comments"><div id="gitalk-container"></div></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+  clientID: '0b21579fda2f1d2e73f4',
+  clientSecret: 'abc0351a314cc46bb3d58b6dad62c670c2d1e8f9',
+  repo: 'hikerpig.github.io',
+  owner: 'hikerpig',
+  admin: 'hikerpig',
+  labels: ['Gitalk'],
+  id: '2019/06/17/2019-06-17-typescript-powered-vuex/',
+  title: '使用 Typescript 加强 Vuex 使用体验',
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+
+gitalk.render('gitalk-container')
+</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-49433257-1');
+</script><script src="https://cdn.jsdelivr.net/npm/mermaid@8.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({theme: "default"});
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/styles/atom-one-dark.css"><script src="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/lib/highlight.js"></script><script>hljs.initHighlightingOnLoad();
+</script></body></html>

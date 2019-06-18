@@ -2,9 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://hikerpig.github.io/2019/06/17/2019-06-17-typescript-powered-vuex/</loc>
+    
+    <lastmod>2019-06-18T15:01:01.262Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2018/07/03/2018-07-03-Vuex-Dynamic-Module-Hints/</loc>
+    
+    <lastmod>2019-06-05T03:04:53.163Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://hikerpig.github.io/2018/04/02/2018-04-02-Customize-Error-in-Typescript/</loc>
     
-    <lastmod>2019-05-25T06:43:08.674Z</lastmod>
+    <lastmod>2019-06-04T06:35:07.818Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2019/03/06/2019-03-06-Decode-Video-Using-FFMpeg-In-Browser/</loc>
+    
+    <lastmod>2019-05-31T02:34:35.926Z</lastmod>
     
   </url>
   
@@ -30,16 +51,16 @@
   </url>
   
   <url>
-    <loc>http://hikerpig.github.io/2019/05/05/2019-05-05-Benchmark-WASM-with-d8/</loc>
+    <loc>http://hikerpig.github.io/2018/12/20/media/README/</loc>
     
-    <lastmod>2019-05-07T03:09:36.652Z</lastmod>
+    <lastmod>2019-05-21T02:32:53.564Z</lastmod>
     
   </url>
   
   <url>
-    <loc>http://hikerpig.github.io/2019/03/06/2019-03-06-Decode-Video-Using-FFMpeg-In-Browser/</loc>
+    <loc>http://hikerpig.github.io/2019/05/05/2019-05-05-Benchmark-WASM-with-d8/</loc>
     
-    <lastmod>2019-04-03T16:06:00.419Z</lastmod>
+    <lastmod>2019-05-07T03:09:36.652Z</lastmod>
     
   </url>
   
@@ -54,13 +75,6 @@
     <loc>http://hikerpig.github.io/2019/02/15/2019-02-14-Setup-CI-in-docker/</loc>
     
     <lastmod>2019-02-18T11:52:23.883Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2018/07/03/2018-07-03-Vuex-Dynamic-Module-Hints/</loc>
-    
-    <lastmod>2019-01-07T05:50:06.415Z</lastmod>
     
   </url>
   
