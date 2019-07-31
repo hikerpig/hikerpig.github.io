@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: hikerpig.github.io 
+Token: 4e31393b58b90ddc7175685145359ece3c4286018be29e8cbb729ec29135fbec
