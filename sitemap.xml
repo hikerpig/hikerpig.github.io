@@ -2,9 +2,44 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://hikerpig.github.io/2019/08/20/2019-08-20-Run-Image-Optimize-With-Cli/</loc>
+    
+    <lastmod>2019-08-20T11:09:12.030Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2019/02/15/2019-03-08-Tips-On-Viewing-Logs/</loc>
+    
+    <lastmod>2019-08-20T10:19:05.390Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2017/08/05/2017-08-05-Holy-Awesome-Spacemacs/</loc>
+    
+    <lastmod>2019-08-20T06:10:14.204Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2013/12/14/2014-03-26-web%E5%BC%80%E5%8F%91%E5%9B%BD%E5%86%85%E5%B8%B8%E7%94%A8%E6%BA%90/</loc>
+    
+    <lastmod>2019-08-01T03:18:09.744Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2017/09/25/2017-09-25-ES6+Babel-little-bug-under-IE11/</loc>
+    
+    <lastmod>2019-07-19T06:27:00.003Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://hikerpig.github.io/2019/06/17/2019-06-17-typescript-powered-vuex/</loc>
     
-    <lastmod>2019-06-18T15:01:01.262Z</lastmod>
+    <lastmod>2019-06-19T06:44:04.000Z</lastmod>
     
   </url>
   
@@ -51,23 +86,9 @@
   </url>
   
   <url>
-    <loc>http://hikerpig.github.io/2018/12/20/media/README/</loc>
-    
-    <lastmod>2019-05-21T02:32:53.564Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://hikerpig.github.io/2019/05/05/2019-05-05-Benchmark-WASM-with-d8/</loc>
     
     <lastmod>2019-05-07T03:09:36.652Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2019/03/08/2019-03-08-Tips-On-Viewing-Logs/</loc>
-    
-    <lastmod>2019-03-08T06:00:52.239Z</lastmod>
     
   </url>
   
@@ -226,13 +247,6 @@
   </url>
   
   <url>
-    <loc>http://hikerpig.github.io/2017/08/05/2017-08-05-Holy-Awesome-Spacemacs/</loc>
-    
-    <lastmod>2018-08-26T08:51:51.720Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://hikerpig.github.io/2017/08/22/2017-08-22-gulp-watch-for-poor-cpu/</loc>
     
     <lastmod>2018-08-26T08:51:43.865Z</lastmod>
@@ -243,13 +257,6 @@
     <loc>http://hikerpig.github.io/2017/09/07/2017-09-07-Using-Object.create/</loc>
     
     <lastmod>2018-08-26T08:51:38.530Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2017/09/25/2017-09-25-ES6+Babel-little-bug-under-IE11/</loc>
-    
-    <lastmod>2018-08-26T08:51:33.168Z</lastmod>
     
   </url>
   
@@ -271,13 +278,6 @@
     <loc>http://hikerpig.github.io/2018/07/31/2018-07-31-Goodbye%20My%20Santa%20Monica%20Dream/</loc>
     
     <lastmod>2018-08-26T08:49:59.529Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2013/12/14/2014-03-26-web%E5%BC%80%E5%8F%91%E5%9B%BD%E5%86%85%E5%B8%B8%E7%94%A8%E6%BA%90/</loc>
-    
-    <lastmod>2018-08-05T05:56:32.242Z</lastmod>
     
   </url>
   

@@ -13,7 +13,7 @@ html {
 
 body {
 	color: rgba(0, 0, 0, 0.7);
-	font-family: 'PingHei', 'PingFang SC', Helvetica Neue, 'Work Sans', 'Hiragino Sans GB', 'Microsoft YaHei', SimSun, sans-serif;
+	font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif;
 	font-size: 15px;
 	width: 100%;
 	margin: 0 auto 30px auto;
@@ -857,7 +857,7 @@ a.btn {
   width: $toc-width;
   top: 30px;
   font-size: 13px;
-  color: $toc-normal-color - 1;
+  color: $toc-normal-color;
   box-sizing: border-box;
 
   border: 1px solid #f0f0f0;
