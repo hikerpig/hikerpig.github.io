@@ -1,4 +1,38 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>HP goes FE</title><meta name="description" content="Hikerpig 万事记"><meta name="keywords" content="Front-End,Programming,Hexo"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/" class="current">首页</a></li><li><a href="/archives">归档</a></li></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2014/03/21/2014-03-21-git小技巧七七八八/">git小技巧七七八八</a></h3></div><div class="post-content"><p></p><h2 id="利用git-rev-parse">利用git rev-parse</h2>
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>HP goes FE</title><meta name="description" content="Hikerpig 万事记"><meta name="keywords" content="Front-End,Programming,Hexo"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/" class="current">首页</a></li><li><a href="/archives">归档</a></li></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2014/03/23/2014-03-23-git-hook中的$GIT_DIR变量/">git hook中的$GIT_DIR</a></h3></div><div class="post-content"><p></p><p>一直使用githook post-update来部署我的jekyll博客，每次push到远程git仓库的时候，在vps上的生产目录会自动更新和重新生成页面和静态资源， post-update文件是这样的：</p>
+<pre><code class="hljs bash"><span class="hljs-meta">#!/bin/usr/zsh
+</span>
+branchName=$(git rev-parse --symbolic --abbrev-ref <span class="hljs-variable">$1</span>)
+HOME=/home/******
+BLOG_DIR=<span class="hljs-variable">$HOME</span>/*******
+
+<span class="hljs-built_in">cd</span> <span class="hljs-variable">$BLOG_DIR</span>
+git pull origin <span class="hljs-variable">$branchName</span>
+
+<span class="hljs-keyword">if</span> [ <span class="hljs-variable">$branchName</span> = <span class="hljs-string">"master"</span> ]; <span class="hljs-keyword">then</span>
+  [ -s <span class="hljs-variable">$HOME</span>/.nvm/nvm.sh ] &amp;&amp; . <span class="hljs-variable">$HOME</span>/.nvm/nvm.sh <span class="hljs-comment"># This loads NVM</span>
+  <span class="hljs-built_in">export</span> PATH=<span class="hljs-variable">$PATH</span>:<span class="hljs-variable">$HOME</span>/.rvm/bin <span class="hljs-comment"># Add RVM to PATH for scripting</span>
+  nvm use 113
+  <span class="hljs-variable">$HOME</span>/.rvm/bin/rvm use ruby-2.0.0
+  jekyll build
+  make front
+<span class="hljs-keyword">fi</span>
+
+<span class="hljs-built_in">exec</span> git update-server-info</code></pre>
+<p>但是执行的时候会出现一个奇怪的问题：</p>
+<pre><code class="hljs bash">Counting objects: 5, <span class="hljs-keyword">done</span>.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), <span class="hljs-keyword">done</span>.
+Writing objects: 100% (3/3), 281 bytes | 0 bytes/s, <span class="hljs-keyword">done</span>.
+Total 3 (delta 2), reused 0 (delta 0)
+remote: fatal: Not a git repository: <span class="hljs-string">'.'</span>
+...</code></pre>
+<p>最后的这一句表示出错了，而且git pull也没有正确进行。</p>
+<p>有人在<a href title="http://stackoverflow.com/questions/4043609/getting-fatal-not-a-git-repository-when-using-post-update-hook-to-execut">这个问题</a>中谈到解决方法，改进的部分在这里：</p>
+<pre><code class="hljs bash"><span class="hljs-built_in">cd</span> <span class="hljs-variable">$BLOG_DIR</span> || <span class="hljs-built_in">exit</span>
+<span class="hljs-built_in">unset</span> GIT_DIR
+git pull origin <span class="hljs-variable">$branchName</span></code></pre>
+<p>之后果然就可以正确地pull代码了。</p>
+<p></p></div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2014-03-23</span><i class="fa fa-tag"></i><a href="/categories/工具/" title="工具" class="tag">工具 </a><a href="/tags/Git/" title="Git" class="tag">Git </a></div></div></div></div><div class="post animated fadeInDown"><div class="post-title"><h3><a href="/2014/03/21/2014-03-21-git小技巧七七八八/">git小技巧七七八八</a></h3></div><div class="post-content"><p></p><h2 id="利用git-rev-parse">利用git rev-parse</h2>
 <p>刚来公司的时候，电脑上的项目运行环境还没有搭配好，一些前端的改动只能推到测试服务器上才能看见效果。因此在开发的时候要频繁地切换和合并开发分支到与测试环境的部署相关联的测试分支上,频繁地手敲命令checkout -&gt; pull -&gt; 等代码p...pu...pul...pulled-&gt; merge-&gt; oh conflict!-&gt; fix conflict -&gt; push -&gt; checkout 然后才查看页面继续开发。 前面的各种点点点急刹人,于是我写了个小脚本,省下了敲分支名的时间:</p>
 <pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span>
 cur_branch=`git rev-parse --abbrev-ref HEAD`

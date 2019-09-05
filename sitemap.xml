@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://hikerpig.github.io/2019/09/04/2019-09-04-Detect-Computer-Resume-From-Sleep-In-Browser/</loc>
+    
+    <lastmod>2019-09-05T12:33:31.530Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2018/11/15/2018-11-15-font-metrics-in-browser/</loc>
+    
+    <lastmod>2019-08-28T10:39:34.166Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://hikerpig.github.io/2019/08/20/2019-08-20-Run-Image-Optimize-With-Cli/</loc>
     
     <lastmod>2019-08-20T11:09:12.030Z</lastmod>
@@ -96,13 +110,6 @@
     <loc>http://hikerpig.github.io/2019/02/15/2019-02-14-Setup-CI-in-docker/</loc>
     
     <lastmod>2019-02-18T11:52:23.883Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2018/11/15/2018-11-15-font-metrics-in-browser/</loc>
-    
-    <lastmod>2019-01-06T02:58:47.755Z</lastmod>
     
   </url>
   

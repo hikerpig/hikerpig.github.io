@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://hikerpig.github.io/"/>
-  <updated>2019-08-20T11:09:12.030Z</updated>
+  <updated>2019-09-05T12:33:31.530Z</updated>
   <id>http://hikerpig.github.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>在浏览器端检测电脑是否刚从休眠中醒来</title>
+    <link href="http://hikerpig.github.io/2019/09/04/2019-09-04-Detect-Computer-Resume-From-Sleep-In-Browser/"/>
+    <id>http://hikerpig.github.io/2019/09/04/2019-09-04-Detect-Computer-Resume-From-Sleep-In-Browser/</id>
+    <published>2019-09-03T16:00:00.000Z</published>
+    <updated>2019-09-05T12:33:31.530Z</updated>
+    
+    <content type="html"><![CDATA[<p>当电脑进入休眠状态，浏览器的一些持久功能会受到影响(例如 WebSocket 连接中断)，有时需要在从休眠状态中恢复过来的时候做一些检查和恢复工作。</p><h1 id="解决方案">解决方案</h1><h2 id="利用计时器">利用计时器</h2><pre><code class="hljs js"><span class="hljs-keyword">let</span> lastTime = (<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>()).getTime()<span class="hljs-comment">// 可能由于脚本计算量大，或是使用了 alert/confirm 等阻塞线程的函数，的确会有些小误差，可以忽略掉</span><span class="hljs-keyword">const</span> THRESHOLD = <span class="hljs-number">15000</span>setInterval(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;  <span class="hljs-keyword">const</span> currentTime = <span class="hljs-built_in">Date</span>.now()  <span class="hljs-keyword">if</span> (currentTime &gt; (lastTime + THRESHOLD)) &#123;    <span class="hljs-comment">// 刚醒来，做点什么呢</span>  &#125;  lastTime = currentTime&#125;, <span class="hljs-number">30000</span>); <span class="hljs-comment">// 30s 比较保守，可以根据业务需求来调整</span></code></pre><h1 id="参考">参考</h1><ul><li><a href="https://stackoverflow.com/questions/4079115/can-any-desktop-browsers-detect-when-the-computer-resumes-from-sleep" target="_blank" rel="noopener">Can any desktop browsers detect when the computer resumes from sleep?</a></li></ul>]]></content>
+    
+    <summary type="html">
+    
+      当电脑进入休眠状态，浏览器的一些持久功能会受到影响(例如 WebSocket 连接中断)，有时需要在从休眠状态中恢复过来的时候做一些检查和恢复工作
+    
+    </summary>
+    
+      <category term="前端" scheme="http://hikerpig.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
+    
+    
+      <category term="浏览器" scheme="http://hikerpig.github.io/tags/%E6%B5%8F%E8%A7%88%E5%99%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>命令行下的图片压缩工具</title>
@@ -264,9 +286,9 @@
     <link href="http://hikerpig.github.io/2018/11/15/2018-11-15-font-metrics-in-browser/"/>
     <id>http://hikerpig.github.io/2018/11/15/2018-11-15-font-metrics-in-browser/</id>
     <published>2018-11-14T16:00:00.000Z</published>
-    <updated>2019-01-06T02:58:47.755Z</updated>
+    <updated>2019-08-28T10:39:34.166Z</updated>
     
-    <content type="html"><![CDATA[<blockquote><p>题图来自 http://iamvdo.me/en/blog/css-font-metrics-line-height-and-vertical-align</p></blockquote><h1 id="为什么同样的-font-size-文字高度不一样">为什么同样的 font-size ，文字高度不一样？</h1><p>每个字体在设计的时候，都是基于一个 <a href="http://designwithfontforge.com/zh-CN/The_EM_Square.html" target="_blank" rel="noopener">EM Square</a>，这是活字印刷中字模的高度。</p><blockquote><p>在数字化字体中，em 是空间的数字化定义总量。在OpenType字体中，UPM或em大小通常是1000单位。在TrueType字体中，UPM约定是2的幂，通常是1024或2048。</p></blockquote><p>实际情况中，许多字体的内容高度其实是比 em box 要大的。</p><p>同是 <code>font-size: 30px</code> 情况下，此处的 Noto Sans JP 的字体空间就比 Kosugi Maru 要高。而且在字体框内，垂直方向上还有留白。</p><img src="//images-hikerpig.oss-cn-beijing.aliyuncs.com/image/fonts/noto-sans-jp-1.jpg" alt="undefined" title="undefined"><img src="//images-hikerpig.oss-cn-beijing.aliyuncs.com//image/fonts/kosugi-maru-1.jpg" alt="undefined" title="undefined"><p>垂直方向留白大小的计算公式，可以由字体文件中的定义得到：</p><blockquote><p>internal leading = ascent - descent - EM_size</p></blockquote><h1 id="代码片段">代码片段</h1><p>可以在<a href="https://jsfiddle.net/hikerpig/xkt3o4sd/4/" target="_blank" rel="noopener">这个 fiddle</a> 里看到结果。</p><h2 id="使用-canvas-度量文字宽度">使用 canvas 度量文字宽度</h2><pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getMetricsByCanvas</span>(<span class="hljs-params">canvas, str, font</span>) </span>&#123;  <span class="hljs-keyword">const</span> ctx = canvas.getContext(<span class="hljs-string">'2d'</span>)  ctx.font = font  <span class="hljs-built_in">console</span>.log(str, font, ctx.measureText(str))&#125;<span class="hljs-built_in">window</span>.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;  <span class="hljs-keyword">const</span> canvas = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'canvas'</span>)  <span class="hljs-built_in">document</span>.body.appendChild(canvas)  <span class="hljs-built_in">window</span>.canvas = canvas  getMetricsByCanvas(canvas, <span class="hljs-string">'字'</span>, <span class="hljs-string">'30px  Noto Sans JP'</span>) <span class="hljs-comment">// 字 30px  Noto Sans JP TextMetrics &#123;width: 30&#125;</span>&#125;</code></pre><p>不过此 API 是拿不到字符的高度的。就有一些比较黑的方法来估算字体的内容高度，例如使用大写字母 'M' 的宽度作为内功高度的近似。这些技巧其实都与字形设计的惯例有关，在拉丁字母中，'M' 是字形最为饱满和方正的字符，高度与宽度近似。</p><p>不过明显这个惯例对于以上两个日文字体<em>并不适用</em>。</p><p>汉字因为字形多数为饱满的方块字，用宽度去估计内容高度其实更容易，例如 '人' 和 '口' 就很好用。</p><h2 id="创建临时-dom-元素用于度量高度">创建临时 dom 元素用于度量高度</h2><p>能拿到更全的字形盒信息</p><pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getMetricsBySpan</span>(<span class="hljs-params">str, font</span>) </span>&#123;  <span class="hljs-keyword">var</span> d = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"span"</span>);  d.style.font = font;  d.textContent = str;  <span class="hljs-built_in">document</span>.body.appendChild(d);  <span class="hljs-keyword">const</span> emHeight = d.offsetHeight;  <span class="hljs-keyword">const</span> emWidth = d.offsetWidth;  <span class="hljs-built_in">console</span>.log(str, font, &#123; emWidth, emHeight &#125;)  <span class="hljs-built_in">document</span>.body.removeChild(d);&#125;getMetricsBySpan(<span class="hljs-string">'字'</span>, <span class="hljs-string">'30px  Noto Sans JP'</span>) <span class="hljs-comment">// 字 30px  Noto Sans JP &#123;emWidth: 30, emHeight: 45&#125;</span></code></pre><h1 id="稍微不那么简单但准确的方法">稍微不那么简单但准确的方法</h1><h2 id="基于-canvas-的-fontmetrics">基于 canvas 的 FontMetrics</h2><p><a href="https://github.com/soulwire/FontMetrics" target="_blank" rel="noopener">FontMetrics</a> 这个库，先清空 canvas，将文字渲染至 canvas 上，然后逐行统计 canvas 上的像素，由此可以知道文字的上下内容边界，再与 font size 换算，便可以得到字符的高度。</p><h2 id="opentype.js">opentype.js</h2><figure><img src="https://camo.githubusercontent.com/2eae816a7d7ec3155c6136a50cc7a939eee608ca/68747470733a2f2f7261772e6769746875622e636f6d2f6f70656e747970656a732f6f70656e747970652e6a732f6d61737465722f672f68656c6c6f2d776f726c642e706e67" alt="opentype.js"><figcaption>opentype.js</figcaption></figure><p><a href="https://opentype.js.org/" target="_blank" rel="noopener">opentype.js</a> 是一个优秀的解析 OpenType 字体的 js 库。以 ArrayBuffer 传入字体的数据，解析出所有 OpenType 标准数据，完全可以基于此写出符合自己需求的排版引擎。</p><pre><code class="hljs typescript"><span class="hljs-keyword">const</span> font = parse(buffer)<span class="hljs-keyword">const</span> g = font.charToGlyph(<span class="hljs-string">'字'</span>)<span class="hljs-keyword">const</span> bb = g.getBoundingBox()  <span class="hljs-comment">// 得出 &#123; x1, x2 , y1, y2 &#125;</span></code></pre><h1 id="参考">参考</h1><p><a href="https://stackoverflow.com/questions/1134586/how-can-you-find-the-height-of-text-on-an-html-canvas" target="_blank" rel="noopener">SO 上的一个问题</a></p><p><a href="https://www.freetype.org/freetype2/docs/glyphs/glyphs-3.html" target="_blank" rel="noopener">FreeType Glyph Metrics</a></p><p><a href="https://www.html5rocks.com/en/tutorials/canvas/texteffects/#toc-text-shadow-clipping" target="_blank" rel="noopener">Typographic effects in canvas</a></p><p><a href="http://iamvdo.me/en/blog/css-font-metrics-line-height-and-vertical-align" target="_blank" rel="noopener">Deep dive CSS: font metrics, line-height and vertical-align</a></p>]]></content>
+    <content type="html"><![CDATA[<blockquote><p>题图来自 http://iamvdo.me/en/blog/css-font-metrics-line-height-and-vertical-align</p></blockquote><h1 id="为什么同样的-font-size-文字高度不一样">为什么同样的 font-size ，文字高度不一样？</h1><p>每个字体在设计的时候，都是基于一个 <a href="http://designwithfontforge.com/zh-CN/The_EM_Square.html" target="_blank" rel="noopener">EM Square</a>，这是活字印刷中字模的高度。</p><blockquote><p>在数字化字体中，em 是空间的数字化定义总量。在OpenType字体中，UPM或em大小通常是1000单位。在TrueType字体中，UPM约定是2的幂，通常是1024或2048。</p></blockquote><p>实际情况中，许多字体的内容高度其实是比 em box 要大的。</p><p>同是 <code>font-size: 30px</code> 情况下，此处的 Noto Sans JP 的字体空间就比 Kosugi Maru 要高。而且在字体框内，垂直方向上还有留白。</p><img src="//images-hikerpig.oss-cn-beijing.aliyuncs.com/image/fonts/noto-sans-jp-1.jpg" alt="undefined" title="undefined"><img src="//images-hikerpig.oss-cn-beijing.aliyuncs.com//image/fonts/kosugi-maru-1.jpg" alt="undefined" title="undefined"><p>垂直方向留白大小的计算公式，可以由字体文件中的定义得到：</p><blockquote><p>internal leading = ascent - descent - EM_size</p></blockquote><h1 id="代码片段">代码片段</h1><p>可以在<a href="https://jsfiddle.net/hikerpig/xkt3o4sd/4/" target="_blank" rel="noopener">这个 fiddle</a> 里看到结果。</p><h2 id="使用-canvas-度量文字宽度">使用 canvas 度量文字宽度</h2><pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getMetricsByCanvas</span>(<span class="hljs-params">canvas, str, font</span>) </span>&#123;  <span class="hljs-keyword">const</span> ctx = canvas.getContext(<span class="hljs-string">'2d'</span>)  ctx.font = font  <span class="hljs-built_in">console</span>.log(str, font, ctx.measureText(str))&#125;<span class="hljs-built_in">window</span>.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;  <span class="hljs-keyword">const</span> canvas = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'canvas'</span>)  <span class="hljs-built_in">document</span>.body.appendChild(canvas)  <span class="hljs-built_in">window</span>.canvas = canvas  getMetricsByCanvas(canvas, <span class="hljs-string">'字'</span>, <span class="hljs-string">'30px  Noto Sans JP'</span>) <span class="hljs-comment">// 字 30px  Noto Sans JP TextMetrics &#123;width: 30&#125;</span>&#125;</code></pre><p>不过此 API 是拿不到字符的高度的。就有一些比较黑的方法来估算字体的内容高度，例如使用大写字母 'M' 的宽度作为内功高度的近似。这些技巧其实都与字形设计的惯例有关，在拉丁字母中，'M' 是字形最为饱满和方正的字符，高度与宽度近似。</p><p>不过明显这个惯例对于以上两个日文字体<em>并不适用</em>。</p><p>汉字因为字形多数为饱满的方块字，用宽度去估计内容高度其实更容易，例如 '人' 和 '口' 就很好用。</p><h2 id="创建临时-dom-元素用于度量高度">创建临时 dom 元素用于度量高度</h2><p>能拿到更全的字形盒信息</p><pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getMetricsBySpan</span>(<span class="hljs-params">str, font</span>) </span>&#123;  <span class="hljs-keyword">var</span> d = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">"span"</span>);  d.style.font = font;  d.textContent = str;  <span class="hljs-built_in">document</span>.body.appendChild(d);  <span class="hljs-keyword">const</span> emHeight = d.offsetHeight;  <span class="hljs-keyword">const</span> emWidth = d.offsetWidth;  <span class="hljs-built_in">console</span>.log(str, font, &#123; emWidth, emHeight &#125;)  <span class="hljs-built_in">document</span>.body.removeChild(d);&#125;getMetricsBySpan(<span class="hljs-string">'字'</span>, <span class="hljs-string">'30px  Noto Sans JP'</span>) <span class="hljs-comment">// 字 30px  Noto Sans JP &#123;emWidth: 30, emHeight: 45&#125;</span></code></pre><h1 id="稍微不那么简单但准确的方法">稍微不那么简单但准确的方法</h1><h2 id="基于-canvas-的-fontmetrics">基于 canvas 的 FontMetrics</h2><p><a href="https://github.com/soulwire/FontMetrics" target="_blank" rel="noopener">FontMetrics</a> 这个库，先清空 canvas，将文字渲染至 canvas 上，然后逐行统计 canvas 上的像素，由此可以知道文字的上下内容边界，再与 font size 换算，便可以得到字符的高度。</p><h2 id="opentype.js">opentype.js</h2><figure><img src="https://camo.githubusercontent.com/2eae816a7d7ec3155c6136a50cc7a939eee608ca/68747470733a2f2f7261772e6769746875622e636f6d2f6f70656e747970656a732f6f70656e747970652e6a732f6d61737465722f672f68656c6c6f2d776f726c642e706e67" alt><figcaption>opentype.js</figcaption></figure><p><a href="https://opentype.js.org/" target="_blank" rel="noopener">opentype.js</a> 是一个优秀的解析 OpenType 字体的 js 库。以 ArrayBuffer 传入字体的数据，解析出所有 OpenType 标准数据，完全可以基于此写出符合自己需求的排版引擎。</p><pre><code class="hljs typescript"><span class="hljs-keyword">const</span> font = parse(buffer)<span class="hljs-keyword">const</span> g = font.charToGlyph(<span class="hljs-string">'字'</span>)<span class="hljs-keyword">const</span> bb = g.getBoundingBox()  <span class="hljs-comment">// 得出 &#123; x1, x2 , y1, y2 &#125;</span></code></pre><h1 id="参考">参考</h1><p><a href="https://stackoverflow.com/questions/1134586/how-can-you-find-the-height-of-text-on-an-html-canvas" target="_blank" rel="noopener">SO 上的一个问题</a></p><p><a href="https://www.freetype.org/freetype2/docs/glyphs/glyphs-3.html" target="_blank" rel="noopener">FreeType Glyph Metrics</a></p><p><a href="https://www.html5rocks.com/en/tutorials/canvas/texteffects/#toc-text-shadow-clipping" target="_blank" rel="noopener">Typographic effects in canvas</a></p><p><a href="http://iamvdo.me/en/blog/css-font-metrics-line-height-and-vertical-align" target="_blank" rel="noopener">Deep dive CSS: font metrics, line-height and vertical-align</a></p>]]></content>
     
     <summary type="html">
     
@@ -532,28 +554,6 @@
     
     
       <category term="Javascript" scheme="http://hikerpig.github.io/tags/Javascript/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>给开发减压的 gulp.watch 配置</title>
-    <link href="http://hikerpig.github.io/2017/08/22/2017-08-22-gulp-watch-for-poor-cpu/"/>
-    <id>http://hikerpig.github.io/2017/08/22/2017-08-22-gulp-watch-for-poor-cpu/</id>
-    <published>2017-08-21T16:00:00.000Z</published>
-    <updated>2018-08-26T08:51:43.865Z</updated>
-    
-    <content type="html"><![CDATA[<p>Gulp 的文件监听使用了 <a href="https://github.com/shama/gaze" target="_blank" rel="noopener">gaze</a>，如果只看了 Gulp 的 API 文档可能会漏掉一些参数。</p><p><a href="https://github.com/gulpjs/gulp/blob/master/docs/API.md" target="_blank" rel="noopener">Gulp 文档</a> 中提到:</p><p><code>gulp.watch(glob[, opts], tasks)</code></p><pre><code class="hljs undefined">optsType: ObjectOptions, that are passed to gaze.</code></pre><p>options 包括:</p><ul><li><code>interval</code> {integer} Interval to pass to fs.watchFile</li><li><code>debounceDelay</code> {integer} Delay for events called in succession for the same file/event in milliseconds</li><li><code>mode</code> {string} Force the watch mode. Either 'auto' (default), 'watch' (force native events), or 'poll' (force stat polling).</li><li><code>cwd</code> {string} The current working directory to base file patterns from. Default is process.cwd()</li></ul><p>gaze 的设置参数中，感觉最有用却被遗漏的就是 <code>interval</code> 了，好多人提到 <a href="https://github.com/gulpjs/gulp/issues/634" target="_blank" rel="noopener">gulp.watch CPU 占用太高</a>，因为 gaze 默认 100ms 检查监听的文件状态。</p><p>如果监听文件太多导致 CPU 占用居高不下的话，可以考虑加大 <code>interval</code>:</p><pre><code class="hljs js">gulp.watch(blob, &#123;<span class="hljs-attr">interval</span>: <span class="hljs-number">500</span>&#125;, tasks)</code></pre><p>笔记本就不会呼呼乱叫了。</p>]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;p&gt;Gulp 的文件监听使用了 &lt;a href=&quot;https://github.com/shama/gaze&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;gaze&lt;/a&gt;，如果只看了 Gulp 的 API 文档可能会漏掉一些参数。&lt;/p&gt;
-&lt;p&gt;&lt;a hre
-      
-    
-    </summary>
-    
     
   </entry>
   
