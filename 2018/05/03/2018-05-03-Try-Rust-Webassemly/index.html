@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.8.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>Try Rust WebAssembly · HP goes FE</title><meta name="description" content="在公司项目里的一个小角落，尝试使用 Rust + WebAssembly 加速应用里部分计算
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>Try Rust WebAssembly · HP goes FE</title><meta name="description" content="在公司项目里的一个小角落，尝试使用 Rust + WebAssembly 加速应用里部分计算
 选择
 首先要分清项目里 WebAssembly 的定位
 
@@ -158,9 +158,9 @@ loadWebAssembly(<span class="hljs-string">'demo.wasm'</span>).then(<span class="
 <h2 id="wasm-瘦身">WASM 瘦身</h2>
 <p>参见<a href="https://rust-lang-nursery.github.io/rust-wasm/game-of-life/code-size.html" title="WASM 瘦身" target="_blank" rel="noopener">此文</a></p>
 <h3 id="cargo.toml-中一些设定">Cargo.toml 中一些设定</h3>
-<pre><code class="hljs undefined">[profile.release]
-debug = false
-lto = true</code></pre>
+<pre><code class="hljs undefined"><span class="hljs-section">[profile.release]</span>
+<span class="hljs-attr">debug</span> = <span class="hljs-literal">false</span>
+<span class="hljs-attr">lto</span> = <span class="hljs-literal">true</span></code></pre>
 <h1 id="例子">例子</h1>
 <ul>
 <li><a href="https://www.hellorust.com/demos/" target="_blank" rel="noopener">Hello Rust</a></li>

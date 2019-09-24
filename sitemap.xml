@@ -2,9 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://hikerpig.github.io/2019/09/24/2019-09-24-Compile-Skia-Canvaskit-WASM/</loc>
+    
+    <lastmod>2019-09-24T08:00:13.607Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://hikerpig.github.io/2019/09/04/2019-09-04-Detect-Computer-Resume-From-Sleep-In-Browser/</loc>
     
-    <lastmod>2019-09-05T12:33:31.530Z</lastmod>
+    <lastmod>2019-09-06T03:49:42.517Z</lastmod>
     
   </url>
   
