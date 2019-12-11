@@ -1,0 +1,82 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>浏览器 IndexedDB 存储限制 · HP goes FE</title><meta name="description" content="对 WebStorage 和 IndexedDB 使用的一些经验"><meta name="keywords" content="IndexedDB,WebStorage,Browser"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>浏览器 IndexedDB 存储限制</a></h1></div><div class="post-content"><p>以下列出在 <a href="https://duomu.tv/" target="_blank" rel="noopener">夺目</a> 产品的开发中，对 WebStorage 和 IndexedDB 使用的一些经验。</p>
+<h1 id="webstorage-存储空间限制">WebStorage 存储空间限制</h1>
+<p>首先，存储分为两种:</p>
+<ol type="1">
+<li>临时存储(Temporary Storage)，默认类型，之后可能会浏览器被删除。</li>
+<li>持久存储(Persistent Storage)，不会被浏览器自动删除，可以使用 <a href="https://developer.mozilla.org/en-US/docs/Web/API/StorageManager/persist" target="_blank" rel="noopener">StorageManager::persist()</a> 方法将此域名的存储类型转为持久型，此时浏览器会弹出弹窗征求用户许可，用户也可以选择拒绝。</li>
+</ol>
+<p>根据 <a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Browser_storage_limits_and_eviction_criteria#Storage_limits" target="_blank" rel="noopener">MDN 的文档</a>，浏览器分配给数据存储的磁盘空间大小是动态的，会根据磁盘剩余空间决定，同时对于一个具体域名下的空间分配也有一定策略。</p>
+<p>Firefox 的策略为:</p>
+<ol type="1">
+<li>全局限制(Global Limit)，50% 剩余磁盘空间</li>
+<li>域名组限制，大约是 20% 的全局限制量。例如 <code>mozilla.org</code>/<code>joe.blogs.mozilla.org</code>/<code>firefox.com</code> 被认为是同一个域名组，共享一个组限制。</li>
+</ol>
+<p>当磁盘空间告罄，quota manager 会开始删除临时存储(temporary storage)，以<strong>域名</strong>为单位删除，直到觉得磁盘空间余量尚足。</p>
+<p>删除顺序遵循 LRU 原则，最后访问时间距离现在最远的域名下的 object store 会被整个删除。</p>
+<p>目前 chrome (79) 的策略细节可能不太一样，但还没有找到具体文档描述。</p>
+<h2 id="查询当前存储空间状况">查询当前存储空间状况</h2>
+<p>使用 <a href="https://developer.mozilla.org/en-US/docs/Web/API/StorageManager/estimate" target="_blank" rel="noopener">StorageManager::estimate()</a> 方法查询当前存储空间的配额(quota)和已使用量(usage)。</p>
+<p>详细描述在 <a href="https://storage.spec.whatwg.org/" target="_blank" rel="noopener">Stroage 草案</a>中可查。</p>
+<pre><code class="hljs js">navigator.storage.estimate().then(<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">estimate</span>) </span>&#123;
+  <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">"percent"</span>).innerHTML =
+      (estimate.usage / estimate.quota * <span class="hljs-number">100</span>).toFixed(<span class="hljs-number">2</span>);
+&#125;);</code></pre>
+<p>额外一说，在 Chrome 中返回的 estimate 还会多出一个非标准字段 <code>usageDetails</code>，能看到更详细的信息。</p>
+<pre><code class="hljs json">"usageDetails": &#123;
+  "caches": 197632,
+  "indexedDB": 187255711,
+  "serviceWorkerRegistrations": 1561632
+&#125;</code></pre>
+<h1 id="实际使用时一些技术选择考量">实际使用时，一些技术选择考量</h1>
+<h2 id="存储大文件和数据块">存储大文件和数据块</h2>
+<p>IndexedDB 在 WebApp 中可以担任数据持久层，比起更早的基于字符串的 LocalStorage ，可以存储更复杂、更多样化和更大的数据。以下是一些常见的场景:</p>
+<ul>
+<li>ArrayBuffer/Uint8Array/Float32Array 存储等二进制数据和视图对象，用作密集计算</li>
+<li>ImageData 在基于 canvas 的绘图程序/游戏 中做绘制结果缓存</li>
+<li>File/Blob 文件分片上传，大文件存储</li>
+</ul>
+<h2 id="blob-与常用二进制数据类型互转">Blob 与常用二进制数据类型互转</h2>
+<p>如果文件很大，建议使用 File/Blob，目前在 mac chrome 79 上测试，保存包含 ArrayBuffer 的单条记录超过 100MB，便会写入失败。</p>
+<p>使用 Blob(或者基于它的 File 对象) 还有许多好处，如果应用的主要功能是音视频相关处理，最后能被原生 DOM 的 img/video/audio 标签都接受 <code>URL.createObjectURL(blob)</code> 生成的字符串作为 src。而且 <code>blob.type</code> 作为有意义的 MIME Type。因此 Blob 很适合作为处理后可以直接展示的成品存储。</p>
+<p>当数据需要被修改和操作，那么适宜转化为 ArrayBuffer 以及具体的类型数据视图 Uint8Array 等使用。</p>
+<h3 id="blob---arraybuffer">Blob -&gt; ArrayBuffer</h3>
+<p>以下两种方法，都为异步过程</p>
+<p>1 使用 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Blob/arrayBuffer" target="_blank" rel="noopener">blob.arrayBuffer()</a> 方法。此方法为标准的推荐，不过目前浏览器支持有限。</p>
+<pre><code class="hljs js"><span class="hljs-keyword">const</span> arrayBuffer = awiat blob.arrayBuffer()</code></pre>
+<p>2 使用 FileReader</p>
+<pre><code class="hljs js"><span class="hljs-keyword">let</span> arrayBuffer
+<span class="hljs-keyword">const</span> fr = <span class="hljs-keyword">new</span> FileReader()
+fr.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>&#123;
+  arrayBuffer = e.target.value
+&#125;
+fr.readAsArrayBuffer(blob)</code></pre>
+<h3 id="arraybuffer---blob">ArrayBuffer -&gt; Blob</h3>
+<p>同步过程</p>
+<pre><code class="hljs js"><span class="hljs-keyword">const</span> blob = <span class="hljs-keyword">new</span> Blob([arrayBuffer], &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'video/mp4'</span> &#125;)</code></pre>
+<h1 id="参考">参考</h1>
+<p>https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Browser_storage_limits_and_eviction_criteria</p>
+<p>https://developers.google.com/web/updates/2016/06/persistent-storage</p>
+<p>https://developer.chrome.com/apps/offline_storage</p>
+<p>https://stackoverflow.com/questions/17809824/how-to-use-navigator-instead-of-window-webkitstorageinfo-html5-file-system-api</p>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2019-12-11</span><i class="fa fa-tag"></i><a href="/categories/前端/" title="前端" class="tag">前端 </a><a href="/tags/IndexedDB/" title="IndexedDB" class="tag">IndexedDB </a><a href="/tags/WebStorage/" title="WebStorage" class="tag">WebStorage </a><a href="/tags/Browser/" title="Browser" class="tag">Browser </a></div></div></div></div><div id="toc"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#webstorage-存储空间限制"><span class="toc-text">WebStorage 存储空间限制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#查询当前存储空间状况"><span class="toc-text">查询当前存储空间状况</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#实际使用时一些技术选择考量"><span class="toc-text">实际使用时，一些技术选择考量</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#存储大文件和数据块"><span class="toc-text">存储大文件和数据块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#blob-与常用二进制数据类型互转"><span class="toc-text">Blob 与常用二进制数据类型互转</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#blob---arraybuffer"><span class="toc-text">Blob -&gt; ArrayBuffer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#arraybuffer---blob"><span class="toc-text">ArrayBuffer -&gt; Blob</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://hikerpig.github.io/2019/12/11/2019-12-11-Browser-Storage-Limit/,HP goes FE,浏览器 IndexedDB 存储限制,;" class="fa fa-twitter"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a role="navigation" href="/2019/09/24/2019-09-24-Compile-Skia-Canvaskit-WASM/" title="编译 Skia canvaskit.wasm" class="btn">下一篇</a></li></ul></div><div id="comments"><div id="gitalk-container"></div></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+  clientID: '0b21579fda2f1d2e73f4',
+  clientSecret: 'abc0351a314cc46bb3d58b6dad62c670c2d1e8f9',
+  repo: 'hikerpig.github.io',
+  owner: 'hikerpig',
+  admin: 'hikerpig',
+  labels: ['Gitalk'],
+  id: '2019/12/11/2019-12-11-Browser-Storage-Limit/',
+  title: '浏览器 IndexedDB 存储限制',
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+
+gitalk.render('gitalk-container')
+</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-49433257-1');
+</script><script src="https://cdn.jsdelivr.net/npm/mermaid@8.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({theme: "default"});
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/styles/atom-one-dark.css"><script src="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/lib/highlight.js"></script><script>hljs.initHighlightingOnLoad();
+</script></body></html>

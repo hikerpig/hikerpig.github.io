@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>Decode Video Using ffmpeg In Browser · HP goes FE</title><meta name="description" content="借助 Emscripten，基于 ffmpeg 二次开发前端音视频功能"><meta name="keywords" content="Avtech,Webassembly,Emscripten,ffmpeg"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>Decode Video Using ffmpeg In Browser</a></h1></div><div class="post-content"><p>音视频开发入门，可能绕不开 ffmpeg 这个项目，最近看了篇 <a href="https://zhuanlan.zhihu.com/p/40786748" target="_blank" rel="noopener">知乎专栏</a>，觉得这个事情很有意思。</p>
-<p>比起直接编辑整个 ffmpeg 项目的 CLI 到前端，更符合实际需求的方式，是先基于 ffmpeg 各种 lib二次开发出合适的功能，然后再使用 Emscripten 编译到 Webassembly。</p>
+<p>比起直接编辑整个 ffmpeg 项目的 CLI 到前端，更符合实际需求的方式，是先基于 ffmpeg 各种 lib 二次开发出合适的功能，此时结果是可执行的二进制文件，可以用 lldb 或者 gdb 调试。然后再使用 Emscripten 编译到 Webassembly，如此一来可以解决 wasm 不易调试的问题。</p>
 <p>跟着教程实现一个功能：解析出视频任意一帧的图像并绘制到 canvas 上。</p>
 <h2 id="web-demo-应用流程">Web demo 应用流程</h2>
 <p>demo 页的简单流程</p>
@@ -14,7 +14,7 @@ end
     C  -- 回到 js --&gt;  D[根据指针读出数据, 构建 ImageData, 绘制到 canvas 上]</code></pre>
 <h2 id="从源码编译-ffmpeg">从源码编译 ffmpeg</h2>
 <p>本文写就的时候使用的是 ffmpeg <code>n4.2-dev</code> 版，将其源码置于项目相对目录 <code>lib/ffmpeg</code> 下。</p>
-<p>ffmpeg 是一个很大的项目，包含的很多功能对于我们的需求来说，都用不上，可以通过 <a href="https://github.com/FFmpeg/FFmpeg/blob/master/configure" target="_blank" rel="noopener">configure</a> 配置留下合适的功能集。以前用 c 写的比较复杂的项目，通常在实际编译之前，可以使用 configure 根据参数和环境生成实际编译过程需要的 Makefile。</p>
+<p>ffmpeg 是一个很大的项目，包含的很多功能对于我们的需求来说，都用不上，可以通过 <a href="https://github.com/FFmpeg/FFmpeg/blob/master/configure" target="_blank" rel="noopener">configure</a> 配置留下合适的功能集。这个其实就是一个可执行的 sh 脚本，比较复杂的项目，通常在实际编译之前，可以使用 configure 根据参数和环境生成实际编译过程需要的 Makefile。</p>
 <h3 id="项目-makefile">项目 Makefile</h3>
 <p>参考 <a href="https://github.com/Kagami/ffmpeg.js/" target="_blank" rel="noopener">ffmpeg.js</a> 项目的一些配置</p>
 <pre><code class="hljs makefile">COMMON_FILTERS = scale crop overlay
@@ -232,7 +232,7 @@ BufferData global_buffer_data;
 <h3 id="c-获取图片rgb数据">[C] 获取图片rgb数据</h3>
 <p>这里内容太多，主要涉及 FFMpeg 的接口和视频编解码的知识，准备另写一篇。</p>
 <h3 id="c-将图像等数据写入内存">[C] 将图像等数据写入内存</h3>
-<p>当拿到包含 RGB 格式图像数据的 <code>AVFrame pFrameRGB</code> 后，是时候将其中的颜色信息取出，转化为线性存储的，利于 JS 中 Canvas 元素使用的数据格式。</p>
+<p>当拿到包含 RGB 格式图像数据的 <code>AVFrame *pFrameRGB</code> 后，是时候将其中的颜色信息取出，转化为线性存储的，利于 JS 中 Canvas 元素使用的数据格式。</p>
 <pre><code class="hljs c"><span class="hljs-keyword">uint8_t</span> *get_image_frame_buffer(AVFrame *pFrame, AVCodecContext *pCodecCtx)
 &#123;
     <span class="hljs-keyword">int</span> width = pCodecCtx-&gt;width;
