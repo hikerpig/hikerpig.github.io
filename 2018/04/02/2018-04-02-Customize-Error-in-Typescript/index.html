@@ -42,7 +42,7 @@ err <span class="hljs-keyword">instanceof</span> MyError  <span class="hljs-comm
 &#125;</code></pre>
 <p>但是这个写法其实相当的傻，因为对于每一个子类的构建函数来说，在改变原型之前，是无法拿到正确的子类实例 'this.constructor' 的，所以 <code>Object.setPrototypeOf</code> 需要出现在所有子类的构建函数中。</p>
 <h2 id="解决方案">解决方案</h2>
-<p>只好把原型继承拿回来了，最终解决方案：</p>
+<p>只好把原型继承拿回来了，最终在 target 为 es5 及以下的解决方案：</p>
 <pre><code class="hljs typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> ExtensibleError <span class="hljs-keyword">implements</span> <span class="hljs-built_in">Error</span> &#123;
   message: <span class="hljs-built_in">string</span>
   name: <span class="hljs-built_in">string</span>
@@ -70,7 +70,7 @@ err <span class="hljs-keyword">instanceof</span> MyError  <span class="hljs-comm
 err <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Error</span> <span class="hljs-comment">// true</span></code></pre>
 <h3 id="如果编译目标为-es6-以上呢">如果编译目标为 ES6 以上呢？</h3>
 <p>此时编译器就不需要去帮你转化 class 的实现了，会把你的代码原样输出:</p>
-<p>之前的解决方案在 nodejs 中运行会报错：</p>
+<p><strong>但是！</strong> 之前的解决方案在 nodejs 中运行会报错：</p>
 <pre><code class="hljs undefined">ExtensibleError.prototype = <span class="hljs-keyword">Object</span>.create(Error.prototype);
                           ^
 TypeError: Cannot assign <span class="hljs-keyword">to</span> <span class="hljs-keyword">read</span> only <span class="hljs-keyword">property</span> <span class="hljs-string">'prototype'</span> <span class="hljs-keyword">of</span> <span class="hljs-function"><span class="hljs-keyword">function</span> '<span class="hljs-title">class</span> <span class="hljs-title">ExtensibleError</span>...</span></code></pre>
@@ -81,6 +81,17 @@ ExtensibleError.prototype = <span class="hljs-built_in">Object</span>.create(<sp
 <span class="hljs-keyword">const</span> e = <span class="hljs-keyword">new</span> ExtensibleError;
 e <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Error</span> <span class="hljs-comment">// false</span></code></pre>
 <p>如果 target 是 ES6 以上的，简简单单写 <code>class ExtensibleError extends Error {}</code> 就行了。</p>
+<p>同时我们的解决方案为了在不同编译 target 下都能正常工作，可以加入一个运行时的检测。</p>
+<pre><code class="hljs js"><span class="hljs-comment">/** 检测当前 runtime 是否支持 es6 class */</span>
+<span class="hljs-keyword">let</span> isClassSupported = <span class="hljs-literal">false</span>
+<span class="hljs-keyword">try</span> &#123;
+  isClassSupported = ((<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test</span> </span>&#123;&#125;).toString().indexOf(<span class="hljs-string">'class'</span>) &gt; <span class="hljs-number">-1</span>)
+&#125; <span class="hljs-keyword">catch</span> (error) &#123;
+&#125;
+
+<span class="hljs-keyword">if</span> (!isClassSupported) &#123;
+  ExtensibleError.prototype = <span class="hljs-built_in">Object</span>.create(<span class="hljs-built_in">Error</span>.prototype)
+&#125;</code></pre>
 <p>参考</p>
 <ul>
 <li><a href="https://github.com/thundernet8/Blog/issues/1" target="_blank" rel="noopener">Error继承踩坑记</a></li>
