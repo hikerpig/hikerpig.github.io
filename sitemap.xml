@@ -2,16 +2,44 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://hikerpig.github.io/2018/04/02/2018-04-02-Customize-Error-in-Typescript/</loc>
+    <loc>http://hikerpig.github.io/2020/02/05/2020-02-05-Awesome-UltiSnips/</loc>
     
-    <lastmod>2019-12-14T10:05:11.829Z</lastmod>
+    <lastmod>2020-02-05T14:21:22.284Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2015/04/16/2015-04-16-Align-your-assignment-sentence-using-Python-in-Vim/</loc>
+    
+    <lastmod>2020-02-05T06:08:41.577Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2015/02/05/2015-02-05-show-scss-code-outline-with-Tagbar/</loc>
+    
+    <lastmod>2020-02-05T06:08:23.388Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://hikerpig.github.io/2019/12/11/2019-12-11-Browser-Storage-Limit/</loc>
     
-    <lastmod>2019-12-11T10:08:00.009Z</lastmod>
+    <lastmod>2020-01-18T06:12:33.331Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2018/04/02/2018-04-02-Customize-Error-in-Typescript/</loc>
+    
+    <lastmod>2020-01-18T06:12:10.614Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2019/06/17/2019-06-17-typescript-powered-vuex/</loc>
+    
+    <lastmod>2019-12-30T08:46:46.709Z</lastmod>
     
   </url>
   
@@ -75,13 +103,6 @@
     <loc>http://hikerpig.github.io/2017/09/25/2017-09-25-ES6+Babel-little-bug-under-IE11/</loc>
     
     <lastmod>2019-07-19T06:27:00.003Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2019/06/17/2019-06-17-typescript-powered-vuex/</loc>
-    
-    <lastmod>2019-06-19T06:44:04.000Z</lastmod>
     
   </url>
   
@@ -229,20 +250,6 @@
     <loc>http://hikerpig.github.io/2015/01/28/2015-01-28-%E4%BD%BF%E7%94%A8Coffeetags%E5%9C%A8VIM%E4%B8%AD%E6%98%BE%E7%A4%BAcoffee%E6%96%87%E4%BB%B6%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84/</loc>
     
     <lastmod>2018-08-26T08:53:42.514Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2015/02/05/2015-02-05-show-scss-code-outline-with-Tagbar/</loc>
-    
-    <lastmod>2018-08-26T08:53:32.420Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2015/04/16/2015-04-16-Align-your-assignment-sentence-using-Python-in-Vim/</loc>
-    
-    <lastmod>2018-08-26T08:53:25.243Z</lastmod>
     
   </url>
   

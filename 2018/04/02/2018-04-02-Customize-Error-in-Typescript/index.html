@@ -14,7 +14,7 @@ err <span class="hljs-keyword">instanceof</span> MyError  <span class="hljs-comm
         <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">d, b</span>) </span>&#123; <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> p <span class="hljs-keyword">in</span> b) <span class="hljs-keyword">if</span> (b.hasOwnProperty(p)) d[p] = b[p]; &#125;;
     <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">d, b</span>) </span>&#123;
         extendStatics(d, b);
-        <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">__</span>(<span class="hljs-params"></span>) </span>&#123; <span class="hljs-keyword">this</span>.constructor = d; &#125;
+        <span class="hljs-function"><span class="hljs-keyword">function</span> __(<span class="hljs-params"></span>) </span>&#123; <span class="hljs-keyword">this</span>.constructor = d; &#125;
         d.prototype = b === <span class="hljs-literal">null</span> ? <span class="hljs-built_in">Object</span>.create(b) : (__.prototype = b.prototype, <span class="hljs-keyword">new</span> __());
     &#125;;
 &#125;)();
@@ -32,7 +32,7 @@ err <span class="hljs-keyword">instanceof</span> MyError  <span class="hljs-comm
 <p>那么在调用以下函数时，_super 为 Error，返回的即是 <code>Error(this, arguments)</code>，而不是 <code>this</code> 。</p>
 <pre><code class="hljs typescript">_super !== <span class="hljs-literal">null</span> &amp;&amp; _super.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>) || <span class="hljs-keyword">this</span>;</code></pre>
 <h2 id="在-typescript-中">在 Typescript 中</h2>
-<p>翻了翻文档，Typescript 2.1 的一些 <a href="https://github.com/Microsoft/TypeScript-wiki/blob/master/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work" target="_blank" rel="noopener">breaking change</a> 导致对于一些原生对象(Error/Array/Map)的继承无法正常工作，应该就是由 generated code 的改变造成的。官方给出的一个建议是：</p>
+<p>翻了翻文档，Typescript 2.1 的一些 <a href="https://github.com/Microsoft/TypeScript-wiki/blob/master/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work" target="_blank" rel="noopener">breaking change</a> 导致对于一些原生对象 (Error/Array/Map) 的继承无法正常工作，应该就是由 generated code 的改变造成的。官方给出的一个建议是：</p>
 <pre><code class="hljs typescript"><span class="hljs-keyword">class</span> FooError <span class="hljs-keyword">extends</span> <span class="hljs-built_in">Error</span> &#123;
   <span class="hljs-keyword">constructor</span>(<span class="hljs-params">m: <span class="hljs-built_in">string</span></span>) &#123;
     <span class="hljs-keyword">super</span>(m)
@@ -40,7 +40,7 @@ err <span class="hljs-keyword">instanceof</span> MyError  <span class="hljs-comm
     <span class="hljs-built_in">Object</span>.setPrototypeOf(<span class="hljs-keyword">this</span>, FooError.prototype)
   &#125;
 &#125;</code></pre>
-<p>但是这个写法其实相当的傻，因为对于每一个子类的构建函数来说，在改变原型之前，是无法拿到正确的子类实例 'this.constructor' 的，所以 <code>Object.setPrototypeOf</code> 需要出现在所有子类的构建函数中。</p>
+<p>但是这个写法其实相当的傻，因为对于每一个子类的构建函数来说，在改变原型之前，是无法拿到正确的子类实例'this.constructor' 的，所以 <code>Object.setPrototypeOf</code> 需要出现在所有子类的构建函数中。</p>
 <h2 id="解决方案">解决方案</h2>
 <p>只好把原型继承拿回来了，最终在 target 为 es5 及以下的解决方案：</p>
 <pre><code class="hljs typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> ExtensibleError <span class="hljs-keyword">implements</span> <span class="hljs-built_in">Error</span> &#123;
@@ -70,7 +70,7 @@ err <span class="hljs-keyword">instanceof</span> MyError  <span class="hljs-comm
 err <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Error</span> <span class="hljs-comment">// true</span></code></pre>
 <h3 id="如果编译目标为-es6-以上呢">如果编译目标为 ES6 以上呢？</h3>
 <p>此时编译器就不需要去帮你转化 class 的实现了，会把你的代码原样输出:</p>
-<p><strong>但是！</strong> 之前的解决方案在 nodejs 中运行会报错：</p>
+<p>** 但是！** 之前的解决方案在 nodejs 中运行会报错：</p>
 <pre><code class="hljs undefined">ExtensibleError.prototype = <span class="hljs-keyword">Object</span>.create(Error.prototype);
                           ^
 TypeError: Cannot assign <span class="hljs-keyword">to</span> <span class="hljs-keyword">read</span> only <span class="hljs-keyword">property</span> <span class="hljs-string">'prototype'</span> <span class="hljs-keyword">of</span> <span class="hljs-function"><span class="hljs-keyword">function</span> '<span class="hljs-title">class</span> <span class="hljs-title">ExtensibleError</span>...</span></code></pre>
@@ -94,7 +94,7 @@ e <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Error
 &#125;</code></pre>
 <p>参考</p>
 <ul>
-<li><a href="https://github.com/thundernet8/Blog/issues/1" target="_blank" rel="noopener">Error继承踩坑记</a></li>
+<li><a href="https://github.com/thundernet8/Blog/issues/1" target="_blank" rel="noopener">Error 继承踩坑记</a></li>
 <li><a href="https://github.com/Microsoft/TypeScript-wiki/blob/master/Breaking-Changes.md#extending-built-ins-like-error-array-and-map-may-no-longer-work" target="_blank" rel="noopener">breaking change</a></li>
 <li><a href="https://stackoverflow.com/questions/12915412/how-do-i-extend-a-host-object-e-g-error-in-typescript" target="_blank" rel="noopener">so 上的一个答案</a></li>
 </ul>

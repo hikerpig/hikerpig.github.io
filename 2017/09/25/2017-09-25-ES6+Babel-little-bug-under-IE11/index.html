@@ -37,7 +37,7 @@ class Person &amp;#123;
 <p>看 babel 编译出的一串代码 blahblah， 重点下面说:</p>
 <pre><code class="hljs js"><span class="hljs-keyword">var</span> _class, _temp
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_possibleConstructorReturn</span>(<span class="hljs-params">self, call</span>) </span>&#123;
+<span class="hljs-function"><span class="hljs-keyword">function</span> _possibleConstructorReturn(<span class="hljs-params">self, call</span>) </span>&#123;
   <span class="hljs-keyword">if</span> (!self) &#123;
     <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">ReferenceError</span>(
       <span class="hljs-string">"this hasn't been initialised - super() hasn't been called"</span>,
@@ -48,7 +48,7 @@ class Person &amp;#123;
     : self
 &#125;
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_inherits</span>(<span class="hljs-params">subClass, superClass</span>) </span>&#123;
+<span class="hljs-function"><span class="hljs-keyword">function</span> _inherits(<span class="hljs-params">subClass, superClass</span>) </span>&#123;
   <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> superClass !== <span class="hljs-string">'function'</span> &amp;&amp; superClass !== <span class="hljs-literal">null</span>) &#123;
     <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(
       <span class="hljs-string">'Super expression must either be null or a function, not '</span> +
@@ -69,7 +69,7 @@ class Person &amp;#123;
       : (subClass.__proto__ = superClass)
 &#125;
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_classCallCheck</span>(<span class="hljs-params">instance, Constructor</span>) </span>&#123;
+<span class="hljs-function"><span class="hljs-keyword">function</span> _classCallCheck(<span class="hljs-params">instance, Constructor</span>) </span>&#123;
   <span class="hljs-keyword">if</span> (!(instance <span class="hljs-keyword">instanceof</span> Constructor)) &#123;
     <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Cannot call a class as a function'</span>)
   &#125;
@@ -111,7 +111,7 @@ _temp)
 <span class="hljs-built_in">console</span>.log(Person.speakForAll() === <span class="hljs-string">'Person'</span>)
 <span class="hljs-built_in">console</span>.log(Developer.speakForAll() === <span class="hljs-string">'Person'</span>)</code></pre>
 <p>关键是此段实现继承的部分:</p>
-<pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_inherits</span>(<span class="hljs-params">subClass, superClass</span>) </span>&#123;
+<pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> _inherits(<span class="hljs-params">subClass, superClass</span>) </span>&#123;
   <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> superClass !== <span class="hljs-string">'function'</span> &amp;&amp; superClass !== <span class="hljs-literal">null</span>) &#123;
     <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(
       <span class="hljs-string">'Super expression must either be null or a function, not '</span> +

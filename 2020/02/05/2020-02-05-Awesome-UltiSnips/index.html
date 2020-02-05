@@ -1,0 +1,95 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>Awesome UltiSnips · HP goes FE</title><meta name="description" content="UltiSnips 不愧为 vim （或乃至所有编辑器）生态下的最佳代码片段解决方案。支持多种常见语法、snippet 添加和管理符合直觉（此处应 cue 一下隔壁对多行文本支持令人垂泪的 vscode）、还有眼花缭乱的 python 脚本插值供高级玩家使用。
+UltiSnips 项目已有十年的历史"><meta name="keywords" content="Vim,UltiSnips"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>Awesome UltiSnips</a></h1></div><div class="post-content"><p>UltiSnips 不愧为 vim （或乃至所有编辑器）生态下的最佳代码片段解决方案。支持多种常见语法、snippet 添加和管理符合直觉（此处应 cue 一下隔壁对多行文本支持令人垂泪的 vscode）、还有眼花缭乱的 python 脚本插值供<a href="https://github.com/honza/vim-snippets" target="_blank" rel="noopener">高级玩家</a>使用。</p>
+<p>UltiSnips 项目已有十年的历史，功能为其模仿和致敬的 SnipMate 的超集，SnipMate 模仿了 TextMate 的语法。</p>
+<p>vscode 也模仿了 TextMate snippet 的语法，从而使得在 ultisnips 和 vscode snippet 语法之间<a href="http://unisnips.netlify.com/" target="_blank" rel="noopener">转换</a>变得相对容易。</p>
+<p>仔细阅读文档以后，发现了一些以前遗漏了的功能。</p>
+<h2 id="snippets-文件组织方式">snippets 文件组织方式</h2>
+<p>引自官方文档：</p>
+<blockquote>
+<p>Using a strategy similar to how Vim detects |ftplugins|, UltiSnips iterates over the snippet definition directories looking for files with names of the following patterns: ft.snippets, ft_<em>.snippets, or ft/</em>, where "ft" is the 'filetype' of the current document and "*" is a shell-like wildcard matching any string including the empty string. The following table shows some typical snippet filenames and their associated filetype.</p>
+<pre><code>snippet filename         filetype ~
+ruby.snippets            ruby
+perl.snippets            perl
+c.snippets               c
+c_my.snippets            c
+c/a                      c
+c/b.snippets             c
+all.snippets             all
+all/a.snippets           all</code></pre>
+</blockquote>
+<p>同一语言的 snippet 不用都塞到一个文件里，可以按照主题组织。</p>
+<pre><code class="hljs undefined"><span class="hljs-comment">-- javascript</span>
+   |<span class="hljs-comment">-- jest.snippets</span>
+   |<span class="hljs-comment">-- vue.snippets</span>
+   |<span class="hljs-comment">-- class.snippets</span></code></pre>
+<h2 id="trigger-不用费脑记">trigger 不用费脑记</h2>
+<h3 id="列出当前可展开的-snippets">列出当前可展开的 snippets</h3>
+<p>在 Normal 模式下，可以使用 <code>:call UltiSnips#ListSnippets()</code>，该函数会列出当前 cursor 处所有支持的 snippet （如果当前 cursor 处没有字符，列出的是此文件所有支持的 snippet），且可以通过数字选择直接展开 snippet 。</p>
+<p>在 Insert 模式下，可设置 <code>g:UltiSnipsListSnippets</code> 绑定按键触发以上函数，默认是 <code>&lt;c-tab&gt;</code>，在一些 terminal 软件里可能会有按键冲突，可以改成别的键，例如:</p>
+<pre><code class="hljs vim"><span class="hljs-variable">g:UltiSnipsListSnippets</span>=<span class="hljs-string">'&lt;c-u&gt;&lt;c-l&gt;'</span></code></pre>
+<p>效果如下：</p>
+<figure>
+<img src="https://i.loli.net/2020/02/05/zL9IbrTyBgfQXEo.gif" alt><figcaption>list snippets usage</figcaption>
+</figure>
+<p>不过这个函数调用的是 vim 的 <a href="https://vim-jp.org/vimdoc-en/eval.html" target="_blank" rel="noopener">inputlist</a> 接口，稍显原始，同时列出的数据太过详尽，有点干扰正常输入流。如果不介意多安装一些东西，可以看下一节。</p>
+<h3 id="与-vim-的自动补全插件配合">与 vim 的自动补全插件配合</h3>
+<p>文档的 <em>UltiSnips and Other Plugins</em> 一节列出了一些支持的自动补全插件。</p>
+<blockquote>
+<p>YouCompleteMe - comes with out of the box completion support for UltiSnips. It offers a really nice completion dialogue for snippets.</p>
+<p>neocomplete - UltiSnips ships with a source for neocomplete and therefore offers out of the box completion dialogue support for it too.</p>
+<p>deoplete - The successor of neocomplete is also supported.</p>
+<p>unite - UltiSnips has a source for unite.</p>
+</blockquote>
+<p>我试过 deoplete ，开箱即用，体验良好。不过由于其他的一些原因，同类型插件我只使用了 <a href="https://github.com/neoclide/coc.nvim" target="_blank" rel="noopener">coc.nvim</a> ，它其实也有对 ultisnips 很好的支持（翻源码才发现它甚至还 port 了一个 vscode 的 snippet 引擎）。</p>
+<figure>
+<img src="https://i.loli.net/2020/02/05/58nsKTQmfAGNVpJ.gif" alt><figcaption>ultisnips with coc.nvim</figcaption>
+</figure>
+<h2 id="以前端项目为例子可以使用的进阶功能">以前端项目为例子，可以使用的进阶功能</h2>
+<h3 id="vim-script-code-transformation">Vim script code + Transformation</h3>
+<p>形式为 <code>${&lt;tab_stop_no/regular_expression/replacement/options}</code> 的 Transformation 需要依赖于一个 tabstop。是在强大的 python script 之外，稍微简单和通用一点的转换形式。</p>
+<p>例如在 <code>test-component.vue</code> 文件里，快速起草一个 Vue SFC 文件结构。</p>
+<pre><code class="hljs vim-snippets">snippet sfc_component &quot;setup sfc component&quot;
+&lt;template&gt;
+  &lt;div class=&quot;$&#123;1:`!v expand(&quot;%:r&quot;)`&#125;&quot;&gt;
+  &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script&gt;
+export default &#123;
+  name: &apos;$&#123;1/[-_]?([a-z]+)/\u$1/g&#125;&apos;,
+&#125;
+&lt;/script&gt;
+endsnippet</code></pre>
+<p>展开后内容为：</p>
+<pre><code class="hljs undefined"><span class="hljs-tag">&lt;<span class="hljs-name">template</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">"test-component"</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">template</span>&gt;</span>
+
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> &#123;
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'TestComponent'</span>,
+&#125;
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span></code></pre>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-02-05</span><i class="fa fa-tag"></i><a href="/categories/工具/" title="工具" class="tag">工具 </a><a href="/tags/Vim/" title="Vim" class="tag">Vim </a><a href="/tags/UltiSnips/" title="UltiSnips" class="tag">UltiSnips </a></div></div></div></div><div id="toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#snippets-文件组织方式"><span class="toc-text">snippets 文件组织方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#trigger-不用费脑记"><span class="toc-text">trigger 不用费脑记</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#列出当前可展开的-snippets"><span class="toc-text">列出当前可展开的 snippets</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#与-vim-的自动补全插件配合"><span class="toc-text">与 vim 的自动补全插件配合</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#以前端项目为例子可以使用的进阶功能"><span class="toc-text">以前端项目为例子，可以使用的进阶功能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#vim-script-code-transformation"><span class="toc-text">Vim script code + Transformation</span></a></li></ol></li></ol></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://hikerpig.github.io/2020/02/05/2020-02-05-Awesome-UltiSnips/,HP goes FE,Awesome UltiSnips,;" class="fa fa-twitter"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a role="navigation" href="/2019/12/11/2019-12-11-Browser-Storage-Limit/" title="浏览器 IndexedDB 存储限制" class="btn">下一篇</a></li></ul></div><div id="comments"><div id="gitalk-container"></div></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+  clientID: '0b21579fda2f1d2e73f4',
+  clientSecret: 'abc0351a314cc46bb3d58b6dad62c670c2d1e8f9',
+  repo: 'hikerpig.github.io',
+  owner: 'hikerpig',
+  admin: 'hikerpig',
+  labels: ['Gitalk'],
+  id: '2020/02/05/2020-02-05-Awesome-UltiSnips/',
+  title: 'Awesome UltiSnips',
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+
+gitalk.render('gitalk-container')
+</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-49433257-1');
+</script><script src="https://cdn.jsdelivr.net/npm/mermaid@8.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({theme: "default"});
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/styles/atom-one-dark.css"><script src="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/lib/highlight.js"></script><script>hljs.initHighlightingOnLoad();
+</script></body></html>

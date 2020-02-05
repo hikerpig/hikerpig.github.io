@@ -31,9 +31,9 @@ emsdk activate 1.38.45
 </ul>
 <h1 id="查看效果">查看效果</h1>
 <p>使用刚才编译出来的 js/wasm 文件查看效果。</p>
-<pre><code class="hljs undefined">cd <span class="hljs-meta-keyword">/path/</span>to<span class="hljs-meta-keyword">/skia/</span>modules/canvaskit
-mkdir -p node_modules/canvaskit
-ln -s <span class="hljs-meta-keyword">/path/</span>to<span class="hljs-meta-keyword">/skia/</span>out/canvaskit_wasm node_modules<span class="hljs-meta-keyword">/canvaskit/</span>bin</code></pre>
+<pre><code class="hljs undefined"><span class="hljs-keyword">cd</span> /path/<span class="hljs-keyword">to</span>/skia/modules/canvaskit
+<span class="hljs-built_in">mkdir</span> -<span class="hljs-keyword">p</span> node_modules/canvaskit
+<span class="hljs-keyword">ln</span> -s /path/<span class="hljs-keyword">to</span>/skia/out/canvaskit_wasm node_modules/canvaskit/bin</code></pre>
 <p>使用一个简单的 http 静态服务器程序 (如 <a href="https://www.npmjs.com/package/http-server" target="_blank" rel="noopener">http-server</a> ) ：</p>
 <pre><code class="hljs undefined">http-<span class="hljs-keyword">server</span> .</code></pre>
 <p>然后可以在 <code>http://127.0.0.1:8080/canvaskit/example.html</code> 和 <code>http://127.0.0.1:8080/canvaskit/extra.html</code> 页面里看示意效果。</p>
