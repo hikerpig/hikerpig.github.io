@@ -2,9 +2,37 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://hikerpig.github.io/2019/02/15/2019-02-14-Setup-CI-in-docker/</loc>
+    
+    <lastmod>2020-03-03T10:53:43.809Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2020/02/19/2020-02-19-Regex-Collection/</loc>
+    
+    <lastmod>2020-02-19T02:58:08.983Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2019/12/11/2019-12-11-Browser-Storage-Limit/</loc>
+    
+    <lastmod>2020-02-16T15:28:51.407Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2019/03/06/2019-03-06-Decode-Video-Using-FFMpeg-In-Browser/</loc>
+    
+    <lastmod>2020-02-15T04:22:23.566Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://hikerpig.github.io/2020/02/05/2020-02-05-Awesome-UltiSnips/</loc>
     
-    <lastmod>2020-02-05T14:21:22.284Z</lastmod>
+    <lastmod>2020-02-10T14:11:59.801Z</lastmod>
     
   </url>
   
@@ -23,13 +51,6 @@
   </url>
   
   <url>
-    <loc>http://hikerpig.github.io/2019/12/11/2019-12-11-Browser-Storage-Limit/</loc>
-    
-    <lastmod>2020-01-18T06:12:33.331Z</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>http://hikerpig.github.io/2018/04/02/2018-04-02-Customize-Error-in-Typescript/</loc>
     
     <lastmod>2020-01-18T06:12:10.614Z</lastmod>
@@ -40,13 +61,6 @@
     <loc>http://hikerpig.github.io/2019/06/17/2019-06-17-typescript-powered-vuex/</loc>
     
     <lastmod>2019-12-30T08:46:46.709Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2019/03/06/2019-03-06-Decode-Video-Using-FFMpeg-In-Browser/</loc>
-    
-    <lastmod>2019-11-06T08:26:20.465Z</lastmod>
     
   </url>
   
@@ -138,13 +152,6 @@
     <loc>http://hikerpig.github.io/2019/05/05/2019-05-05-Benchmark-WASM-with-d8/</loc>
     
     <lastmod>2019-05-07T03:09:36.652Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2019/02/15/2019-02-14-Setup-CI-in-docker/</loc>
-    
-    <lastmod>2019-02-18T11:52:23.883Z</lastmod>
     
   </url>
   

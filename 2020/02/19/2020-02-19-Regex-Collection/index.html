@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>我的常用正则表达式清单 · HP goes FE</title><meta name="description" content="转换
+medium 的一篇文章有列出几种常见命名方式转换的 JS 函数
+CamelCase -&amp;gt; kebab-case
+javascript 使用示例
+string.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase()
+其"><meta name="keywords" content="工具,正则"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>我的常用正则表达式清单</a></h1></div><div class="post-content"><h2 id="转换">转换</h2>
+<p><a href="https://medium.com/javascript-in-plain-english/convert-string-to-different-case-styles-snake-kebab-camel-and-pascal-case-in-javascript-da724b7220d7" target="_blank" rel="noopener">medium 的一篇文章有列出几种常见命名方式转换的 JS 函数</a></p>
+<h3 id="camelcase---kebab-case">CamelCase -&gt; kebab-case</h3>
+<p>javascript 使用示例</p>
+<pre><code class="hljs js">string.replace(<span class="hljs-regexp">/([a-z0-9]|(?=[A-Z]))([A-Z])/g</span>, <span class="hljs-string">'$1-$2'</span>).toLowerCase()</code></pre>
+<p>其中使用了正向前瞻 (positive lookahead)，有一些 <a href="https://www.cnblogs.com/boundless-sky/p/7597631.html" target="_blank" rel="noopener">参考文章</a> 可以学习一下。</p>
+<h3 id="kebab-casesnake_case---camelcase">kebab-case/snake_case -&gt; CamelCase</h3>
+<pre><code class="hljs js"><span class="hljs-keyword">const</span> toCamelCase = <span class="hljs-function"><span class="hljs-params">str</span> =&gt;</span>
+  str
+    .toLowerCase()
+    .replace(<span class="hljs-regexp">/[^a-zA-Z0-9]+(.)/g</span>, (m, char) =&gt; char.toUpperCase())</code></pre>
+</div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-02-19</span><i class="fa fa-tag"></i><a href="/categories/Engineering/" title="Engineering" class="tag">Engineering </a><a href="/tags/工具/" title="工具" class="tag">工具 </a><a href="/tags/正则/" title="正则" class="tag">正则 </a></div></div></div></div><div id="toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#转换"><span class="toc-text">转换</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#camelcase---kebab-case"><span class="toc-text">CamelCase -&gt; kebab-case</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#kebab-casesnake_case---camelcase"><span class="toc-text">kebab-case/snake_case -&gt; CamelCase</span></a></li></ol></li></ol></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://hikerpig.github.io/2020/02/19/2020-02-19-Regex-Collection/,HP goes FE,我的常用正则表达式清单,;" class="fa fa-twitter"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a role="navigation" href="/2020/02/05/2020-02-05-Awesome-UltiSnips/" title="Awesome UltiSnips" class="btn">下一篇</a></li></ul></div><div id="comments"><div id="gitalk-container"></div></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+  clientID: '0b21579fda2f1d2e73f4',
+  clientSecret: 'abc0351a314cc46bb3d58b6dad62c670c2d1e8f9',
+  repo: 'hikerpig.github.io',
+  owner: 'hikerpig',
+  admin: 'hikerpig',
+  labels: ['Gitalk'],
+  id: '2020/02/19/2020-02-19-Regex-Collection/',
+  title: '我的常用正则表达式清单',
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+
+gitalk.render('gitalk-container')
+</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-49433257-1');
+</script><script src="https://cdn.jsdelivr.net/npm/mermaid@8.0.0/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({theme: "default"});
+}</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/styles/atom-one-dark.css"><script src="https://cdn.jsdelivr.net/npm/highlight.js@9.13.1/lib/highlight.js"></script><script>hljs.initHighlightingOnLoad();
+</script></body></html>
