@@ -27,16 +27,25 @@
 <blockquote>
 <p>双二阶滤波器是传递函数的分子、分母都是二阶多项式的滤波器。</p>
 </blockquote>
-<p>直观地从使用角度来理解，这个滤波器在两个不同的频段可以有不同的响应模型，所以通过合理配置参数，可以增强或者削减某些频段的强度，实现低通（lowpass）、高通（highpass）、带通（bandpass）等效果。详细响应曲线可以参考 <a href="https://webaudioapi.com/samples/frequency-response/" target="_blank" rel="noopener">这个例子</a>。</p>
-<p>以下是一个低通滤镜的响应曲线：</p>
-<figure>
-<img src="https://i.loli.net/2020/03/17/jyV8N5axb1HUuA3.jpg" alt><figcaption>low pass filter</figcaption>
-</figure>
+<p>直观地从使用角度来理解，这个滤波器在两个不同的频段可以有不同的响应模型，所以通过合理配置参数，可以增强或者削减某些频段的强度，实现低通（lowpass）、高通（highpass）、带通（bandpass）等效果。详细响应曲线可以参考以下这个例子，来自<a href="https://webaudioapi.com/samples/frequency-response/" target="_blank" rel="noopener">webaudioapi.com</a>。</p>
+<iframe src="https://webaudioapi.com/samples/frequency-response/" height="600" class="iframe--resize-v">
+</iframe>
+<!--以下是一个低通滤镜的响应曲线：
+
+![low pass filter](https://i.loli.net/2020/03/17/jyV8N5axb1HUuA3.jpg)-->
 <h3 id="convolvernode">ConvolverNode</h3>
+<p><a href="https://webaudio.github.io/web-audio-api/#ConvolverNode" target="_blank" rel="noopener">规范中的 ConvolverNode 定义</a>：</p>
 <blockquote>
 <p>The ConvolverNode interface is an AudioNode that performs a Linear Convolution on a given AudioBuffer, often used to achieve a reverb effect</p>
 </blockquote>
-<p>对信号源做线性卷积，一般可用于制造回响（reverb）效果</p>
+<p>对信号源和提供给卷积器的脉冲响应（impulse response，以 AudioBuffer 的形式提供给卷积器，作为卷积核）做线性卷积，一般可用于制造混响（reverb，或称回响）效果。</p>
+<p>首先说到<a href="https://www.wikiwand.com/zh-hans/%E5%86%B2%E6%BF%80%E5%93%8D%E5%BA%94" target="_blank" rel="noopener">脉冲响应</a>，指的是一个系统随着时间，对于输入信号（特化来说，极短的时候就是一个脉冲）的响应。</p>
+<p>以下的脉冲响应来自 <a href="https://webaudioapi.com/samples/room-effects/" target="_blank" rel="noopener">webaudioapi room-effects 例子</a> 里的 telephone 效果。对于每一个脉冲来说，在发生的 0.0006 秒左右后开始有响应，大概 0.0025 秒之后趋于平静。在音效处理中，一般会将未经处理的声音（称作“干”声音，对应于题图中的 dry）与经过处理过的声音（称作“湿”声音，对应于 wet）按照一定比例混合，那么在电话的这个例子中，就能听到稍微有一点延后的效果。假如这个延后的时间内更长，就有大的房间里回音的效果。</p>
+<figure>
+<img src="https://i.loli.net/2020/03/18/CsUke2BOMqRPbQt.jpg" alt><figcaption>电话效果</figcaption>
+</figure>
+<p>blink 的源码中有一段关于 <a href="https://github.com/chromium/chromium/blob/master/third_party/blink/renderer/modules/webaudio/docs/convolver_reverb.md" target="_blank" rel="noopener">convolver_reverb 的文档</a>，叙述了实现卷积混响时减少计算量的一些技巧。</p>
+<p>一般来说，脉冲响应曲线由音效设计师录制或是制作，可以导出成 <code>.wav</code> 文件等。</p>
 </div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-03-16</span><i class="fa fa-tag"></i><a href="/categories/前端/" title="前端" class="tag">前端 </a><a href="/tags/Avtech/" title="Avtech" class="tag">Avtech </a><a href="/tags/audio/" title="audio" class="tag">audio </a></div></div></div></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://hikerpig.github.io/2020/03/16/2020-03-16-A-Glimpse-Of-Web-Audio-API/,HP goes FE,初识 Web Audio API - 术语扫盲,;" class="fa fa-twitter"></a></div></div><div class="pagination"><ul class="clearfix"><li class="next pagbuttons"><a role="navigation" href="/2020/02/19/2020-02-19-Regex-Collection/" title="我的常用正则表达式清单" class="btn">下一篇</a></li></ul></div><div id="comments"><div id="gitalk-container"></div></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
   clientID: '0b21579fda2f1d2e73f4',
   clientSecret: 'abc0351a314cc46bb3d58b6dad62c670c2d1e8f9',

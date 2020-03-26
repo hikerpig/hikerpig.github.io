@@ -970,3 +970,12 @@ figure {
 figcaption {
   font-size: 0.8em;
 }
+
+// iframe
+iframe {
+  width: 100%;
+}
+
+.iframe--resize-v {
+  resize: vertical;
+}

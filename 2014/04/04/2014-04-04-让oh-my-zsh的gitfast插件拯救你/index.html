@@ -1,33 +1,40 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>让oh-my-zsh的git插件飞起来 · HP goes FE</title><meta name="description" content="让oh-my-zsh的git插件飞起来"><meta name="keywords" content="Git,zsh"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>让oh-my-zsh的git插件飞起来</a></h1></div><div class="post-content"><p>作为一个伪文艺程序员，在ubuntu上使用zsh搭配OMG的插件oh-my-zsh，小日子曾经过的滋滋润润，各种auto-completion让我基本上爱上Tab键了。后来换了台旧MBP，每次跑到项目文件夹下<code>git checkout feat (tab)</code>就傻了，出去泡一杯咖啡回来shell还在哼哧哼哧地忙活着，分分钟有种再手贱&lt;tab&gt;就剁掉的冲动。</p>
+<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>让oh-my-zsh的git插件飞起来 · HP goes FE</title><meta name="description" content="让oh-my-zsh的git插件飞起来"><meta name="keywords" content="Git,zsh"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>让oh-my-zsh的git插件飞起来</a></h1></div><div class="post-content"><p>更新：2020-03-26</p>
+<p>作为一个伪文艺程序员，在ubuntu上使用zsh搭配OMG的插件oh-my-zsh，小日子曾经过的滋滋润润，各种auto-completion让我基本上爱上Tab键了。后来换了台旧MBP，每次跑到项目文件夹下<code>git checkout feat (tab)</code>就傻了，出去泡一杯咖啡回来shell还在哼哧哼哧地忙活着，分分钟有种再手贱&lt;tab&gt;就剁掉的冲动。</p>
 <p><a href="http://marc-abramowitz.com/archives/2012/04/10/fix-for-oh-my-zsh-git-svn-prompt-slowness/comment-page-1/" target="_blank" rel="noopener">有位仁兄</a>找到了问题的解决方法，原来作恶的是<code>~/.oh-my-zsh/lib/git.zsh</code>中的<code>git_prompt_info()</code> 调用的<code>parse_git_dirty()</code>函数。</p>
-<pre><code class="hljs bash"><span class="hljs-comment"># get the name of the branch we are on</span>
+<p>更新：这段代码是 2020-03-26 时的版本</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># Outputs current branch info in prompt format</span>
 <span class="hljs-keyword">function</span> <span class="hljs-function"><span class="hljs-title">git_prompt_info</span></span>() &#123;
-  <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$(git config --get oh-my-zsh.hide-status)</span>"</span> != <span class="hljs-string">"1"</span> ]]; <span class="hljs-keyword">then</span>
+  <span class="hljs-built_in">local</span> ref
+  <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$(command git config --get oh-my-zsh.hide-status 2&gt;/dev/null)</span>"</span> != <span class="hljs-string">"1"</span> ]]; <span class="hljs-keyword">then</span>
     ref=$(<span class="hljs-built_in">command</span> git symbolic-ref HEAD 2&gt; /dev/null) || \
-    ref=$(<span class="hljs-built_in">command</span> git rev-parse --short HEAD 2&gt; /dev/null) || <span class="hljs-built_in">return</span>
+    ref=$(<span class="hljs-built_in">command</span> git rev-parse --short HEAD 2&gt; /dev/null) || <span class="hljs-built_in">return</span> 0
     <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$ZSH_THEME_GIT_PROMPT_PREFIX</span><span class="hljs-variable">$&#123;ref#refs/heads/&#125;</span><span class="hljs-variable">$(parse_git_dirty)</span><span class="hljs-variable">$ZSH_THEME_GIT_PROMPT_SUFFIX</span>"</span>
   <span class="hljs-keyword">fi</span>
 &#125;
 
 <span class="hljs-comment"># Checks if working tree is dirty</span>
-<span class="hljs-function"><span class="hljs-title">parse_git_dirty</span></span>() &#123;
-  <span class="hljs-built_in">local</span> SUBMODULE_SYNTAX=<span class="hljs-string">''</span>
-  <span class="hljs-built_in">local</span> GIT_STATUS=<span class="hljs-string">''</span>
-  <span class="hljs-built_in">local</span> CLEAN_MESSAGE=<span class="hljs-string">'nothing to commit (working directory clean)'</span>
-  <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$(command git config --get oh-my-zsh.hide-status)</span>"</span> != <span class="hljs-string">"1"</span> ]]; <span class="hljs-keyword">then</span>
-    <span class="hljs-keyword">if</span> [[ <span class="hljs-variable">$POST_1_7_2_GIT</span> -gt 0 ]]; <span class="hljs-keyword">then</span>
-          SUBMODULE_SYNTAX=<span class="hljs-string">"--ignore-submodules=dirty"</span>
-    <span class="hljs-keyword">fi</span>
+<span class="hljs-keyword">function</span> <span class="hljs-function"><span class="hljs-title">parse_git_dirty</span></span>() &#123;
+  <span class="hljs-built_in">local</span> STATUS
+  <span class="hljs-built_in">local</span> -a FLAGS
+  FLAGS=(<span class="hljs-string">'--porcelain'</span>)
+  <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$(command git config --get oh-my-zsh.hide-dirty)</span>"</span> != <span class="hljs-string">"1"</span> ]]; <span class="hljs-keyword">then</span>
     <span class="hljs-keyword">if</span> [[ <span class="hljs-string">"<span class="hljs-variable">$DISABLE_UNTRACKED_FILES_DIRTY</span>"</span> == <span class="hljs-string">"true"</span> ]]; <span class="hljs-keyword">then</span>
-        GIT_STATUS=$(<span class="hljs-built_in">command</span> git status -s <span class="hljs-variable">$&#123;SUBMODULE_SYNTAX&#125;</span> -uno 2&gt; /dev/null | tail -n1)
-    <span class="hljs-keyword">else</span>
-        GIT_STATUS=$(<span class="hljs-built_in">command</span> git status -s <span class="hljs-variable">$&#123;SUBMODULE_SYNTAX&#125;</span> 2&gt; /dev/null | tail -n1)
+      FLAGS+=<span class="hljs-string">'--untracked-files=no'</span>
     <span class="hljs-keyword">fi</span>
-    <span class="hljs-keyword">if</span> [[ -n <span class="hljs-variable">$GIT_STATUS</span> ]]; <span class="hljs-keyword">then</span>
-      <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$ZSH_THEME_GIT_PROMPT_DIRTY</span>"</span>
-    <span class="hljs-keyword">else</span>
-      <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$ZSH_THEME_GIT_PROMPT_CLEAN</span>"</span>
-    <span class="hljs-keyword">fi</span>
+    <span class="hljs-keyword">case</span> <span class="hljs-string">"<span class="hljs-variable">$GIT_STATUS_IGNORE_SUBMODULES</span>"</span> <span class="hljs-keyword">in</span>
+      git)
+        <span class="hljs-comment"># let git decide (this respects per-repo config in .gitmodules)</span>
+        ;;
+      *)
+        <span class="hljs-comment"># if unset: ignore dirty submodules</span>
+        <span class="hljs-comment"># other values are passed to --ignore-submodules</span>
+        FLAGS+=<span class="hljs-string">"--ignore-submodules=<span class="hljs-variable">$&#123;GIT_STATUS_IGNORE_SUBMODULES:-dirty&#125;</span>"</span>
+        ;;
+    <span class="hljs-keyword">esac</span>
+    STATUS=$(<span class="hljs-built_in">command</span> git status <span class="hljs-variable">$&#123;FLAGS&#125;</span> 2&gt; /dev/null | tail -n1)
+  <span class="hljs-keyword">fi</span>
+  <span class="hljs-keyword">if</span> [[ -n <span class="hljs-variable">$STATUS</span> ]]; <span class="hljs-keyword">then</span>
+    <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$ZSH_THEME_GIT_PROMPT_DIRTY</span>"</span>
   <span class="hljs-keyword">else</span>
     <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$ZSH_THEME_GIT_PROMPT_CLEAN</span>"</span>
   <span class="hljs-keyword">fi</span>
@@ -37,17 +44,9 @@
   ref=$(git symbolic-ref HEAD 2&gt; /dev/null) || <span class="hljs-built_in">return</span>
   <span class="hljs-built_in">echo</span> <span class="hljs-string">"<span class="hljs-variable">$ZSH_THEME_GIT_PROMPT_PREFIX</span><span class="hljs-variable">$&#123;ref#refs/heads/&#125;</span><span class="hljs-variable">$ZSH_THEME_GIT_PROMPT_SUFFIX</span>"</span>
 &#125;</code></pre>
-<p>其实sf上早有人问过这问题，解决方案也早已存在于oh-my-zsh的标配插件中了。直接在<code>~/.zshrc</code>中修改下调用插件就好</p>
-<pre><code class="hljs bash">plugins=(gitfast) <span class="hljs-comment"># 原来是git</span></code></pre>
-<p>看看<code>.oh-my-zsh/plugins/gitfast.plugin.zsh</code>里的写法</p>
-<pre><code class="hljs bash">dir=$(dirname <span class="hljs-variable">$0</span>)
-<span class="hljs-built_in">source</span> <span class="hljs-variable">$dir</span>/../git/git.plugin.zsh
-<span class="hljs-built_in">source</span> <span class="hljs-variable">$dir</span>/git-prompt.sh
-
-<span class="hljs-keyword">function</span> <span class="hljs-function"><span class="hljs-title">git_prompt_info</span></span>() &#123;
-  dirty=<span class="hljs-string">"<span class="hljs-variable">$(parse_git_dirty)</span>"</span>
-  __git_ps1 <span class="hljs-string">"<span class="hljs-variable">$&#123;ZSH_THEME_GIT_PROMPT_PREFIX//\%/%%&#125;</span>%s<span class="hljs-variable">$&#123;dirty//\%/%%&#125;</span><span class="hljs-variable">$&#123;ZSH_THEME_GIT_PROMPT_SUFFIX//\%/%%&#125;</span>"</span>
-&#125;</code></pre>
+<p>当然如果你不想魔改源码， SO 上也有人<a href="https://stackoverflow.com/questions/12765344/oh-my-zsh-slow-but-only-for-certain-git-repo" target="_blank" rel="noopener">问过这问题</a>，解决方案存在于上面的源码里。</p>
+<pre><code class="hljs bash">git config --add oh-my-zsh.hide-status 1
+git config --add oh-my-zsh.hide-dirty 1</code></pre>
 <p>没有了<code>parse_git_dirty</code>，我们就看不到zsh 中git repo名字旁边提示当前分支是否dirty的小勾勾“✔”和小叉叉“✗”，但是人生体验流畅了不只十个数量级啊。比起肆意的人生，OOXX算什么呢！！！（话题没有跑偏没有跑偏(;¬_¬) ）</p>
 <p>从此&lt;tab&gt;键又能肆意飞翔了。</p>
 </div><div class="post-footer"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2014-04-04</span><i class="fa fa-tag"></i><a href="/categories/Tips/" title="Tips" class="tag">Tips </a><a href="/tags/Git/" title="Git" class="tag">Git </a><a href="/tags/zsh/" title="zsh" class="tag">zsh </a></div></div></div></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://hikerpig.github.io/2014/04/04/2014-04-04-让oh-my-zsh的gitfast插件拯救你/,HP goes FE,让oh-my-zsh的git插件飞起来,;" class="fa fa-twitter"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a role="navigation" href="/2014/04/08/2014-04-08-在Jekyll博客里优雅地嵌入Github-Gist/" title="在Jekyll博客里优雅地嵌入Github Gist" class="btn">上一篇</a></li><li class="next pagbuttons"><a role="navigation" href="/2014/04/02/2014-04-02-从今开始用Casperjs来暴力签到吧/" title="从今开始用Casperjs来暴力签到吧" class="btn">下一篇</a></li></ul></div><div id="comments"><div id="gitalk-container"></div></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
