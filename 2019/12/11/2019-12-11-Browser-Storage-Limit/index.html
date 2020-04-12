@@ -43,12 +43,13 @@
 <p>以下两种方法，都为异步过程</p>
 <p>1 使用 <a href="https://developer.mozilla.org/en-US/docs/Web/API/Blob/arrayBuffer" target="_blank" rel="noopener">blob.arrayBuffer()</a> 方法。此方法为标准的推荐，不过目前浏览器支持有限。</p>
 <pre><code class="hljs js"><span class="hljs-keyword">const</span> arrayBuffer = awiat blob.arrayBuffer()</code></pre>
-<p>2 使用 FileReader `` <pre><code class="hljs js"><span class="hljs-keyword">let</span> arrayBuffer
+<p>2 使用 <code>FileReader</code></p>
+<pre><code class="hljs js"><span class="hljs-keyword">let</span> arrayBuffer
 <span class="hljs-keyword">const</span> fr = <span class="hljs-keyword">new</span> FileReader()
 fr.onload = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>&#123;
   arrayBuffer = e.target.value
 &#125;
-fr.readAsArrayBuffer(blob)</code></pre></p>
+fr.readAsArrayBuffer(blob)</code></pre>
 <h3 id="arraybuffer---blob">ArrayBuffer -&gt; Blob</h3>
 <p>同步过程</p>
 <pre><code class="hljs js"><span class="hljs-keyword">const</span> blob = <span class="hljs-keyword">new</span> Blob([arrayBuffer], &#123; <span class="hljs-attr">type</span>: <span class="hljs-string">'video/mp4'</span> &#125;)</code></pre>

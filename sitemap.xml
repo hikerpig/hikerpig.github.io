@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://hikerpig.github.io/2020/03/07/2020-03-07-Vuex-Webpack-HMR/</loc>
+    
+    <lastmod>2020-04-12T15:58:38.662Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2019/12/11/2019-12-11-Browser-Storage-Limit/</loc>
+    
+    <lastmod>2020-04-09T10:05:04.197Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://hikerpig.github.io/2020/03/16/2020-03-16-A-Glimpse-Of-Web-Audio-API/</loc>
     
     <lastmod>2020-03-31T14:57:34.995Z</lastmod>
@@ -33,13 +47,6 @@
     <loc>http://hikerpig.github.io/2019/05/13/2019-05-13-Fastblur-implemetation-with-rust/</loc>
     
     <lastmod>2020-03-16T05:26:52.900Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2019/12/11/2019-12-11-Browser-Storage-Limit/</loc>
-    
-    <lastmod>2020-03-10T07:20:17.987Z</lastmod>
     
   </url>
   
