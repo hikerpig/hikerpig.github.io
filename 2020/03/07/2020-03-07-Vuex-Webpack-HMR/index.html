@@ -1,121 +1,33 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta name="generator" content="Hexo 3.9.0"><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>一次 Webpack 下的 Vuex HMR 尝试 · HP goes FE</title><meta name="description" content="使用 Webpack 构建 Vue 项目时，借助 vue-loader 和 vue-hot-reload-api，我们在开发的时候可以获得很好的组件热加载（Hot Module Replacement）体验。然而 vue-loader 中却没有关于 vuex 的配置（当然这也的确不是它应该插手的地方"><meta name="keywords" content="Engineering,Vuex,Webpack"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div id="toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#vuex-的-api"><span class="toc-text">Vuex 的 API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方案"><span class="toc-text">解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#样例说明"><span class="toc-text">样例说明</span></a></li></ol></li></ol></div><div class="post animated fadeInDown"><div class="post-title"><h1><a>一次 Webpack 下的 Vuex HMR 尝试</a></h1></div><div class="post-info"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-03-07</span><i class="fa fa-tag"></i><a href="/categories/前端/" title="前端" class="tag">前端 </a><a href="/tags/Engineering/" title="Engineering" class="tag">Engineering </a><a href="/tags/Vuex/" title="Vuex" class="tag">Vuex </a><a href="/tags/Webpack/" title="Webpack" class="tag">Webpack </a></div></div></div><div class="post-content"><p>使用 Webpack 构建 Vue 项目时，借助 vue-loader 和 vue-hot-reload-api，我们在开发的时候可以获得很好的组件热加载（Hot Module Replacement）体验。然而 vue-loader 中却没有关于 vuex 的配置（当然这也的确不是它应该插手的地方）。</p>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>一次 Webpack 下的 Vuex HMR 尝试 · HP goes FE</title><meta name="description" content="使用 Webpack 构建 Vue 项目时，借助 vue-loader 和 vue-hot-reload-api，我们在开发的时候可以获得很好的组件热加载（Hot Module Replacement）体验。然而 vue-loader 中却没有关于 vuex 的配置（当然这也的确不是它应该插手的地方"><meta name="keywords" content="Engineering,Vuex,Webpack"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig" target="_blank" rel="noopener"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig" target="_blank" rel="noopener">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole" target="_blank" rel="noopener">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div id="toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#vuex-的-api"><span class="toc-text">Vuex 的 API</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解决方案"><span class="toc-text">解决方案</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#样例说明"><span class="toc-text">样例说明</span></a></li></ol></li></ol></div><div class="post animated fadeInDown"><div class="post-title"><h1><a>一次 Webpack 下的 Vuex HMR 尝试</a></h1></div><div class="post-info"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-03-07</span><i class="fa fa-tag"></i><a href="/categories/前端/" title="前端" class="tag">前端 </a><a href="/tags/Engineering/" title="Engineering" class="tag">Engineering </a><a href="/tags/Vuex/" title="Vuex" class="tag">Vuex </a><a href="/tags/Webpack/" title="Webpack" class="tag">Webpack </a></div></div></div><div class="post-content"><p>使用 Webpack 构建 Vue 项目时，借助 vue-loader 和 vue-hot-reload-api，我们在开发的时候可以获得很好的组件热加载（Hot Module Replacement）体验。然而 vue-loader 中却没有关于 vuex 的配置（当然这也的确不是它应该插手的地方）。</p>
 <p>官方 vue-cli 的 vuex 插件也没有相应支持（在 cli serve 下如果更改 store 或是其依赖的模块，页面会自动刷新，这个行为是 hot reload 而不是 HMR）。</p>
 <p>Nuxt.js 框架秉承着 convention over configuration 的思想，在一定的目录和文件结构约定下，通过目录分析和脚手架文件模板，很好地解决了 HMR 的问题，生成 <code>store</code> 入口模块的相关代码在<a href="https://github.com/nuxt/nuxt.js/blob/dev/packages/vue-app/template/store.js" target="_blank" rel="noopener">这里</a>。</p>
 <p>在不使用 Nuxt 的情况下，我们也可以通过在项目中保持一定的模块规范来简单实现 Vuex HMR 的配置。</p>
 <h2 id="vuex-的-api">Vuex 的 API</h2>
 <p>Vuex 自身是提供了 hotUpdate api 以及 <a href="https://vuex.vuejs.org/guide/hot-reload.html" target="_blank" rel="noopener">一个 HMR 的代码示例</a> 的。</p>
-<pre><code class="hljs js"><span class="hljs-keyword">if</span> (<span class="hljs-built_in">module</span>.hot) &#123;
-  <span class="hljs-comment">// accept actions and mutations as hot modules</span>
-  <span class="hljs-built_in">module</span>.hot.accept([<span class="hljs-string">'./mutations'</span>, <span class="hljs-string">'./modules/a'</span>], () =&gt; &#123;
-    <span class="hljs-comment">// require the updated modules</span>
-    <span class="hljs-comment">// have to add .default here due to babel 6 module output</span>
-    <span class="hljs-keyword">const</span> newMutations = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./mutations'</span>).default
-    <span class="hljs-keyword">const</span> newModuleA = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./modules/a'</span>).default
-    <span class="hljs-comment">// swap in the new modules and mutations</span>
-    store.hotUpdate(&#123;
-      <span class="hljs-attr">mutations</span>: newMutations,
-      <span class="hljs-attr">modules</span>: &#123;
-        <span class="hljs-attr">a</span>: newModuleA
-      &#125;
-    &#125;)
-  &#125;)
-&#125;</code></pre>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">if</span> (<span class="hljs-built_in">module</span>.hot) &#123;<br>  <span class="hljs-comment">// accept actions and mutations as hot modules</span><br>  <span class="hljs-built_in">module</span>.hot.accept([<span class="hljs-string">'./mutations'</span>, <span class="hljs-string">'./modules/a'</span>], () =&gt; &#123;<br>    <span class="hljs-comment">// require the updated modules</span><br>    <span class="hljs-comment">// have to add .default here due to babel 6 module output</span><br>    <span class="hljs-keyword">const</span> newMutations = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./mutations'</span>).default<br>    <span class="hljs-keyword">const</span> newModuleA = <span class="hljs-built_in">require</span>(<span class="hljs-string">'./modules/a'</span>).default<br>    <span class="hljs-comment">// swap in the new modules and mutations</span><br>    store.hotUpdate(&#123;<br>      mutations: newMutations,<br>      modules: &#123;<br>        a: newModuleA<br>      &#125;<br>    &#125;)<br>  &#125;)<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>这个例子稍显简单，需要手动指定每一个 submodule 的路径。</p>
 <h2 id="解决方案">解决方案</h2>
 <p>假设项目中 vuex 相关文件的目录结构如下。</p>
-<pre><code class="hljs text">src/store
-├── index.js
-└── modules
-    ├── complex
-    │   └── index.js
-    ├── sub.js // 一个 vuex 模块定义文件
-    ├── util.js // 一个随意的工具函数文件，不导出 vuex 模块定义，并不推荐这样的
-    └── ...</code></pre>
+<figure class="highlight plain"><table><tr><td class="code"><pre><code class="hljs text">src&#x2F;store<br>├── index.js<br>└── modules<br>    ├── complex<br>    │   └── index.js<br>    ├── sub.js &#x2F;&#x2F; 一个 vuex 模块定义文件<br>    ├── util.js &#x2F;&#x2F; 一个随意的工具函数文件，不导出 vuex 模块定义，并不推荐这样与 module 并行的结构，但我们的方案不会误判，详情请继续往下看<br>    └── ...<br></code></pre></td></tr></table></figure>
 <p>其中省略了上例中的 <code>mutations</code> 文件，将全局根模块的内容都写在 <code>store/index.js</code> 中。 <code>modules</code> 文件夹里存放模块的定义内容。</p>
-<p>那我们就可以使用 <a href="https://webpack.js.org/api/module-methods/#requirecontext" target="_blank" rel="noopener"><code>require.context</code></a> 来动态得出依赖的模块列表。</p>
+<p>那我们就可以使用 <a href="https://webpack.js.org/api/module-methods/#requirecontext" target="_blank" rel="noopener">require.context</a> 来动态得出依赖的模块列表。</p>
 <p>首先 <code>sub.js</code> 和 <code>complex/index.js</code> 需要服从一些我们预设的规则：</p>
 <ol type="1">
 <li>vuex module 定义文件都使用 <code>export default</code> 导出</li>
 <li>如果是 <code>namespaced</code> 模块，需要通过 <code>export const VUEX_NS</code> 或者在 vuex module 定义中添加一个 <code>namespace: string</code> 字段来导出命名空间名。</li>
 </ol>
 <p>例如 sub.js 文件内容：</p>
-<pre><code class="hljs js"><span class="hljs-keyword">import</span> &#123; greet &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span>
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> VUEX_NS = <span class="hljs-string">'sub'</span>
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> &#123;
-  <span class="hljs-attr">namespaced</span>: <span class="hljs-literal">true</span>,
-  <span class="hljs-attr">actions</span>: &#123;
-    test_sub_action() &#123;
-      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'sub v1'</span>)
-      greet()
-    &#125;
-  &#125;
-&#125;</code></pre>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> &#123; greet &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'./util'</span><br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> VUEX_NS = <span class="hljs-string">'sub'</span><br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> &#123;<br>  namespaced: <span class="hljs-literal">true</span>,<br>  actions: &#123;<br>    test_sub_action() &#123;<br>      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'sub v1'</span>)<br>      greet()<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>在 store/index.js 中的例子如下：</p>
-<pre><code class="hljs js"><span class="hljs-keyword">import</span> Vue <span class="hljs-keyword">from</span> <span class="hljs-string">'vue'</span>
-<span class="hljs-keyword">import</span> Vuex <span class="hljs-keyword">from</span> <span class="hljs-string">'vuex'</span>
-
-<span class="hljs-keyword">import</span> SUB, &#123; VUEX_NS <span class="hljs-keyword">as</span> SUB_VUEX_NS &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'./modules/sub'</span>
-<span class="hljs-keyword">import</span> COMPLEX, &#123; VUEX_NS <span class="hljs-keyword">as</span> COMPLEX_VUEX_NS &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'./modules/complex'</span>
-
-Vue.use(Vuex)
-
-<span class="hljs-keyword">const</span> store = <span class="hljs-keyword">new</span> Vuex.Store(&#123;
-  <span class="hljs-attr">actions</span>: &#123;
-    test_action() &#123;
-      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'root action v1'</span>)
-    &#125;
-  &#125;,
-  <span class="hljs-attr">modules</span>: &#123;
-    [SUB_VUEX_NS]: SUB,
-    [COMPLEX_VUEX_NS]: COMPLEX,
-  &#125;
-&#125;)
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> store
-
-<span class="hljs-keyword">if</span> (<span class="hljs-built_in">module</span>.hot) &#123;
-  <span class="hljs-comment">// submodules hmr</span>
-  <span class="hljs-keyword">const</span> moduleFiles = <span class="hljs-built_in">require</span>.context(<span class="hljs-string">'./modules'</span>, <span class="hljs-literal">true</span>, /js$/)
-  <span class="hljs-keyword">const</span> moduleFileKeys = moduleFiles.keys().map(<span class="hljs-function"><span class="hljs-params">k</span> =&gt;</span> moduleFiles.resolve(k))
-
-  <span class="hljs-built_in">module</span>.hot.accept(moduleFileKeys, (deps) =&gt; &#123;
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'module files update'</span>, deps)
-    <span class="hljs-keyword">const</span> hotUpdatePayload = &#123;
-      <span class="hljs-attr">modules</span>: &#123;&#125;,
-    &#125;
-    deps.forEach(<span class="hljs-function">(<span class="hljs-params">moduleId</span>) =&gt;</span> &#123;
-      <span class="hljs-keyword">const</span> m = __webpack_require__(moduleId)
-      <span class="hljs-keyword">const</span> moduleDef = m.default
-      <span class="hljs-keyword">if</span> (moduleDef &amp;&amp; (moduleDef.actions || moduleDef.mutations)) &#123;
-        <span class="hljs-keyword">let</span> namespace = <span class="hljs-string">''</span>
-        <span class="hljs-keyword">if</span> (moduleDef.namespaced) &#123;
-          <span class="hljs-comment">// Guess namespace</span>
-          namespace = moduleDef.namespace || m[<span class="hljs-string">'VUEX_NS'</span>] || moduleDef[<span class="hljs-string">'namespace'</span>]
-        &#125;
-        <span class="hljs-keyword">if</span> (namespace) &#123;
-          <span class="hljs-keyword">if</span> (hotUpdatePayload.modules[namespace]) &#123;
-            <span class="hljs-built_in">console</span>.warn(<span class="hljs-string">`Already exists module with namespace <span class="hljs-subst">$&#123;namespace&#125;</span>`</span>)
-          &#125;
-          <span class="hljs-built_in">Object</span>.assign(hotUpdatePayload.modules, &#123; [namespace]: moduleDef &#125;)
-        &#125; <span class="hljs-keyword">else</span> &#123;
-          <span class="hljs-built_in">Object</span>.assign(hotUpdatePayload, moduleDef)
-        &#125;
-      &#125;
-    &#125;)
-
-    store.hotUpdate(hotUpdatePayload)
-  &#125;)
-&#125;</code></pre>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">import</span> Vue <span class="hljs-keyword">from</span> <span class="hljs-string">'vue'</span><br><span class="hljs-keyword">import</span> Vuex <span class="hljs-keyword">from</span> <span class="hljs-string">'vuex'</span><br><br><span class="hljs-keyword">import</span> SUB, &#123; VUEX_NS <span class="hljs-keyword">as</span> SUB_VUEX_NS &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'./modules/sub'</span><br><span class="hljs-keyword">import</span> COMPLEX, &#123; VUEX_NS <span class="hljs-keyword">as</span> COMPLEX_VUEX_NS &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'./modules/complex'</span><br><br>Vue.use(Vuex)<br><br><span class="hljs-keyword">const</span> store = <span class="hljs-keyword">new</span> Vuex.Store(&#123;<br>  actions: &#123;<br>    test_action() &#123;<br>      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'root action v1'</span>)<br>    &#125;<br>  &#125;,<br>  modules: &#123;<br>    [SUB_VUEX_NS]: SUB,<br>    [COMPLEX_VUEX_NS]: COMPLEX,<br>  &#125;<br>&#125;)<br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> store<br><br><span class="hljs-keyword">if</span> (<span class="hljs-built_in">module</span>.hot) &#123;<br>  <span class="hljs-comment">// submodules hmr</span><br>  <span class="hljs-keyword">const</span> moduleFiles = <span class="hljs-built_in">require</span>.context(<span class="hljs-string">'./modules'</span>, <span class="hljs-literal">true</span>, /js$/)<br>  <span class="hljs-keyword">const</span> moduleFileKeys = moduleFiles.keys().map(<span class="hljs-function"><span class="hljs-params">k</span> =&gt;</span> moduleFiles.resolve(k))<br><br>  <span class="hljs-built_in">module</span>.hot.accept(moduleFileKeys, (deps) =&gt; &#123;<br>    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'module files update'</span>, deps)<br>    <span class="hljs-keyword">const</span> hotUpdatePayload = &#123;<br>      modules: &#123;&#125;,<br>    &#125;<br>    deps.forEach(<span class="hljs-function">(<span class="hljs-params">moduleId</span>) =&gt;</span> &#123;<br>      <span class="hljs-keyword">const</span> m = __webpack_require__(moduleId)<br>      <span class="hljs-keyword">const</span> moduleDef = m.default<br>      <span class="hljs-keyword">if</span> (moduleDef &amp;&amp; (moduleDef.actions || moduleDef.mutations)) &#123;<br>        <span class="hljs-keyword">let</span> namespace = <span class="hljs-string">''</span><br>        <span class="hljs-keyword">if</span> (moduleDef.namespaced) &#123;<br>          <span class="hljs-comment">// Guess namespace</span><br>          namespace = moduleDef.namespace || m[<span class="hljs-string">'VUEX_NS'</span>] || moduleDef[<span class="hljs-string">'namespace'</span>]<br>        &#125;<br>        <span class="hljs-keyword">if</span> (namespace) &#123;<br>          <span class="hljs-keyword">if</span> (hotUpdatePayload.modules[namespace]) &#123;<br>            <span class="hljs-built_in">console</span>.warn(<span class="hljs-string">`Already exists module with namespace <span class="hljs-subst">$&#123;namespace&#125;</span>`</span>)<br>          &#125;<br>          <span class="hljs-built_in">Object</span>.assign(hotUpdatePayload.modules, &#123; [namespace]: moduleDef &#125;)<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>          <span class="hljs-built_in">Object</span>.assign(hotUpdatePayload, moduleDef)<br>        &#125;<br>      &#125;<br>    &#125;)<br><br>    store.hotUpdate(hotUpdatePayload)<br>  &#125;)<br>&#125;<br></code></pre></td></tr></table></figure>
 <h3 id="样例说明">样例说明</h3>
 <p>在以上的目录结构下，<code>moduleFileKeys</code> 的结果为：</p>
-<pre><code class="hljs js">[<span class="hljs-string">"./src/store/modules/complex/index.js"</span>, <span class="hljs-string">"./src/store/modules/sub.js"</span>, <span class="hljs-string">"./src/store/modules/util.js"</span>]</code></pre>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js">[<span class="hljs-string">"./src/store/modules/complex/index.js"</span>, <span class="hljs-string">"./src/store/modules/sub.js"</span>, <span class="hljs-string">"./src/store/modules/util.js"</span>]<br></code></pre></td></tr></table></figure>
 <p>这其中任一个文件发生变化，都会在 module 更新结束后，进入给 <code>module.hot.accept</code> 函数传入的回调函数 <code>(deps) =&gt; {...}</code> 中，执行我们自定义的更新逻辑。</p>
 <p><code>__webpack_require__</code> 是一个 webpack module 作用域内特有的函数，文档<a href="https://webpack.js.org/api/module-variables/#__webpack_require__-webpack-specific" target="_blank" rel="noopener">在此</a>。P.S. 这里使用它，而不是 <code>require(moduleId)</code>，我们都知道源文件中的 <code>require</code> 语句会被 webpack 分析并在生成目标代码时改写，但若入参不是字符串，不能被静态分析出具体的模块，在生成的 bundle 里会被 webpack 转为 <code>__webpack_require__("./src/store sync recursive")(moduleId)</code>，在我的测试中，<code>__webpack_require__("./src/store sync recursive")</code> 这句的结果是一个 <code>webpackEmptyContext</code>，调用它会抛出 MODULE_NOT_FOUND 的异常。</p>
 <p>接下来关于 moduleDef 判断的代码建立在之前说的预设规则上，可以根据项目实际修改。</p>
 <p>P.S. 目前这个方案没有解决两层及以上深度的 module 情况，实际使用中这个似乎也不常见。</p>
-</div></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://hikerpig.github.io/2020/03/07/2020-03-07-Vuex-Webpack-HMR/,HP goes FE,一次 Webpack 下的 Vuex HMR 尝试,;" class="fa fa-twitter"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a role="navigation" href="/2020/03/16/2020-03-16-A-Glimpse-Of-Web-Audio-API/" title="初识 Web Audio API - 术语扫盲" class="btn">上一篇</a></li><li class="next pagbuttons"><a role="navigation" href="/2020/02/19/2020-02-19-Regex-Collection/" title="我的常用正则表达式清单" class="btn">下一篇</a></li></ul></div><div id="comments"><div id="gitalk-container"></div></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+</div></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://hikerpig.github.io/2020/03/07/2020-03-07-Vuex-Webpack-HMR/,HP goes FE,一次 Webpack 下的 Vuex HMR 尝试,;" target="_blank" rel="noopener" class="fa fa-twitter"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a role="navigation" href="/2020/03/16/2020-03-16-A-Glimpse-Of-Web-Audio-API/" title="初识 Web Audio API - 术语扫盲" class="btn">上一篇</a></li><li class="next pagbuttons"><a role="navigation" href="/2020/02/19/2020-02-19-Regex-Collection/" title="我的常用正则表达式清单" class="btn">下一篇</a></li></ul></div><div id="comments"><div id="gitalk-container"></div></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
   clientID: '0b21579fda2f1d2e73f4',
   clientSecret: 'abc0351a314cc46bb3d58b6dad62c670c2d1e8f9',
   repo: 'hikerpig.github.io',
@@ -129,7 +41,7 @@ Vue.use(Vuex)
 })
 
 gitalk.render('gitalk-container')
-</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
+</script></div></div></div></div><script src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><script src="//cdn.jsdelivr.net/npm/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
 gtag('config', 'UA-49433257-1');
