@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://hikerpig.github.io/"/>
-  <updated>2020-06-05T12:55:55.971Z</updated>
+  <updated>2020-07-25T08:26:50.125Z</updated>
   <id>http://hikerpig.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Toc Bar Userscript - 一个显示页面大纲的油猴脚本</title>
+    <link href="http://hikerpig.github.io/2020/07/02/2020-07-02-Toc-Bar-Userscript/"/>
+    <id>http://hikerpig.github.io/2020/07/02/2020-07-02-Toc-Bar-Userscript/</id>
+    <published>2020-07-01T16:00:00.000Z</published>
+    <updated>2020-07-25T08:26:50.125Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="toc-bar">Toc Bar</h1><p>一个自用的油猴脚本，在页面中插入一个显示当前内容大纲的浮动组件，可<a href="https://greasyfork.org/zh-CN/scripts/406337-toc-bar" target="_blank" rel="noopener">去 greasefork 下载</a>。</p><p>目前适配了一些个人经常访问的网站，主要面向技术阅读，知乎/Medium/devto/github 之类。</p><h2 id="features">✨Features</h2><ul><li>使用 <a href="https://tscanlin.github.io/tocbot" target="_blank" rel="noopener">tocbot</a> 生成 Table of Content</li><li>对一些页面中 <code>h*</code> 标签不带 id 的网站，生成 id，以实现点击 TOC 标题跳转到对应内容的功能</li><li>不想使用的时候，组件可以一键折叠，避免挡住正在浏览的内容</li></ul><h2 id="screenshots">Screenshots</h2><figure><img src="https://raw.githubusercontent.com/hikerpig/toc-bar-userscript/master/images/screenshot-2.png" alt="" /><figcaption>devto</figcaption></figure><figure><img src="https://i.loli.net/2020/07/25/i3Ub8OwqrvaGzZX.png" alt="" /><figcaption>tocbar-github.png</figcaption></figure><figure><img src="https://raw.githubusercontent.com/hikerpig/toc-bar-userscript/master/images/screenshot-1.jpg" alt="" /><figcaption>zhuanlan-sspai</figcaption></figure>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h1 id=&quot;toc-bar&quot;&gt;Toc Bar&lt;/h1&gt;
+&lt;p&gt;一个自用的油猴脚本，在页面中插入一个显示当前内容大纲的浮动组件，可&lt;a href=&quot;https://greasyfork.org/zh-CN/scripts/406337-toc-bar&quot; target=&quot;_bla
+      
+    
+    </summary>
+    
+    
+      <category term="玩具" scheme="http://hikerpig.github.io/categories/%E7%8E%A9%E5%85%B7/"/>
+    
+    
+      <category term="Toys" scheme="http://hikerpig.github.io/tags/Toys/"/>
+    
+      <category term="Userscript" scheme="http://hikerpig.github.io/tags/Userscript/"/>
+    
+  </entry>
   
   <entry>
     <title>工作和个人项目使用不同 gitconfig</title>
@@ -545,32 +574,6 @@
     
     
       <category term="SVG" scheme="http://hikerpig.github.io/tags/SVG/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Goodbye My Santa Monica Dream 🎵</title>
-    <link href="http://hikerpig.github.io/2018/07/31/2018-07-31-Goodbye%20My%20Santa%20Monica%20Dream/"/>
-    <id>http://hikerpig.github.io/2018/07/31/2018-07-31-Goodbye My Santa Monica Dream/</id>
-    <published>2018-07-30T16:00:00.000Z</published>
-    <updated>2018-08-26T08:49:59.529Z</updated>
-    
-    <content type="html"><![CDATA[<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width="330" height="86" src="//music.163.com/outchain/player?type=2&amp;id=30496500&amp;auto=1&amp;height=66"></iframe><p>从《Life is strange》的原声带中发现的瑰宝，来自澳大利亚的兄妹组合 <a href="https://music.douban.com/musician/100215/" target="_blank" rel="noopener">Angus &amp; Julia Stone</a> 的一首略显忧伤的曲子，他俩前几年的曲风，小清新中带着些许迷幻。妹妹声音空灵慵懒，像加州的海风，棕榈叶间斑驳的阳光，和歌词特别配。</p><p>原曲使用 Open D 调弦，变调夹 3 品，感谢 <a href="http://www.goliathguitartutorials.com" target="_blank" rel="noopener">Goliath Guitar</a> 在 <a href="https://www.youtube.com/watch?v=sOJMMpdWScM" target="_blank" rel="noopener">Youtube 上的教程</a>，讲解详细，也给出了还原度几乎 100% 的伴奏谱子，而且非常好弹。pdf 谱例可以<a href="http://www.goliathguitartutorials.com/santa-monica-dream.html" target="_blank" rel="noopener">去这里下载</a>。</p><img src="//images-hikerpig.oss-cn-beijing.aliyuncs.com/image/tabs/santa_monica_dream_-_angus_and_julia.jpg" alt="undefined" title="undefined">]]></content>
-    
-    <summary type="html">
-    
-      
-      
-        &lt;iframe frameborder=&quot;no&quot; border=&quot;0&quot; marginwidth=&quot;0&quot; marginheight=&quot;0&quot; width=&quot;330&quot; height=&quot;86&quot; src=&quot;//music.163.com/outchain/player?type=2&amp;amp
-      
-    
-    </summary>
-    
-    
-      <category term="杂记" scheme="http://hikerpig.github.io/categories/%E6%9D%82%E8%AE%B0/"/>
-    
-    
-      <category term="吉他" scheme="http://hikerpig.github.io/tags/%E5%90%89%E4%BB%96/"/>
     
   </entry>
   
