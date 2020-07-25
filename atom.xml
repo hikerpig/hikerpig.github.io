@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://hikerpig.github.io/"/>
-  <updated>2020-07-25T08:26:50.125Z</updated>
+  <updated>2020-07-25T08:54:13.754Z</updated>
   <id>http://hikerpig.github.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="http://hikerpig.github.io/2020/07/02/2020-07-02-Toc-Bar-Userscript/"/>
     <id>http://hikerpig.github.io/2020/07/02/2020-07-02-Toc-Bar-Userscript/</id>
     <published>2020-07-01T16:00:00.000Z</published>
-    <updated>2020-07-25T08:26:50.125Z</updated>
+    <updated>2020-07-25T08:54:13.754Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="toc-bar">Toc Bar</h1><p>一个自用的油猴脚本，在页面中插入一个显示当前内容大纲的浮动组件，可<a href="https://greasyfork.org/zh-CN/scripts/406337-toc-bar" target="_blank" rel="noopener">去 greasefork 下载</a>。</p><p>目前适配了一些个人经常访问的网站，主要面向技术阅读，知乎/Medium/devto/github 之类。</p><h2 id="features">✨Features</h2><ul><li>使用 <a href="https://tscanlin.github.io/tocbot" target="_blank" rel="noopener">tocbot</a> 生成 Table of Content</li><li>对一些页面中 <code>h*</code> 标签不带 id 的网站，生成 id，以实现点击 TOC 标题跳转到对应内容的功能</li><li>不想使用的时候，组件可以一键折叠，避免挡住正在浏览的内容</li></ul><h2 id="screenshots">Screenshots</h2><figure><img src="https://raw.githubusercontent.com/hikerpig/toc-bar-userscript/master/images/screenshot-2.png" alt="" /><figcaption>devto</figcaption></figure><figure><img src="https://i.loli.net/2020/07/25/i3Ub8OwqrvaGzZX.png" alt="" /><figcaption>tocbar-github.png</figcaption></figure><figure><img src="https://raw.githubusercontent.com/hikerpig/toc-bar-userscript/master/images/screenshot-1.jpg" alt="" /><figcaption>zhuanlan-sspai</figcaption></figure>]]></content>
+    <content type="html"><![CDATA[<h1 id="toc-bar">Toc Bar</h1><p>一个自用的油猴脚本，在页面中插入一个显示当前内容大纲的浮动组件，可<a href="https://greasyfork.org/zh-CN/scripts/406337-toc-bar" target="_blank" rel="noopener">去 greasyfork 下载</a>。</p><p>目前适配了一些个人经常访问的网站，主要面向技术阅读，知乎/Medium/devto/github 之类。</p><h2 id="features">✨Features</h2><ul><li>使用 <a href="https://tscanlin.github.io/tocbot" target="_blank" rel="noopener">tocbot</a> 生成 Table of Content</li><li>对一些页面中 <code>h*</code> 标签不带 id 的网站，生成 id，以实现点击 TOC 标题跳转到对应内容的功能</li><li>不想使用的时候，组件可以一键折叠，避免挡住正在浏览的内容</li></ul><h2 id="screenshots">Screenshots</h2><figure><img src="https://raw.githubusercontent.com/hikerpig/toc-bar-userscript/master/images/screenshot-2.png" alt="" /><figcaption>devto</figcaption></figure><figure><img src="https://i.loli.net/2020/07/25/i3Ub8OwqrvaGzZX.png" alt="" /><figcaption>tocbar-github.png</figcaption></figure><figure><img src="https://raw.githubusercontent.com/hikerpig/toc-bar-userscript/master/images/screenshot-1.jpg" alt="" /><figcaption>zhuanlan-sspai</figcaption></figure>]]></content>
     
     <summary type="html">
     
