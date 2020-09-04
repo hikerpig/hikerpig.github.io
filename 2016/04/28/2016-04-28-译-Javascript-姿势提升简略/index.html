@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>[译] Javascript 姿势提升简略 · HP goes FE</title><meta name="description" content="成为一个更好的 Javascript 开发者。代码组织，Linting，测试。"><meta name="keywords" content="Javascript"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig" target="_blank" rel="noopener"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig" target="_blank" rel="noopener">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole" target="_blank" rel="noopener">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div id="toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#组织代码"><span class="toc-text">组织代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#框架"><span class="toc-text">框架！</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设计模式"><span class="toc-text">设计模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#模块"><span class="toc-text">模块</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#一个实用的模块案例"><span class="toc-text">一个实用的模块案例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码检验linting"><span class="toc-text">代码检验(Linting)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#浏览器开发者工具"><span class="toc-text">浏览器开发者工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#google-chrome"><span class="toc-text">Google Chrome</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mozilla-firefox"><span class="toc-text">Mozilla Firefox</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#apple-safari-传说中用来看-apple-keynotes-的浏览器"><span class="toc-text">Apple Safari (传说中用来看 Apple keynotes 的浏览器)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#internet-explorer"><span class="toc-text">Internet Explorer</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更多学习"><span class="toc-text">更多学习</span></a></li></ol></div><div class="post animated fadeInDown"><div class="post-title"><h1><a>[译] Javascript 姿势提升简略</a></h1></div><div class="post-info"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2016-04-28</span><i class="fa fa-tag"></i><a href="/categories/前端/" title="前端" class="tag">前端 </a><a href="/tags/Javascript/" title="Javascript" class="tag">Javascript </a></div></div></div><div class="post-content"><ul>
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>[译] Javascript 姿势提升简略 · HP goes FE</title><meta name="description" content="成为一个更好的 Javascript 开发者。代码组织，Linting，测试。"><meta name="keywords" content="Javascript"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig" target="_blank" rel="noopener"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="https://blog.hikerpig.cn/wiki/" target="_blank">Wiki</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig" target="_blank" rel="noopener">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole" target="_blank" rel="noopener">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div id="toc"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#组织代码"><span class="toc-text">组织代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#框架"><span class="toc-text">框架！</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设计模式"><span class="toc-text">设计模式</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#模块"><span class="toc-text">模块</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#一个实用的模块案例"><span class="toc-text">一个实用的模块案例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#代码检验linting"><span class="toc-text">代码检验(Linting)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#测试"><span class="toc-text">测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#浏览器开发者工具"><span class="toc-text">浏览器开发者工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#google-chrome"><span class="toc-text">Google Chrome</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#mozilla-firefox"><span class="toc-text">Mozilla Firefox</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#apple-safari-传说中用来看-apple-keynotes-的浏览器"><span class="toc-text">Apple Safari (传说中用来看 Apple keynotes 的浏览器)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#internet-explorer"><span class="toc-text">Internet Explorer</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更多学习"><span class="toc-text">更多学习</span></a></li></ol></div><div class="post animated fadeInDown"><div class="post-title"><h1><a>[译] Javascript 姿势提升简略</a></h1></div><div class="post-info"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2016-04-28</span><i class="fa fa-tag"></i><a href="/categories/前端/" title="前端" class="tag">前端 </a><a href="/tags/Javascript/" title="Javascript" class="tag">#Javascript </a></div></div></div><div class="post-content"><ul>
 <li>原文链接 : <a href="http://developer.telerik.com/featured/leveling-up-your-javascript/" target="_blank" rel="noopener">Leveling Up Your JavaScript</a></li>
 <li>原文作者 : <a href="http://developer.telerik.com/author/rcamden/" target="_blank" rel="noopener">Raymond Camden</a></li>
 </ul>
@@ -27,20 +27,20 @@ c.soNotRealistic();</code></pre>
 <p>在所有我看过的设计模式中，我觉得模块模式是最简单也是最容易应用到现有代码里的。</p>
 <p>纵而览之，模块模式就是一系列代码之外加了个包装。你抽取出一系列功能相关的代码扔到一个模块里，决定需要暴露的部分，也可以把一个模块里的代码放到不同的文件里。然后建立一个易于在项目之间共享的代码黑匣。</p>
 <p>看看这个简单的例子。此处的语法乍看可能有点奇怪，起码我一开始是这样觉得的。我们先从"包装"部分开始看，然后我再解释其余部分。</p>
-<p><img src="http://ww4.sinaimg.cn/large/9b5c8bd8jw1f0zumg7z7gj20kp05ojru.jpg"></p>
+<p><img src="http://ww4.sinaimg.cn/large/9b5c8bd8jw1f0zumg7z7gj20kp05ojru.jpg" /></p>
 <p>模块模式的包装。</p>
 <p>只有我一个人被这些括号搞晕了么？我搞不明白这里是干嘛的，这还是在我懂 JavaScript 的前提下。其实这里如果从里往外看，就清晰很多。</p>
-<p><img src="http://ww2.sinaimg.cn/large/9b5c8bd8jw1f0zuncbxnuj20m805lgly.jpg"></p>
+<p><img src="http://ww2.sinaimg.cn/large/9b5c8bd8jw1f0zuncbxnuj20m805lgly.jpg" /></p>
 <p>模块的内部只是个普通的函数。</p>
 <p>从一个简单的函数开始，在其内部定义该模块的实际需要提供的代码。</p>
-<p><img src="http://ww1.sinaimg.cn/large/9b5c8bd8jw1f0zunvmhafj20m805ot94.jpg"></p>
+<p><img src="http://ww1.sinaimg.cn/large/9b5c8bd8jw1f0zunvmhafj20m805ot94.jpg" /></p>
 <p>圆括号使得这个函数自动执行。</p>
 <p>最后的圆括号会让该函数立即执行。我们在函数里返回了什么，模块就是什么。此时我们这里还是空的。不过此时上图高亮的部分还_不是_合法的 JavaScript。那么，怎样让它变得合法呢？</p>
-<p><img src="http://ww4.sinaimg.cn/large/9b5c8bd8jw1f0zuoenvzjj20m805mdg9.jpg"></p>
+<p><img src="http://ww4.sinaimg.cn/large/9b5c8bd8jw1f0zuoenvzjj20m805mdg9.jpg" /></p>
 <p>外边的圆括号开始发功了。</p>
 <p>在<code>function() { }()</code> 外的圆括号使得此处成为合法JavaScript。你要是不信我，就打开开发者工具的控制台自己输入看看。</p>
 <p>这样就是我们一开始看到的。</p>
-<p><img src="http://ww1.sinaimg.cn/large/9b5c8bd8jw1f0zuotyvzej20m808ngm7.jpg"></p>
+<p><img src="http://ww1.sinaimg.cn/large/9b5c8bd8jw1f0zuotyvzej20m808ngm7.jpg" /></p>
 <p>返回值被赋给一个变量。</p>
 <p>最后一件事是把返回值赋给一个变量。尽管我自己完全懂得这里，但每次我看见这种代码我都得暂停一秒钟来提醒自己这是什么鬼。说来也不怕羞，我在编辑器里存着这段空模块代码随时快手粘贴。</p>
 <p>当我们终于征服了这坨诡异的语法之后，真正的模块模式究竟长啥样呢？</p>
@@ -179,11 +179,11 @@ document.getElementById(&quot;submitButton&quot;).addEventListener(&quot;click&q
 <p>记不记得你有多少次写过多少蠢代码？我说的是那些根本不能工作的，类似我最爱的 <code>fuction</code> 和 <code>functon</code>。</p>
 <p>代码检验就是这时候站出来帮你的！除了我之外大家都知道，代码检验不只有风格的最佳实践，还包含语法和基本的逻辑检验。还有一个让我从"等我有时间一定或做的" 跳到"我会虔诚地遵循它" 的原因，那就是几乎所有现代编辑器都支持此功能。我目前用的编辑器（ Sublime, Brackets 和 Visual Studio Code）都支持代码实时检验和反馈。</p>
 <p>举个例子，以下是 Visual Studio Code 对我一段很挫的代码的提示。当然了，我是故意写得很挫的。</p>
-<p><img src="http://ww4.sinaimg.cn/large/9b5c8bd8jw1f0zupgeoxdj20m80d1q40.jpg"></p>
+<p><img src="http://ww4.sinaimg.cn/large/9b5c8bd8jw1f0zupgeoxdj20m80d1q40.jpg" /></p>
 <p>Visual Studio Code 代码检验。</p>
 <p>上图中，你能看到 Visual Studio Code <strike>抱怨</strike>我代码中的几个错误。Visual Studio Code 的代码检验器，和大多数检验器一样，可配置你关心的检验规则以及对其中"错误"（必须修正）和"警告"(别偷懒啊，总要修复的)的定义。</p>
 <p>如果你不想安装任何东西，也不想折腾编辑器，另一种好方法是使用<a href="http://jshint.com" target="_blank" rel="noopener">JSHint.com</a>在线检验代码。JSHint 差不多是最流行的检验器，它基于另一个检验器 JSLint (谁说它们长得像来着？)。JSHint 的诞生一部分原因是由于 JSLint 太过严格。你可以直接在编辑器里或是通过命令行使用 JSHint，最简单的体验方法是在它的网站上试试。</p>
-<p><img src="http://ww1.sinaimg.cn/large/9b5c8bd8jw1f0zuppot76j20m804w0t8.jpg"></p>
+<p><img src="http://ww1.sinaimg.cn/large/9b5c8bd8jw1f0zuppot76j20m804w0t8.jpg" /></p>
 <p>JSHint 网站。</p>
 <p>乍看可能不太明显，其实左边是在一个在线代码编辑器。右边的是一份对左边代码的检验报告。要看到检验效果，最简单方式是在代码里随便写错点什么。我这里把 <code>main</code> 函数名改成了 <code>main2</code>。</p>
 <pre><code>function main2() {
@@ -192,7 +192,7 @@ document.getElementById(&quot;submitButton&quot;).addEventListener(&quot;click&q
 
 main();</code></pre>
 <p>马上，网页就对此给我报了两个错误。注意了，这并不是语法错误。代码在语法上是完全没问题的，但是 JSHint 发现了你可能忽视了的问题所在（当然了，这里代码只有5行，但想象下一个大文件里函数定义和调用之间隔了好多行的时候）。</p>
-<p><img src="http://ww4.sinaimg.cn/large/9b5c8bd8jw1f0zuq1qvjvj209t070wei.jpg"></p>
+<p><img src="http://ww4.sinaimg.cn/large/9b5c8bd8jw1f0zuq1qvjvj209t070wei.jpg" /></p>
 <p>JSHint 错误。</p>
 <p>来个更真实的例子如何？以下的代码（嗯现在我_是_用了 jQuery），我写了点简单的 JavaScript 做表单验证。都是些鸡毛蒜皮的东西，不过今天几乎一半的 JavaScript 代码做的都是这些事（哦哦当然还有创建弹出框然后问你要不要"赞"这个网站。真特么爱死这些了）。这些代码可以在 demo_jshint 文件夹的 app_orig.js 中找到。</p>
 <pre><code>function validAge(x) {
@@ -229,7 +229,7 @@ $(document).ready(function() {
 });</code></pre>
 <p>开始是两个辅助验证的函数（对年龄和 email）。然后是 <code>document.ready</code> 代码块里对表单提交的监听。获取表单中三个字段的值，检查是否为空（或是无效输入），若表单无效就弹出警告，否则继续（在我们的例子里，什么也没发生，表单没变化）。</p>
 <p>扔到 JSHint 上看看发生了啥：</p>
-<p><img src="http://ww3.sinaimg.cn/large/9b5c8bd8jw1f0zuqkjapdj20b90s5q3x.jpg"></p>
+<p><img src="http://ww3.sinaimg.cn/large/9b5c8bd8jw1f0zuqkjapdj20b90s5q3x.jpg" /></p>
 <p>JSHint 对我们样例代码的报错。</p>
 <p>哇塞好多东西！看起来是类似的问题出现了多次。我开始用检验器的时候这种情况挺常见。我并没有弄出很多种错误，而仅仅是同种错误的重复。第一个非常简单—— 检查相等时使用三等号替代双等号。简单来说就是用更严格的标准检测空字符串。先修复这个(demo_jshint/app_mod1.js)。</p>
 <pre><code>function validAge(x) {
@@ -265,7 +265,7 @@ $(document).ready(function() {
   });
 });</code></pre>
 <p>JSHint 报告变成了:</p>
-<p><img src="http://ww2.sinaimg.cn/large/9b5c8bd8jw1f0zur1n2y4j20am0lb0t8.jpg"></p>
+<p><img src="http://ww2.sinaimg.cn/large/9b5c8bd8jw1f0zur1n2y4j20am0lb0t8.jpg" /></p>
 <p>JSHint 对我们样例代码的报错。</p>
 <p>算是解决了。下一个错误类型是"未声明变量"。看着有点诡异。如果使用 jQuery 的话，你知道<code>$</code> 是存在的。<code>badForm</code> 的问题就更简单点——我忘记用 <code>var</code> 声明它了。那我们怎么解决<code>$</code>的问题呢？JSHint 提供了对代码规则检验方法的配置。在代码里加上一个注释以后，我们告诉 JSHint <code>$</code> 变量是作为全局变量可以放心使用。接下来我们补上这个注释，并且加上丢失的 <code>var</code> 声明（demo_jshint/app_mod2.js）。</p>
 <pre><code>/* globals $ */
@@ -302,7 +302,7 @@ $(document).ready(function() {
   });
 });</code></pre>
 <p>JSHint 报告变成了:</p>
-<p><img src="http://ww4.sinaimg.cn/large/9b5c8bd8jw1f0zurgx350j209204gwed.jpg"></p>
+<p><img src="http://ww4.sinaimg.cn/large/9b5c8bd8jw1f0zurgx350j209204gwed.jpg" /></p>
 <p>JSHint 对我们样例代码的报错。</p>
 <p>哇哦！就快结束了！最后一个问题恰好的展示了 JSHint 在提示最佳代码风格实践和指出错误以外的用途。这里我忘了写过一个处理年龄验证的函数。你看我创建了 <code>validAge</code>，但是在表单验证代码区域没使用它。也许我该删了这个函数 —— 反正也只有一行，但我觉得留下来更好——以免以后验证逻辑越来越复杂。以下就是完整的代码了(demo_jshint/app.js)。</p>
 <pre><code>/* globals $ */
@@ -344,13 +344,13 @@ $(document).ready(function() {
 <p>我不写测试。</p>
 <p>没错，我话就撂这儿了。世界不会停止转动。不过，在开发客户端项目时，我其实_是_写测试的（好啦实际是我_尝试_去写测试），但是我的主要工作写博客，和各种功能的样例代码。这些代码只为验证概念而非投入生产环境使用，因此不写测试没什么大不了的。其实，在我成为布道者和不做"实际"工作之前，我也是敢这么放话的，不写测试的借口和不使用代码检验器一样。不过一些给检验器加分的因素放在测试上也很好用。</p>
 <p>首先——许多编辑器会为你自动生成测试代码。例如在 Brackets 中，可以使用 <a href="https://github.com/dschaffe/brackets-xunit" target="_blank" rel="noopener">xunit</a> 扩展。借助它你只要在 JavaScript 文件上调出右键菜单就能生成测试代码（支持多种流行测试框架格式）。</p>
-<p><img src="http://ww1.sinaimg.cn/large/9b5c8bd8jw1f0zus4jz8sj20m80hymy4.jpg"></p>
+<p><img src="http://ww1.sinaimg.cn/large/9b5c8bd8jw1f0zus4jz8sj20m80hymy4.jpg" /></p>
 <p>xunit 创建的测试。</p>
 <p>该扩展基于现存代码去生成测试代码。生成的测试代码只是个模板，你需要自己去填写具体内容，这避免了一些无聊的重复劳动。</p>
-<p><img src="http://ww2.sinaimg.cn/large/9b5c8bd8jw1f0zuthjkyxj20m80hxjtd.jpg"></p>
+<p><img src="http://ww2.sinaimg.cn/large/9b5c8bd8jw1f0zuthjkyxj20m80hxjtd.jpg" /></p>
 <p>xunit 创建的测试。</p>
 <p>完成了测试细节的填充后，该扩展会帮你自动执行测试。都到了这份上了，不写代码基本上就只是懒了。</p>
-<p><img src="http://ww2.sinaimg.cn/large/9b5c8bd8jw1f0zutuzzmij20m80l50we.jpg"></p>
+<p><img src="http://ww2.sinaimg.cn/large/9b5c8bd8jw1f0zutuzzmij20m80l50we.jpg" /></p>
 <p>测试报告。</p>
 <p>你也许听过 TDD (测试驱动开发)。说的是在写具体代码之前先把单元测试写好。本质上是测试主导你的开发。写下代码并看它通过测试的时候，这些通过的测试能让你确保自己没有走错路。</p>
 <p>我觉得这个想法不错，不过让所有人都这么做的确是有点困难。我们干脆先从简单点的开始。想象下你手上有一些据你所知功能正常的代码，然后你发现了个 bug。在修复它之前，你可以创建一个测试去检验出此 bug，修复 bug，然后跑跑测试，确保此后相同的 bug _不会_再次出现。如我所言，这不是最理想的实践，但也能算是朝着以后在开发所有阶段实践测试的一个过渡。</p>
@@ -403,14 +403,14 @@ more script tags here...</code></pre>
 
 });</code></pre>
 <p>我的测试说的是当9999作为输入时应该返回9999。在浏览器里打开 SpecRunner.html 你就能看到错误报告。</p>
-<p><img src="http://ww4.sinaimg.cn/large/9b5c8bd8jw1f0zuu5bbhaj20m80e1q61.jpg"></p>
+<p><img src="http://ww4.sinaimg.cn/large/9b5c8bd8jw1f0zuu5bbhaj20m80e1q61.jpg" /></p>
 <p>测试失败的报告。</p>
 <p>修复起来很简单。把条件里的数字从9999增到10000:</p>
 <pre><code>if(x &lt; 10000) {
   return x;
 }</code></pre>
 <p>不论何时再跑测试你能看到一片欢乐。</p>
-<p><img src="http://ww2.sinaimg.cn/large/9b5c8bd8jw1f0zuuh4xj8j20m804y74k.jpg"></p>
+<p><img src="http://ww2.sinaimg.cn/large/9b5c8bd8jw1f0zuuh4xj8j20m804y74k.jpg" /></p>
 <p>测试成功的报告。</p>
 <p>你估计能想出一些相关测试完善这套测试。通常来说，积极地添加测试以覆盖你代码的各种可能使用场景没有任何不妥。关于日期和时间的牛库 <a href="http://momentjs.com/" target="_blank" rel="noopener">Moment.js</a>，不是我骗你，有超过五万七千多个测试。你真没看错，就是几万个。</p>
 <p>JavaScript 测试框架的其他选择有 <a href="https://qunitjs.com/" target="_blank" rel="noopener">QUnit</a>和 <a href="http://mochajs.org/" target="_blank" rel="noopener">Mocha</a>。和代码检验一样，你能使用 Grunt 之类的工具自动化测试，甚至可以往全栈靠一点，使用 <a href="http://www.seleniumhq.org/" target="_blank" rel="noopener">Selenium</a> 测试浏览器。</p>

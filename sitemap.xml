@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://hikerpig.github.io/2020/09/04/2020-09-04-Hiding-My-Heart/</loc>
+    
+    <lastmod>2020-09-04T06:30:33.813Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://hikerpig.github.io/2018/07/31/2018-07-31-Goodbye%2520My%2520Santa%2520Monica%2520Dream/</loc>
+    
+    <lastmod>2020-09-04T06:25:37.397Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://hikerpig.github.io/2020/07/02/2020-07-02-Toc-Bar-Userscript/</loc>
     
     <lastmod>2020-07-25T08:54:13.754Z</lastmod>
@@ -334,13 +348,6 @@
     <loc>http://hikerpig.github.io/2018/05/03/2018-05-03-Try-Rust-Webassemly/</loc>
     
     <lastmod>2018-08-26T08:50:19.060Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://hikerpig.github.io/2018/07/31/2018-07-31-Goodbye%2520My%2520Santa%2520Monica%2520Dream/</loc>
-    
-    <lastmod>2018-08-26T08:49:59.529Z</lastmod>
     
   </url>
   

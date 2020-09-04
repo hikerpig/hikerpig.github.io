@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>在 Typescript 中使用可被复用的 Vue Mixin · HP goes FE</title><meta name="description" content="转到用 Typescript 写 Vue 应用以后，经过一轮工具链和依赖的洗礼，总算蹒跚地能走起来了，不过有一个很常用的功能 mixin，似乎还没有官方的解决方案。
 既想享受 mixin 的灵活和方便，又想收获 ts 的类型系统带来的安全保障和开发时使用 IntelliSense 的顺滑体验。
-vu"><meta name="keywords" content="Typescript,Vue"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig" target="_blank" rel="noopener"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig" target="_blank" rel="noopener">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole" target="_blank" rel="noopener">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>在 Typescript 中使用可被复用的 Vue Mixin</a></h1></div><div class="post-info"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-01-21</span><i class="fa fa-tag"></i><a href="/categories/前端/" title="前端" class="tag">前端 </a><a href="/tags/Typescript/" title="Typescript" class="tag">Typescript </a><a href="/tags/Vue/" title="Vue" class="tag">Vue </a></div></div></div><div class="post-content"><p>转到用 Typescript 写 Vue 应用以后，经过一轮工具链和依赖的洗礼，总算蹒跚地能走起来了，不过有一个很常用的功能 mixin，似乎还没有官方的解决方案。</p>
+vu"><meta name="keywords" content="Typescript,Vue"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig" target="_blank" rel="noopener"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="https://blog.hikerpig.cn/wiki/" target="_blank">Wiki</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig" target="_blank" rel="noopener">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole" target="_blank" rel="noopener">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>在 Typescript 中使用可被复用的 Vue Mixin</a></h1></div><div class="post-info"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2018-01-21</span><i class="fa fa-tag"></i><a href="/categories/前端/" title="前端" class="tag">前端 </a><a href="/tags/Typescript/" title="Typescript" class="tag">#Typescript </a><a href="/tags/Vue/" title="Vue" class="tag">#Vue </a></div></div></div><div class="post-content"><p>转到用 Typescript 写 Vue 应用以后，经过一轮工具链和依赖的洗礼，总算蹒跚地能走起来了，不过有一个很常用的功能 mixin，似乎还没有官方的解决方案。</p>
 <p>既想享受 mixin 的灵活和方便，又想收获 ts 的类型系统带来的安全保障和开发时使用 IntelliSense 的顺滑体验。</p>
 <p>vuejs 官方组织里有一个 'vue-class-component' 以及连带推荐的 'vue-property-decorator'，都没有相应实现。翻了下前者的 issue，有一条挂了好些时间的待做 feature 就是 mixin 的支持。</p>
 <p>也不是什么复杂的事，自己写一个吧。</p>
@@ -8,221 +8,34 @@ vu"><meta name="keywords" content="Typescript,Vue"><meta content="width=device-w
 <p>后注：vue-class-component 6.2.0 开始提供 <a href="https://github.com/vuejs/vue-class-component/commit/cdcbfe5bb1a4c9d59a4b3066477f49c9aae8e2fc" target="_blank" rel="noopener">mixins</a> 方法，和本文的实现思路相似。</p>
 </blockquote>
 <h1 id="实现">实现</h1>
-<pre><code class="hljs typescript"><span class="hljs-keyword">import</span> Vue, &#123; VueConstructor &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'vue'</span>
-
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> VClass&lt;T&gt; = &#123;
-  <span class="hljs-keyword">new</span>(): T
-&#125; &amp; Pick&lt;VueConstructor, keyof VueConstructor&gt;
-
-<span class="hljs-comment">/**
- * mixins for class style vue component
- */</span>
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Mixins</span>&lt;<span class="hljs-title">A</span>&gt;(<span class="hljs-params">c: VClass&lt;A&gt;</span>): <span class="hljs-title">VClass</span>&lt;<span class="hljs-title">A</span>&gt;
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Mixins</span>&lt;<span class="hljs-title">A</span>, <span class="hljs-title">B</span>&gt;(<span class="hljs-params">c: VClass&lt;A&gt;, c1: VClass&lt;B&gt;</span>): <span class="hljs-title">VClass</span>&lt;<span class="hljs-title">A</span>&amp;<span class="hljs-title">B</span>&gt;
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Mixins</span>&lt;<span class="hljs-title">A</span>, <span class="hljs-title">B</span>, <span class="hljs-title">C</span>&gt;(<span class="hljs-params">c: VClass&lt;A&gt;, c1: VClass&lt;B&gt;, c2: VClass&lt;C&gt;</span>): <span class="hljs-title">VClass</span>&lt;<span class="hljs-title">A</span>&amp;<span class="hljs-title">B</span>&amp;<span class="hljs-title">C</span>&gt;
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Mixins</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params">c: VClass&lt;T&gt;, ...traits: <span class="hljs-built_in">Array</span>&lt;VClass&lt;T&gt;&gt;</span>): <span class="hljs-title">VClass</span>&lt;<span class="hljs-title">T</span>&gt; </span>&#123;
-  <span class="hljs-title">return</span> <span class="hljs-title">c</span>.<span class="hljs-title">extend</span>(<span class="hljs-params">&#123;
-    mixins: traits
-  &#125;</span>)
-&#125;</span></span></span></code></pre>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">import</span> Vue, &#123; VueConstructor &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'vue'</span><br><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">type</span> VClass&lt;T&gt; = &#123;<br>  <span class="hljs-keyword">new</span>(): T<br>&#125; &amp; Pick&lt;VueConstructor, keyof VueConstructor&gt;<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * mixins for class style vue component</span><br><span class="hljs-comment"> */</span><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Mixins</span>&lt;<span class="hljs-title">A</span>&gt;(<span class="hljs-params">c: VClass&lt;A&gt;</span>): <span class="hljs-title">VClass</span>&lt;<span class="hljs-title">A</span>&gt;</span><br><span class="hljs-function"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Mixins</span>&lt;<span class="hljs-title">A</span>, <span class="hljs-title">B</span>&gt;(<span class="hljs-params">c: VClass&lt;A&gt;, c1: VClass&lt;B&gt;</span>): <span class="hljs-title">VClass</span>&lt;<span class="hljs-title">A</span>&amp;<span class="hljs-title">B</span>&gt;</span></span><br><span class="hljs-function"><span class="hljs-function"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Mixins</span>&lt;<span class="hljs-title">A</span>, <span class="hljs-title">B</span>, <span class="hljs-title">C</span>&gt;(<span class="hljs-params">c: VClass&lt;A&gt;, c1: VClass&lt;B&gt;, c2: VClass&lt;C&gt;</span>): <span class="hljs-title">VClass</span>&lt;<span class="hljs-title">A</span>&amp;<span class="hljs-title">B</span>&amp;<span class="hljs-title">C</span>&gt;</span></span></span><br><span class="hljs-function"><span class="hljs-function"><span class="hljs-function"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Mixins</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params">c: VClass&lt;T&gt;, ...traits: <span class="hljs-built_in">Array</span>&lt;VClass&lt;T&gt;&gt;</span>): <span class="hljs-title">VClass</span>&lt;<span class="hljs-title">T</span>&gt; </span>&#123;</span></span></span><br><span class="hljs-function"><span class="hljs-function"><span class="hljs-function">  <span class="hljs-title">return</span> <span class="hljs-title">c</span>.<span class="hljs-title">extend</span>(<span class="hljs-params">&#123;</span></span></span></span><br><span class="hljs-function"><span class="hljs-function"><span class="hljs-function"><span class="hljs-params">    mixins: traits</span></span></span></span><br><span class="hljs-function"><span class="hljs-function"><span class="hljs-function"><span class="hljs-params">  &#125;</span>)</span></span></span><br><span class="hljs-function"><span class="hljs-function"><span class="hljs-function">&#125;</span></span></span><br></code></pre></td></tr></table></figure>
 <p>声明 <code>VClass&lt;T&gt;</code> 可作为 T 的类构造器。同时通过 <code>Pick</code> 拿到 Vue 的构造器上的静态方法（extend/mixin 之类），如此才能够支持下面这段中的真正实现，通过调用一个 Vue 的子类构造器上的 <code>extend</code> 方法生成新的子类构造器。</p>
-<pre><code class="hljs typescript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Mixins</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params">c: VClass&lt;T&gt;, ...traits: <span class="hljs-built_in">Array</span>&lt;VClass&lt;T&gt;&gt;</span>): <span class="hljs-title">VClass</span>&lt;<span class="hljs-title">T</span>&gt; </span>&#123;
-  <span class="hljs-keyword">return</span> c.extend(&#123;
-    mixins: traits
-  &#125;)
-&#125;</code></pre>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><code class="hljs typescript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Mixins</span>&lt;<span class="hljs-title">T</span>&gt;(<span class="hljs-params">c: VClass&lt;T&gt;, ...traits: <span class="hljs-built_in">Array</span>&lt;VClass&lt;T&gt;&gt;</span>): <span class="hljs-title">VClass</span>&lt;<span class="hljs-title">T</span>&gt; </span>&#123;<br>  <span class="hljs-keyword">return</span> c.extend(&#123;<br>    mixins: traits<br>  &#125;)<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>至于 ABC 这个纯粹是类型声明的体力活了。</p>
 <h1 id="使用">使用</h1>
 <p>实际使用时:</p>
-<pre><code class="hljs typescript"><span class="hljs-keyword">import</span> &#123; Component, Vue &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'vue-property-decorator'</span>
-<span class="hljs-keyword">import</span> &#123; Mixins &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'../../util/mixins'</span>
-
-<span class="hljs-meta">@Component</span>
-<span class="hljs-keyword">class</span> PageMixin <span class="hljs-keyword">extends</span> Vue &#123;
-  title = <span class="hljs-string">'Test Page'</span>
-
-  redirectTo(path: <span class="hljs-built_in">string</span>) &#123;
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'calling reidrectTo'</span>, path)
-    <span class="hljs-keyword">this</span>.$router.push(&#123; path &#125;)
-  &#125;
-&#125;
-
-<span class="hljs-keyword">interface</span> IDisposable &#123;
-  dispose(...args: <span class="hljs-built_in">any</span>[]): <span class="hljs-built_in">any</span>
-&#125;
-
-<span class="hljs-meta">@Component</span>
-<span class="hljs-keyword">class</span> DisposableMixin <span class="hljs-keyword">extends</span> Vue &#123;
-  _disposables: IDisposable[]
-
-  created() &#123;
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'disposable mixin created'</span>);
-    <span class="hljs-keyword">this</span>._disposables = []
-  &#125;
-
-  beforeDestroy() &#123;
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'about to clear disposables'</span>)
-    <span class="hljs-keyword">this</span>._disposables.map(<span class="hljs-function">(<span class="hljs-params">d</span>) =&gt;</span> &#123;
-      d.dispose()
-    &#125;)
-    <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>._disposables
-  &#125;
-
-  registerDisposable(d: IDisposable) &#123;
-    <span class="hljs-keyword">this</span>._disposables.push(d)
-  &#125;
-&#125;
-
-<span class="hljs-meta">@Component</span>(&#123;
-  template: <span class="hljs-string">`
-  &lt;div&gt;
-    &lt;h1&gt;&#123;&#123; title &#125;&#125;&lt;/h1&gt;
-    &lt;p&gt;Counted: &#123;&#123; counter &#125;&#125;&lt;/p&gt;
-  &lt;/div&gt;
-  `</span>
-&#125;)
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">class</span> TimerPage <span class="hljs-keyword">extends</span> Mixins(PageMixin, DisposableMixin) &#123;
-  counter = <span class="hljs-number">0</span>
-
-  mounted() &#123;
-    <span class="hljs-keyword">const</span> timer = setInterval(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;
-      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.counter++ &gt;= <span class="hljs-number">3</span>) &#123;
-        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.redirectTo(<span class="hljs-string">'/otherpage'</span>)
-      &#125;
-      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'count to'</span>, <span class="hljs-keyword">this</span>.counter);
-    &#125;, <span class="hljs-number">1000</span>)
-
-    <span class="hljs-keyword">this</span>.registerDisposable(&#123;
-      dispose() &#123;
-        clearInterval(timer)
-      &#125;
-    &#125;)
-  &#125;
-&#125;</code></pre>
-<pre><code class="hljs undefined"><span class="hljs-built_in">count</span> <span class="hljs-keyword">to</span> <span class="hljs-number">1</span>
-<span class="hljs-built_in">count</span> <span class="hljs-keyword">to</span> <span class="hljs-number">2</span>
-<span class="hljs-built_in">count</span> <span class="hljs-keyword">to</span> <span class="hljs-number">3</span>
-calling reidrectTo /otherpage
-<span class="hljs-keyword">about</span> <span class="hljs-keyword">to</span> clear disposables</code></pre>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">import</span> &#123; Component, Vue &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'vue-property-decorator'</span><br><span class="hljs-keyword">import</span> &#123; Mixins &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'../../util/mixins'</span><br><br><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">class</span> PageMixin <span class="hljs-keyword">extends</span> Vue &#123;<br>  title = <span class="hljs-string">'Test Page'</span><br><br>  redirectTo(path: <span class="hljs-built_in">string</span>) &#123;<br>    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'calling reidrectTo'</span>, path)<br>    <span class="hljs-keyword">this</span>.$router.push(&#123; path &#125;)<br>  &#125;<br>&#125;<br><br><span class="hljs-keyword">interface</span> IDisposable &#123;<br>  dispose(...args: <span class="hljs-built_in">any</span>[]): <span class="hljs-built_in">any</span><br>&#125;<br><br><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">class</span> DisposableMixin <span class="hljs-keyword">extends</span> Vue &#123;<br>  _disposables: IDisposable[]<br><br>  created() &#123;<br>    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'disposable mixin created'</span>);<br>    <span class="hljs-keyword">this</span>._disposables = []<br>  &#125;<br><br>  beforeDestroy() &#123;<br>    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'about to clear disposables'</span>)<br>    <span class="hljs-keyword">this</span>._disposables.map(<span class="hljs-function">(<span class="hljs-params">d</span>) =&gt;</span> &#123;<br>      d.dispose()<br>    &#125;)<br>    <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>._disposables<br>  &#125;<br><br>  registerDisposable(d: IDisposable) &#123;<br>    <span class="hljs-keyword">this</span>._disposables.push(d)<br>  &#125;<br>&#125;<br><br><span class="hljs-meta">@Component</span>(&#123;<br>  template: <span class="hljs-string">`</span><br><span class="hljs-string">  &lt;div&gt;</span><br><span class="hljs-string">    &lt;h1&gt;&#123;&#123; title &#125;&#125;&lt;/h1&gt;</span><br><span class="hljs-string">    &lt;p&gt;Counted: &#123;&#123; counter &#125;&#125;&lt;/p&gt;</span><br><span class="hljs-string">  &lt;/div&gt;</span><br><span class="hljs-string">  `</span><br>&#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-keyword">class</span> TimerPage <span class="hljs-keyword">extends</span> Mixins(PageMixin, DisposableMixin) &#123;<br>  counter = <span class="hljs-number">0</span><br><br>  mounted() &#123;<br>    <span class="hljs-keyword">const</span> timer = setInterval(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> &#123;<br>      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.counter++ &gt;= <span class="hljs-number">3</span>) &#123;<br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.redirectTo(<span class="hljs-string">'/otherpage'</span>)<br>      &#125;<br>      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'count to'</span>, <span class="hljs-keyword">this</span>.counter);<br>    &#125;, <span class="hljs-number">1000</span>)<br><br>    <span class="hljs-keyword">this</span>.registerDisposable(&#123;<br>      dispose() &#123;<br>        clearInterval(timer)<br>      &#125;<br>    &#125;)<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><code class="hljs applescript"><span class="hljs-built_in">count</span> <span class="hljs-keyword">to</span> <span class="hljs-number">1</span><br><span class="hljs-built_in">count</span> <span class="hljs-keyword">to</span> <span class="hljs-number">2</span><br><span class="hljs-built_in">count</span> <span class="hljs-keyword">to</span> <span class="hljs-number">3</span><br>calling reidrectTo /otherpage<br><span class="hljs-keyword">about</span> <span class="hljs-keyword">to</span> clear disposables<br></code></pre></td></tr></table></figure>
 <p>注意到直接 <code>extends Vue</code> 的 <code>DisposableMixin</code> 并不是一个有效的 Vue 组件，也不可以直接在 <code>mixins</code> 选项里使用，如果要被以 <code>Vue.extend</code> 方式扩展的自定义组件使用，记住使用 <code>Component</code> 包装一层。</p>
-<pre><code class="hljs typescript"><span class="hljs-keyword">const</span> ExtendedComponent = Vue.extend(&#123;
-  name: <span class="hljs-string">'ExtendedComponent'</span>,
-  mixins: [Component(DisposableMixin)],
-&#125;)</code></pre>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">const</span> ExtendedComponent = Vue.extend(&#123;<br>  name: <span class="hljs-string">'ExtendedComponent'</span>,<br>  mixins: [Component(DisposableMixin)],<br>&#125;)<br></code></pre></td></tr></table></figure>
 <h1 id="abstract-class">Abstract class</h1>
 <p>在业务系统中，多数情况需求下会更复杂，提供一些基础功能，但有些部分需要留给继承者自行实现，这个时候使用抽象类就很合适。</p>
 <h2 id="直接继承">直接继承</h2>
-<pre><code class="hljs typescript"><span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> AbstractMusicPlayer <span class="hljs-keyword">extends</span> Vue &#123;
-  <span class="hljs-keyword">abstract</span> audioSrc: <span class="hljs-built_in">string</span>
-  
-  playing = <span class="hljs-literal">false</span>
-  
-  togglePlay() &#123;
-    <span class="hljs-keyword">this</span>.playing = !<span class="hljs-keyword">this</span>.playing
-  &#125;
-&#125;
-
-<span class="hljs-meta">@Component</span>
-<span class="hljs-keyword">class</span> MusicPlayerA <span class="hljs-keyword">extends</span> AbstractMusicPlayer &#123;
-  audioSrc = <span class="hljs-string">'/audio-a.mp3'</span>
-&#125;
-
-<span class="hljs-meta">@Component</span>
-<span class="hljs-keyword">class</span> MusicPlayerB <span class="hljs-keyword">extends</span> AbstractMusicPlayer &#123;
-  staticBase = <span class="hljs-string">'/statics'</span>
-
-  <span class="hljs-keyword">get</span> audioSrc() &#123;
-    <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">$&#123;this.staticBase&#125;</span>/audio-b.mp3`</span>
-  &#125;
-&#125;</code></pre>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">abstract</span> <span class="hljs-keyword">class</span> AbstractMusicPlayer <span class="hljs-keyword">extends</span> Vue &#123;<br>  <span class="hljs-keyword">abstract</span> audioSrc: <span class="hljs-built_in">string</span><br>  <br>  playing = <span class="hljs-literal">false</span><br>  <br>  togglePlay() &#123;<br>    <span class="hljs-keyword">this</span>.playing = !<span class="hljs-keyword">this</span>.playing<br>  &#125;<br>&#125;<br><br><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">class</span> MusicPlayerA <span class="hljs-keyword">extends</span> AbstractMusicPlayer &#123;<br>  audioSrc = <span class="hljs-string">'/audio-a.mp3'</span><br>&#125;<br><br><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">class</span> MusicPlayerB <span class="hljs-keyword">extends</span> AbstractMusicPlayer &#123;<br>  staticBase = <span class="hljs-string">'/statics'</span><br><br>  <span class="hljs-keyword">get</span> audioSrc() &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">$&#123;<span class="hljs-keyword">this</span>.staticBase&#125;</span>/audio-b.mp3`</span><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 <h2 id="使用-mixins">使用 Mixins</h2>
 <h3 id="坏方法欺骗以及注释">坏方法：欺骗，以及注释</h3>
 <p>但抽象类是无法被实例化的，并不满足 <code>{ new(): T }</code> 这个要求，因此只能被继承，而<strong>不能</strong>被混入，由于同样的原因，抽象类也无法被 'vue-class-component' 的 <code>Component</code> 函数装饰。</p>
 <p>这时候只好将实现了的功能写入 Mixin 中，待实现的功能放到接口里，让具体类来实现。</p>
-<pre><code class="hljs typescriptvue-class-component">
-interface IMusicSourceProvider &#123;
-  audioSrc: string
-&#125;
-
-/**
- * 需要实现 IPlayerImplementation
- */
-@Component
-class PlayerMixin extends Vue &#123;
-  /** @abstract 必须实现 */
-  audioSrc: string
-
-  logSrc() &#123;
-    console.log(this.audioSrc)
-  &#125;
-&#125;
-
-interface IPlayerImplementation extends IMusicSourceProvider &#123;&#125;
-
-@Component
-class OtherMixin extends Vue &#123;
-  description = &apos;另一个 Mixin&apos;
-&#125;
-
-@Component
-class RealPlayer extends Mixins(PlayerMixin, OtherMixin) implements IPlayerImplementation &#123;
-  audioSrc = &apos;/audio-c.mp3&apos;
-&#125;
-
-// 无法正常工作
-@Component
-class BrokenPlayer extends Mixins(PlayerMixin, OtherMixin) &#123;
-&#125;</code></pre>
+<figure class="highlight plain"><table><tr><td class="code"><pre><code class="hljs typescriptvue-class-component"><br>interface IMusicSourceProvider &#123;<br>  audioSrc: string<br>&#125;<br><br>&#x2F;**<br> * 需要实现 IPlayerImplementation<br> *&#x2F;<br>@Component<br>class PlayerMixin extends Vue &#123;<br>  &#x2F;** @abstract 必须实现 *&#x2F;<br>  audioSrc: string<br><br>  logSrc() &#123;<br>    console.log(this.audioSrc)<br>  &#125;<br>&#125;<br><br>interface IPlayerImplementation extends IMusicSourceProvider &#123;&#125;<br><br>@Component<br>class OtherMixin extends Vue &#123;<br>  description &#x3D; &#39;另一个 Mixin&#39;<br>&#125;<br><br>@Component<br>class RealPlayer extends Mixins(PlayerMixin, OtherMixin) implements IPlayerImplementation &#123;<br>  audioSrc &#x3D; &#39;&#x2F;audio-c.mp3&#39;<br>&#125;<br><br>&#x2F;&#x2F; 无法正常工作<br>@Component<br>class BrokenPlayer extends Mixins(PlayerMixin, OtherMixin) &#123;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>鉴于 <code>@Component</code> 装饰器的实现方式，这种欺骗编译器的方式其实还是比较拙劣的。</p>
 <p>如果一个具体类继承了 <code>PlayerMixin</code>，却没有使用 getter 或 property initializer 实现 <code>audioSrc</code> 这个属性，编译器无法告诉你这个错误（不开启严格模式的情况下），但实际使用中 <code>audioSrc</code> 其实是没有被初始化的，你会发现 <code>BrokenPlayer</code> 的实例当中 <code>_data</code> 里并不包含 <code>audioSrc</code>，即便在实例化后手动设置该值，Vue 也无法监听到该值的变化，会造成一些比较隐秘的 bug。</p>
 <p>我们只能在代码里小心翼翼写上注释，期待使用者不要忘了这件事。</p>
 <p>也可以执行一些开发时候的额外检查，如下：</p>
 <h4 id="自定义装饰器-abstractproperty">自定义装饰器 AbstractProperty</h4>
 <p>vue-class-component 提供了 <a href="https://github.com/vuejs/vue-class-component#create-custom-decorators" target="_blank" rel="noopener">createDecorator</a> 方法来创建其体系下的自定义装饰器，我们可以这么用：</p>
-<pre><code class="hljs typescript"><span class="hljs-keyword">import</span> &#123; createDecorator &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'vue-class-component'</span>
-
-<span class="hljs-comment">// 一个什么都不做的装饰器，在 production 环境下启用。不使用 createDecorator</span>
-<span class="hljs-keyword">const</span> HolderDecorator = <span class="hljs-function">(<span class="hljs-params">ctor: <span class="hljs-built_in">any</span></span>) =&gt;</span> ctor
-
-<span class="hljs-comment">/**
- * Only for vue-class-component decorated class
- */</span>
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> AbstractProperty = isProduction ? HolderDecorator:
-createDecorator(<span class="hljs-function">(<span class="hljs-params">options, key</span>) =&gt;</span> &#123;
-  <span class="hljs-keyword">const</span> originCreated = options.created
-  options.created = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;
-    <span class="hljs-keyword">if</span> (originCreated) originCreated.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>)
-    <span class="hljs-keyword">if</span> (!(key <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span>)) &#123;
-      <span class="hljs-built_in">console</span>.error(<span class="hljs-string">`未实现 AbstractProperty '<span class="hljs-subst">$&#123;key&#125;</span>'`</span>)
-    &#125;
-  &#125;
-&#125;)
-
-
-<span class="hljs-meta">@Component</span>
-<span class="hljs-keyword">class</span> PlayerMixin <span class="hljs-keyword">extends</span> Vue &#123;
-  <span class="hljs-meta">@AbstractProperty</span>
-  audioSrc: <span class="hljs-built_in">string</span>
-
-  logSrc() &#123;
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.audioSrc)
-  &#125;
-&#125;
-
-<span class="hljs-meta">@Component</span>
-<span class="hljs-keyword">class</span> BrokenPlayer <span class="hljs-keyword">extends</span> Mixins(PlayerMixin, OtherMixin) &#123;
-&#125;
-<span class="hljs-keyword">const</span> player = <span class="hljs-keyword">new</span> BrokenPlayer
-<span class="hljs-comment">// 未实现 AbstractProperty 'audioSrc'</span></code></pre>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">import</span> &#123; createDecorator &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'vue-class-component'</span><br><br><span class="hljs-comment">// 一个什么都不做的装饰器，在 production 环境下启用。不使用 createDecorator</span><br><span class="hljs-keyword">const</span> HolderDecorator = <span class="hljs-function">(<span class="hljs-params">ctor: <span class="hljs-built_in">any</span></span>) =&gt;</span> ctor<br><br><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Only for vue-class-component decorated class</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> AbstractProperty = isProduction ? HolderDecorator:<br>createDecorator(<span class="hljs-function">(<span class="hljs-params">options, key</span>) =&gt;</span> &#123;<br>  <span class="hljs-keyword">const</span> originCreated = options.created<br>  options.created = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>&#123;<br>    <span class="hljs-keyword">if</span> (originCreated) originCreated.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>)<br>    <span class="hljs-keyword">if</span> (!(key <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span>)) &#123;<br>      <span class="hljs-built_in">console</span>.error(<span class="hljs-string">`未实现 AbstractProperty '<span class="hljs-subst">$&#123;key&#125;</span>'`</span>)<br>    &#125;<br>  &#125;<br>&#125;)<br><br><br><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">class</span> PlayerMixin <span class="hljs-keyword">extends</span> Vue &#123;<br>  <span class="hljs-meta">@AbstractProperty</span><br>  audioSrc: <span class="hljs-built_in">string</span><br><br>  logSrc() &#123;<br>    <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.audioSrc)<br>  &#125;<br>&#125;<br><br><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">class</span> BrokenPlayer <span class="hljs-keyword">extends</span> Mixins(PlayerMixin, OtherMixin) &#123;<br>&#125;<br><span class="hljs-keyword">const</span> player = <span class="hljs-keyword">new</span> BrokenPlayer<br><span class="hljs-comment">// 未实现 AbstractProperty 'audioSrc'</span><br></code></pre></td></tr></table></figure>
 <h3 id="没那么坏的方法中间类">没那么坏的方法：中间类</h3>
-<pre><code class="hljs typescript"><span class="hljs-meta">@Component</span>
-<span class="hljs-keyword">class</span> _PlayerImpl <span class="hljs-keyword">extends</span> AbstractMusicPlayer &#123;
-  audioSrc = <span class="hljs-string">'/audio-d.mp3'</span>
-&#125;
-
-<span class="hljs-meta">@Component</span>
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> RealPlayer2 <span class="hljs-keyword">extends</span> Mixins(_PlayerImpl, OtherMixin) &#123;
-&#125;</code></pre>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><code class="hljs typescript"><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">class</span> _PlayerImpl <span class="hljs-keyword">extends</span> AbstractMusicPlayer &#123;<br>  audioSrc = <span class="hljs-string">'/audio-d.mp3'</span><br>&#125;<br><br><span class="hljs-meta">@Component</span><br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> RealPlayer2 <span class="hljs-keyword">extends</span> Mixins(_PlayerImpl, OtherMixin) &#123;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>使用中间类 <code>_PlayerImpl</code> 来实现抽象类的抽象部分，然后再被真正的使用者 <code>RealPlayer2</code> 使用。啰嗦了一点，但是类型安全。</p>
 </div></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://hikerpig.github.io/2018/01/21/2018-01-21-typed-vue-mixins/,HP goes FE,在 Typescript 中使用可被复用的 Vue Mixin,;" target="_blank" rel="noopener" class="fa fa-twitter"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a role="navigation" href="/2018/04/02/2018-04-02-Customize-Error-in-Typescript/" title="在 Typescript 中继承 Error 对象" class="btn">上一篇</a></li><li class="next pagbuttons"><a role="navigation" href="/2017/09/25/2017-09-25-ES6+Babel-little-bug-under-IE11/" title="ES6 Class 和 Babel 6 在 IE 10 及以下时候的一个坑" class="btn">下一篇</a></li></ul></div><div id="comments"><div id="gitalk-container"></div></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
   clientID: '0b21579fda2f1d2e73f4',

@@ -1,148 +1,27 @@
 <!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>ES6 Class 和 Babel 6 在 IE 10 及以下时候的一个坑 · HP goes FE</title><meta name="description" content="写 ES6+ 一定逃不开 babel，也避不开调试 babel 生成的一些代码。
 当输入一段 ES6 Class 代码时:
-class Person &amp;#123;
-  static baseName = 'Person'
-
-  static speakForAll() &amp;#123;
-    retu"><meta name="keywords" content="Javascript,Babel"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig" target="_blank" rel="noopener"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig" target="_blank" rel="noopener">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole" target="_blank" rel="noopener">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div id="toc"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#问题"><span class="toc-text">问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#刨根问底"><span class="toc-text">刨根问底</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#知识回顾"><span class="toc-text">知识回顾</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#object.setprototypeof"><span class="toc-text">Object.setPrototypeOf</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#proto__"><span class="toc-text">__proto__</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#解决方案"><span class="toc-text">解决方案</span></a></li></ol></div><div class="post animated fadeInDown"><div class="post-title"><h1><a>ES6 Class 和 Babel 6 在 IE 10 及以下时候的一个坑</a></h1></div><div class="post-info"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-09-25</span><i class="fa fa-tag"></i><a href="/tags/Javascript/" title="Javascript" class="tag">Javascript </a><a href="/tags/Babel/" title="Babel" class="tag">Babel </a></div></div></div><div class="post-content"><p>写 ES6+ 一定逃不开 babel，也避不开调试 babel 生成的一些代码。</p>
+class Person &amp;#123;  static baseName = 'Person'  static speakForAll() &amp;#123;    return t"><meta name="keywords" content="Javascript,Babel"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 4.2.0"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a href="http://github.com/hikerpig" target="_blank" rel="noopener"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="https://blog.hikerpig.cn/wiki/" target="_blank">Wiki</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a href="https://github/hikerpig" target="_blank" rel="noopener">Hikerpig </a><span>forked from </span><a href="https://github.com/Ben02/hexo-theme-Anatole" target="_blank" rel="noopener">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div id="toc"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#问题"><span class="toc-text">问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#刨根问底"><span class="toc-text">刨根问底</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#知识回顾"><span class="toc-text">知识回顾</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#object.setprototypeof"><span class="toc-text">Object.setPrototypeOf</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#proto__"><span class="toc-text">__proto__</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#解决方案"><span class="toc-text">解决方案</span></a></li></ol></div><div class="post animated fadeInDown"><div class="post-title"><h1><a>ES6 Class 和 Babel 6 在 IE 10 及以下时候的一个坑</a></h1></div><div class="post-info"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2017-09-25</span><i class="fa fa-tag"></i><a href="/tags/Javascript/" title="Javascript" class="tag">#Javascript </a><a href="/tags/Babel/" title="Babel" class="tag">#Babel </a></div></div></div><div class="post-content"><p>写 ES6+ 一定逃不开 babel，也避不开调试 babel 生成的一些代码。</p>
 <p>当输入一段 ES6 Class 代码时:</p>
-<pre><code class="hljs js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>&#123;
-  <span class="hljs-keyword">static</span> baseName = <span class="hljs-string">'Person'</span>
-
-  <span class="hljs-keyword">static</span> speakForAll() &#123;
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.baseName
-  &#125;
-
-  speak() &#123;
-    <span class="hljs-keyword">return</span> <span class="hljs-string">'Hello'</span>
-  &#125;
-&#125;
-
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Developer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Person</span> </span>&#123;
-&#125;
-
-
-<span class="hljs-keyword">const</span> myself = <span class="hljs-keyword">new</span> Developer()
-<span class="hljs-built_in">console</span>.log(myself.speak() === <span class="hljs-string">'Hello'</span>) <span class="hljs-comment">// true</span>
-
-<span class="hljs-built_in">console</span>.log(Person.speakForAll() === <span class="hljs-string">'Person'</span>) <span class="hljs-comment">// true</span>
-<span class="hljs-built_in">console</span>.log(Developer.speakForAll() === <span class="hljs-string">'Person'</span>) <span class="hljs-comment">// true</span></code></pre>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Person</span> </span>&#123;<br>  <span class="hljs-keyword">static</span> baseName = <span class="hljs-string">'Person'</span><br><br>  <span class="hljs-keyword">static</span> speakForAll() &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.baseName<br>  &#125;<br><br>  speak() &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">'Hello'</span><br>  &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Developer</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Person</span> </span>&#123;<br>&#125;<br><br><br><span class="hljs-keyword">const</span> myself = <span class="hljs-keyword">new</span> Developer()<br><span class="hljs-built_in">console</span>.log(myself.speak() === <span class="hljs-string">'Hello'</span>) <span class="hljs-comment">// true</span><br><br><span class="hljs-built_in">console</span>.log(Person.speakForAll() === <span class="hljs-string">'Person'</span>) <span class="hljs-comment">// true</span><br><span class="hljs-built_in">console</span>.log(Developer.speakForAll() === <span class="hljs-string">'Person'</span>) <span class="hljs-comment">// true</span><br></code></pre></td></tr></table></figure>
 <h1 id="问题">问题</h1>
 <p>在开发常用的浏览器 Chrome 和 Firefox 里正常工作，但是在 IE10 下会报错 <code>Uncaught TypeError: Developer.speakForAll is not a function</code></p>
 <h2 id="刨根问底">刨根问底</h2>
 <p><code>.babelrc</code> 配置如下:</p>
-<pre><code class="hljs json">&#123;
-  <span class="hljs-attr">"presets"</span>: [<span class="hljs-string">"es2015"</span>, <span class="hljs-string">"stage-2"</span>],
-&#125;</code></pre>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json">&#123;<br>  <span class="hljs-attr">"presets"</span>: [<span class="hljs-string">"es2015"</span>, <span class="hljs-string">"stage-2"</span>],<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>看 babel 编译出的一串代码 blahblah， 重点下面说:</p>
-<pre><code class="hljs js"><span class="hljs-keyword">var</span> _class, _temp
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> _possibleConstructorReturn(<span class="hljs-params">self, call</span>) </span>&#123;
-  <span class="hljs-keyword">if</span> (!self) &#123;
-    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">ReferenceError</span>(
-      <span class="hljs-string">"this hasn't been initialised - super() hasn't been called"</span>,
-    )
-  &#125;
-  <span class="hljs-keyword">return</span> call &amp;&amp; (<span class="hljs-keyword">typeof</span> call === <span class="hljs-string">'object'</span> || <span class="hljs-keyword">typeof</span> call === <span class="hljs-string">'function'</span>)
-    ? call
-    : self
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> _inherits(<span class="hljs-params">subClass, superClass</span>) </span>&#123;
-  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> superClass !== <span class="hljs-string">'function'</span> &amp;&amp; superClass !== <span class="hljs-literal">null</span>) &#123;
-    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(
-      <span class="hljs-string">'Super expression must either be null or a function, not '</span> +
-        <span class="hljs-keyword">typeof</span> superClass,
-    )
-  &#125;
-  subClass.prototype = <span class="hljs-built_in">Object</span>.create(superClass &amp;&amp; superClass.prototype, &#123;
-    <span class="hljs-attr">constructor</span>: &#123;
-      <span class="hljs-attr">value</span>: subClass,
-      <span class="hljs-attr">enumerable</span>: <span class="hljs-literal">false</span>,
-      <span class="hljs-attr">writable</span>: <span class="hljs-literal">true</span>,
-      <span class="hljs-attr">configurable</span>: <span class="hljs-literal">true</span>,
-    &#125;,
-  &#125;)
-  <span class="hljs-keyword">if</span> (superClass)
-    <span class="hljs-built_in">Object</span>.setPrototypeOf
-      ? <span class="hljs-built_in">Object</span>.setPrototypeOf(subClass, superClass)
-      : (subClass.__proto__ = superClass)
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> _classCallCheck(<span class="hljs-params">instance, Constructor</span>) </span>&#123;
-  <span class="hljs-keyword">if</span> (!(instance <span class="hljs-keyword">instanceof</span> Constructor)) &#123;
-    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Cannot call a class as a function'</span>)
-  &#125;
-&#125;
-
-<span class="hljs-keyword">var</span> Person = ((_temp = _class = (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Person</span>(<span class="hljs-params"></span>) </span>&#123;
-    _classCallCheck(<span class="hljs-keyword">this</span>, Person)
-  &#125;
-
-  Person.speakForAll = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">speakForAll</span>(<span class="hljs-params"></span>) </span>&#123;
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.baseName
-  &#125;
-
-  Person.prototype.speak = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">speak</span>(<span class="hljs-params"></span>) </span>&#123;
-    <span class="hljs-keyword">return</span> <span class="hljs-string">'Hello'</span>
-  &#125;
-
-  <span class="hljs-keyword">return</span> Person
-&#125;)()),
-(_class.baseName = <span class="hljs-string">'Person'</span>),
-_temp)
-
-<span class="hljs-keyword">var</span> Developer = (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">_Person</span>) </span>&#123;
-  _inherits(Developer, _Person)
-
-  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Developer</span>(<span class="hljs-params"></span>) </span>&#123;
-    _classCallCheck(<span class="hljs-keyword">this</span>, Developer)
-
-    <span class="hljs-keyword">return</span> _possibleConstructorReturn(<span class="hljs-keyword">this</span>, _Person.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>))
-  &#125;
-
-  <span class="hljs-keyword">return</span> Developer
-&#125;)(Person)
-
-<span class="hljs-keyword">var</span> myself = <span class="hljs-keyword">new</span> Developer()
-<span class="hljs-built_in">console</span>.log(myself.speak() === <span class="hljs-string">'Hello'</span>)
-
-<span class="hljs-built_in">console</span>.log(Person.speakForAll() === <span class="hljs-string">'Person'</span>)
-<span class="hljs-built_in">console</span>.log(Developer.speakForAll() === <span class="hljs-string">'Person'</span>)</code></pre>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">var</span> _class, _temp<br><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_possibleConstructorReturn</span>(<span class="hljs-params">self, call</span>) </span>&#123;<br>  <span class="hljs-keyword">if</span> (!self) &#123;<br>    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">ReferenceError</span>(<br>      <span class="hljs-string">"this hasn't been initialised - super() hasn't been called"</span>,<br>    )<br>  &#125;<br>  <span class="hljs-keyword">return</span> call &amp;&amp; (<span class="hljs-keyword">typeof</span> call === <span class="hljs-string">'object'</span> || <span class="hljs-keyword">typeof</span> call === <span class="hljs-string">'function'</span>)<br>    ? call<br>    : self<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_inherits</span>(<span class="hljs-params">subClass, superClass</span>) </span>&#123;<br>  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> superClass !== <span class="hljs-string">'function'</span> &amp;&amp; superClass !== <span class="hljs-literal">null</span>) &#123;<br>    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<br>      <span class="hljs-string">'Super expression must either be null or a function, not '</span> +<br>        <span class="hljs-keyword">typeof</span> superClass,<br>    )<br>  &#125;<br>  subClass.prototype = <span class="hljs-built_in">Object</span>.create(superClass &amp;&amp; superClass.prototype, &#123;<br>    <span class="hljs-keyword">constructor</span>: &#123;<br>      value: subClass,<br>      enumerable: <span class="hljs-literal">false</span>,<br>      writable: <span class="hljs-literal">true</span>,<br>      configurable: <span class="hljs-literal">true</span>,<br>    &#125;,<br>  &#125;)<br>  <span class="hljs-keyword">if</span> (superClass)<br>    <span class="hljs-built_in">Object</span>.setPrototypeOf<br>      ? <span class="hljs-built_in">Object</span>.setPrototypeOf(subClass, superClass)<br>      : (subClass.__proto__ = superClass)<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_classCallCheck</span>(<span class="hljs-params">instance, Constructor</span>) </span>&#123;<br>  <span class="hljs-keyword">if</span> (!(instance <span class="hljs-keyword">instanceof</span> Constructor)) &#123;<br>    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Cannot call a class as a function'</span>)<br>  &#125;<br>&#125;<br><br><span class="hljs-keyword">var</span> Person = ((_temp = _class = (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>&#123;<br>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Person</span>(<span class="hljs-params"></span>) </span>&#123;<br>    _classCallCheck(<span class="hljs-keyword">this</span>, Person)<br>  &#125;<br><br>  Person.speakForAll = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">speakForAll</span>(<span class="hljs-params"></span>) </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.baseName<br>  &#125;<br><br>  Person.prototype.speak = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">speak</span>(<span class="hljs-params"></span>) </span>&#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-string">'Hello'</span><br>  &#125;<br><br>  <span class="hljs-keyword">return</span> Person<br>&#125;)()),<br>(_class.baseName = <span class="hljs-string">'Person'</span>),<br>_temp)<br><br><span class="hljs-keyword">var</span> Developer = (<span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">_Person</span>) </span>&#123;<br>  _inherits(Developer, _Person)<br><br>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Developer</span>(<span class="hljs-params"></span>) </span>&#123;<br>    _classCallCheck(<span class="hljs-keyword">this</span>, Developer)<br><br>    <span class="hljs-keyword">return</span> _possibleConstructorReturn(<span class="hljs-keyword">this</span>, _Person.apply(<span class="hljs-keyword">this</span>, <span class="hljs-built_in">arguments</span>))<br>  &#125;<br><br>  <span class="hljs-keyword">return</span> Developer<br>&#125;)(Person)<br><br><span class="hljs-keyword">var</span> myself = <span class="hljs-keyword">new</span> Developer()<br><span class="hljs-built_in">console</span>.log(myself.speak() === <span class="hljs-string">'Hello'</span>)<br><br><span class="hljs-built_in">console</span>.log(Person.speakForAll() === <span class="hljs-string">'Person'</span>)<br><span class="hljs-built_in">console</span>.log(Developer.speakForAll() === <span class="hljs-string">'Person'</span>)<br></code></pre></td></tr></table></figure>
 <p>关键是此段实现继承的部分:</p>
-<pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> _inherits(<span class="hljs-params">subClass, superClass</span>) </span>&#123;
-  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> superClass !== <span class="hljs-string">'function'</span> &amp;&amp; superClass !== <span class="hljs-literal">null</span>) &#123;
-    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(
-      <span class="hljs-string">'Super expression must either be null or a function, not '</span> +
-        <span class="hljs-keyword">typeof</span> superClass,
-    )
-  &#125;
-  subClass.prototype = <span class="hljs-built_in">Object</span>.create(superClass &amp;&amp; superClass.prototype, &#123;
-    <span class="hljs-attr">constructor</span>: &#123;
-      <span class="hljs-attr">value</span>: subClass,
-      <span class="hljs-attr">enumerable</span>: <span class="hljs-literal">false</span>,
-      <span class="hljs-attr">writable</span>: <span class="hljs-literal">true</span>,
-      <span class="hljs-attr">configurable</span>: <span class="hljs-literal">true</span>,
-    &#125;,
-  &#125;)
-  <span class="hljs-keyword">if</span> (superClass)
-    <span class="hljs-built_in">Object</span>.setPrototypeOf
-      ? <span class="hljs-built_in">Object</span>.setPrototypeOf(subClass, superClass)
-      : (subClass.__proto__ = superClass)
-&#125;</code></pre>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">_inherits</span>(<span class="hljs-params">subClass, superClass</span>) </span>&#123;<br>  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> superClass !== <span class="hljs-string">'function'</span> &amp;&amp; superClass !== <span class="hljs-literal">null</span>) &#123;<br>    <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<br>      <span class="hljs-string">'Super expression must either be null or a function, not '</span> +<br>        <span class="hljs-keyword">typeof</span> superClass,<br>    )<br>  &#125;<br>  subClass.prototype = <span class="hljs-built_in">Object</span>.create(superClass &amp;&amp; superClass.prototype, &#123;<br>    <span class="hljs-keyword">constructor</span>: &#123;<br>      value: subClass,<br>      enumerable: <span class="hljs-literal">false</span>,<br>      writable: <span class="hljs-literal">true</span>,<br>      configurable: <span class="hljs-literal">true</span>,<br>    &#125;,<br>  &#125;)<br>  <span class="hljs-keyword">if</span> (superClass)<br>    <span class="hljs-built_in">Object</span>.setPrototypeOf<br>      ? <span class="hljs-built_in">Object</span>.setPrototypeOf(subClass, superClass)<br>      : (subClass.__proto__ = superClass)<br>&#125;<br></code></pre></td></tr></table></figure>
 <p><code>subClass.prototype</code> 这一段比较简单，操作原型链来实现实例方法和属性的继承。顺带还用 object descriptor 重写了 <code>constructor</code> 这一属性，调用 <code>myself.constructor</code> 时才会拿到正确的值 <code>Developer</code>，而不是 <code>Person</code>。</p>
 <p>接下来的一段比较有趣。</p>
-<pre><code class="hljs js"><span class="hljs-built_in">Object</span>.setPrototypeOf(subClass, superClass)</code></pre>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-built_in">Object</span>.setPrototypeOf(subClass, superClass)<br></code></pre></td></tr></table></figure>
 <p>这个写法还是比较讨巧的，将父类的构造函数 <code>superClass</code> 作为子类构造函数 <code>subClass</code> 的原型。</p>
 <h1 id="知识回顾">知识回顾</h1>
 <h2 id="object.setprototypeof">Object.setPrototypeOf</h2>
 <p>这是个 <a href="http://www.ecma-international.org/ecma-262/6.0/#sec-object.setprototypeof" target="_blank" rel="noopener">ES2015</a> 新提出的函数，函数签名：</p>
-<pre><code class="hljs js"><span class="hljs-built_in">Object</span>.setPrototypeOf(obj, prototype)</code></pre>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-built_in">Object</span>.setPrototypeOf(obj, prototype)<br></code></pre></td></tr></table></figure>
 <p>对比 <code>Object.create</code>，可以在对象创建出来之后替换其原型。</p>
-<pre><code class="hljs js"><span class="hljs-keyword">const</span> p1 = &#123;&#125;
-<span class="hljs-built_in">Object</span>.setPrototypeOf(p1, Person.prototype)
-<span class="hljs-built_in">console</span>.log(p1.speak()) <span class="hljs-comment">// 为'Hello'</span></code></pre>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-keyword">const</span> p1 = &#123;&#125;<br><span class="hljs-built_in">Object</span>.setPrototypeOf(p1, Person.prototype)<br><span class="hljs-built_in">console</span>.log(p1.speak()) <span class="hljs-comment">// 为'Hello'</span><br></code></pre></td></tr></table></figure>
 <p>浏览器兼容性</p>
 <table>
 <thead>
@@ -179,21 +58,7 @@ _temp)
 <p><a href="https://github.com/babel/babel/issues/3041" target="_blank" rel="noopener">Babel 的一个 issue</a> 中有人提过类似问题，回答是：babel 6 不考虑兼容 IE。没碰上问题算幸运，碰上问题只好自己解决。</p>
 <h1 id="解决方案">解决方案</h1>
 <p>就这个事情来说，添加一个 polyfill 能够解决。以 <a href="https://github.com/wesleytodd/setprototypeof" target="_blank" rel="noopener">这个实现</a> 来说:</p>
-<pre><code class="hljs js"><span class="hljs-built_in">module</span>.exports = <span class="hljs-built_in">Object</span>.setPrototypeOf || (&#123;<span class="hljs-attr">__proto__</span>:[]&#125; <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ? setProtoOf : mixinProperties);
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setProtoOf</span>(<span class="hljs-params">obj, proto</span>) </span>&#123;
-  obj.__proto__ = proto;
-  <span class="hljs-keyword">return</span> obj;
-&#125;
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mixinProperties</span>(<span class="hljs-params">obj, proto</span>) </span>&#123;
-  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> prop <span class="hljs-keyword">in</span> proto) &#123;
-    <span class="hljs-keyword">if</span> (!obj.hasOwnProperty(prop)) &#123;
-      obj[prop] = proto[prop];
-    &#125;
-  &#125;
-  <span class="hljs-keyword">return</span> obj;
-&#125;</code></pre>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-built_in">module</span>.exports = <span class="hljs-built_in">Object</span>.setPrototypeOf || (&#123;<span class="hljs-attr">__proto__</span>:[]&#125; <span class="hljs-keyword">instanceof</span> <span class="hljs-built_in">Array</span> ? setProtoOf : mixinProperties);<br><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">setProtoOf</span>(<span class="hljs-params">obj, proto</span>) </span>&#123;<br>  obj.__proto__ = proto;<br>  <span class="hljs-keyword">return</span> obj;<br>&#125;<br><br><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">mixinProperties</span>(<span class="hljs-params">obj, proto</span>) </span>&#123;<br>  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> prop <span class="hljs-keyword">in</span> proto) &#123;<br>    <span class="hljs-keyword">if</span> (!obj.hasOwnProperty(prop)) &#123;<br>      obj[prop] = proto[prop];<br>    &#125;<br>  &#125;<br>  <span class="hljs-keyword">return</span> obj;<br>&#125;<br></code></pre></td></tr></table></figure>
 <p>先探测 Object 上是否原生支持，然后检测更改 <code>__proto__</code> 是否有作用，最后回退到简单暴力的遍历赋值。</p>
 </div></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a href="http://twitter.com/home?status=,http://hikerpig.github.io/2017/09/25/2017-09-25-ES6+Babel-little-bug-under-IE11/,HP goes FE,ES6 Class 和 Babel 6 在 IE 10 及以下时候的一个坑,;" target="_blank" rel="noopener" class="fa fa-twitter"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a role="navigation" href="/2018/01/21/2018-01-21-typed-vue-mixins/" title="在 Typescript 中使用可被复用的 Vue Mixin" class="btn">上一篇</a></li><li class="next pagbuttons"><a role="navigation" href="/2017/09/07/2017-09-07-Using-Object.create/" title="使用 Object.create(null) 创建空对象" class="btn">下一篇</a></li></ul></div><div id="comments"><div id="gitalk-container"></div></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
   clientID: '0b21579fda2f1d2e73f4',
