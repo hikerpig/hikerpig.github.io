@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="author" content="hikerpig,hikerpigwinnie@gmail.com"><title>Mermaid.js - 一个刚刚好的开源产品 · HP goes FE</title><meta name="description" content="Mermaid.js 凭借一己之力，提升了技术博客内的时序图/类图等 UML 图表的覆盖率。
+文档里这句话道出了这个项目的存在意义：
+
+There is no explanation like a Good Diagram - 一图胜千言
+
+在 Web 技术大行其道的今天，Electron 蚕食传统"><meta name="keywords" content="产品"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="renderer" content="webkit"><link rel="short icon" href="/images/favicon.png" type="image/x-icon"><link rel="stylesheet" href="/css/style.css"><link rel="stylesheet" href="/css/blog_basic.css"><link rel="stylesheet" href="/css/font-awesome.min.css"><link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/atom.xml"><meta name="generator" content="Hexo 5.1.1"></head><body><div class="sidebar animated fadeInDown"><div class="logo-title"><div class="title"><img src="/images/avatar.jpeg" class="sidebar__avatar"><h3 title=""><a href="/">HP goes FE</a></h3><div class="description"><p>Note for everything</p></div></div></div><ul class="social-links"><li><a target="_blank" rel="noopener" href="http://github.com/hikerpig"><i class="fa fa-github"></i></a></li></ul><div class="sidebar-nav animated fadeInDown"><div class="nav"><li><a href="/">首页</a></li><li><a href="/archives">归档</a></li><li><a href="https://blog.hikerpig.cn/wiki/" target="_blank">Wiki</a></li></div><div class="information"><div class="back_btn"><a onclick="window.history.go(-1)" class="fa fa-chevron-left"></a></div></div></div><div class="footer"><a target="_blank" href="/"><span>Theme by  </span></a><a target="_blank" rel="noopener" href="https://github/hikerpig">Hikerpig </a><span>forked from </span><a target="_blank" rel="noopener" href="https://github.com/Ben02/hexo-theme-Anatole">Anatole</a><div class="by_farbox"><a href="https://hexo.io/zh-cn/" target="_blank">Proudly published with Hexo</a></div></div></div><div class="main"><div class="autopagerize_page_element"><div class="content"><div class="post-page"><div class="post animated fadeInDown"><div class="post-title"><h1><a>Mermaid.js - 一个刚刚好的开源产品</a></h1></div><div class="post-info"><div class="meta"><div class="info"><i class="fa fa-sun-o"></i><span class="date">2020-08-28</span><i class="fa fa-tag"></i><a href="/categories/product/" title="product" class="tag">product </a><a href="/tags/产品/" title="产品" class="tag">#产品 </a></div></div></div><div class="post-content"><p><a target="_blank" rel="noopener" href="http://mermaid-js.github.io/mermaid/">Mermaid.js</a> 凭借一己之力，提升了技术博客内的时序图/类图等 UML 图表的覆盖率。</p>
+<p>文档里这句话道出了这个项目的存在意义：</p>
+<blockquote>
+<p>There is no explanation like a Good Diagram - 一图胜千言</p>
+</blockquote>
+<p>在 Web 技术大行其道的今天，Electron 蚕食传统桌面客户端技术的市场。使用 JavaScript 写就的 Mermaid.js 目前已成为各种轻量技术文档编辑器中的一个事实标准模块。</p>
+<h2 id="从一个入门开发者和使用者角度看这个项目">从一个入门开发者和使用者角度看这个项目</h2>
+<p>第一个 commit 是在 <a target="_blank" rel="noopener" href="https://github.com/mermaid-js/mermaid/commits/887dc488a7149cd5fcf482246c827d18ae028cf5">14 年 12月 底</a>, 一开始实现的是 sequenceDiagram。</p>
+<p>它的图表 DSL 借鉴了许多开源产品，例如 PlantUML / js-sequence-diagrams 等，但又有各种改进（例如添加元素 <code>onclick</code> 事件回调这样浏览器环境特有的需求）。</p>
+<p>Mermaid.js 本身追求代码实现以及使用上的简洁易懂。作者本人最早开始这个兴趣项目是为了做出一个有趣的产品，满足和自己一样的人们的需求。并不是为了炫技以及升职加薪（有些 KPI 项目咱们也就不说什么了）。在开发方向和技术栈的选择上，并没有陷入前端圈的时髦风潮陷阱，一直保持着“简单能用就行”的准则。</p>
+<p>简单好用，是它成功的原因。</p>
+<p>作为一个想帮它解决小问题的开发者，不需要理解什么复杂宏伟的分层设计，照着代码入口看就能理解工作原理。作为一个使用者，不需要繁复的设定参数，只要一个简单的 <code>&lt;script&gt;</code> 标签引入，然后调用 <code>mermaid.initialize(&#123;startOnLoad:true&#125;)</code> 函数即可见证效果。</p>
+<h3 id="项目结构">项目结构</h3>
+<p>中期的 Mermaid.js 代码分层大概是这样的，实际上，图表实现层对布局和绘制层的调用比较直接和混乱，基本上一种图表一种特化（怎么画线、箭头等）实现方式。</p>
+<p><img src="https://images-hikerpig.oss-cn-beijing.aliyuncs.com/image/mermaidjs-old.svg" /></p>
+<h3 id="使用的一些第三方库">使用的一些第三方库</h3>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/dagrejs/dagre">dagre - Graph layout for JavaScript</a>，包含多种图布局算法实现的库，本身不包含渲染层，但可通过 <code>dagre-d3</code> 调用 <code>d3.js</code> 完成绘制。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/dagrejs/graphlib">graphlib</a>，如名字所示，是一个 JavaScript 写的关于图(Graph) 的工具库，包括基础的用于构建图的对象接口，以及一些图算法。详情可见其 <a target="_blank" rel="noopener" href="https://github.com/dagrejs/graphlib/wiki/API-Reference">API-Reference</a>。</li>
+<li><a target="_blank" rel="noopener" href="https://d3js.org/">D3.js</a>，前端数据可视化无人不知的库，作者在可视化和交互设计上有许多优秀的论文以及项目。Mermaid.js 本身目标不是数据可视化，主要是用 d3 和一些扩展库来操作 DOM。</li>
+</ul>
+<h2 id="近期的发展">近期的发展</h2>
+<h3 id="向社区寻求帮助">向社区寻求帮助</h3>
+<p>一年前，作者在 issues 里向社区求助 <a target="_blank" rel="noopener" href="https://github.com/mermaid-js/mermaid/issues/866">Collaborators wanted! · Issue #866 · mermaid-js/mermaid</a>，将 issue 分类 / 小 bug 修复等轻量工作委托给社区热心开发者。</p>
+<p>这是一个流行的开源产品一定会经历的阶段，毕竟即便搭上作者所有的业余时间，仅凭一个人肯定是无法面对各种问题和 feature request 的。因此在项目名声鹊起之时，作者很有必要考虑如何建立友好互动的社区，包括但不限于给出 Github CONTRIBUTOR.md 指南、建立实时讨论组（Slack/Gitter 之类）、线下分享会等。</p>
+<h3 id="generic-rendering-engine">Generic rendering engine</h3>
+<p>最早有人提 issue 问是否可以有通用渲染引擎来满足非常规 uml 图表的绘制需求，作者也意识到了每个图表的 renderer 重复做一些事情且重复修类似 bug 的痛苦之处，开始思考合理划分通用渲染和单独图表逻辑。</p>
+<p>2020/5/5 提出 isssue <a target="_blank" rel="noopener" href="https://github.com/mermaid-js/mermaid/issues/1295">Create generic rendering engine</a>，月底完成合入主分支。之后逐步给主要图表添加 v2 版本，如 stateDiagram-v2 与旧版共存。</p>
+<p>作者是个务实的人，当前阶段的渲染层并不着急对过去内部概念推倒重建，而是在逐步改写的第一阶段，先包装好对 dagre 的调用和增强。</p>
+<p><img src="https://images-hikerpig.oss-cn-beijing.aliyuncs.com/image/mermaidjs-dagre-wrapper.svg" /></p>
+</div></div><div class="share"><div class="evernote"><a href="javascript:(function(){EN_CLIP_HOST='http://www.evernote.com';try{var%20x=document.createElement('SCRIPT');x.type='text/javascript';x.src=EN_CLIP_HOST+'/public/bookmarkClipper.js?'+(new%20Date().getTime()/100000);document.getElementsByTagName('head')[0].appendChild(x);}catch(e){location.href=EN_CLIP_HOST+'/clip.action?url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title);}})();" ref="nofollow" target="_blank" class="fa fa-bookmark"></a></div><div class="weibo"><a href="javascript:void((function(s,d,e){try{}catch(e){}var f='http://service.weibo.com/share/share.php?',u=d.location.href,p=['url=',e(u),'&amp;title=',e(d.title),'&amp;appkey=2924220432'].join('');function a(){if(!window.open([f,p].join(''),'mb',['toolbar=0,status=0,resizable=1,width=620,height=450,left=',(s.width-620)/2,',top=',(s.height-450)/2].join('')))u.href=[f,p].join('');};if(/Firefox/.test(navigator.userAgent)){setTimeout(a,0)}else{a()}})(screen,document,encodeURIComponent));" class="fa fa-weibo"></a></div><div class="twitter"><a target="_blank" rel="noopener" href="http://twitter.com/home?status=,http://hikerpig.github.io/2020/08/28/2020-08-28-Mermaid.js-as-a-nice-product/,HP goes FE,Mermaid.js - 一个刚刚好的开源产品,;" class="fa fa-twitter"></a></div></div><div class="pagination"><ul class="clearfix"><li class="pre pagbuttons"><a role="navigation" href="/2020/09/04/2020-09-04-Hiding-My-Heart/" title="Hiding My Heart 🎵" class="btn">上一篇</a></li><li class="next pagbuttons"><a role="navigation" href="/2020/07/02/2020-07-02-Toc-Bar-Userscript/" title="Toc Bar Userscript - 一个显示页面大纲的油猴脚本" class="btn">下一篇</a></li></ul></div><div id="comments"><div id="gitalk-container"></div></div><link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"><script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script><script>var gitalk = new Gitalk({
+  clientID: '0b21579fda2f1d2e73f4',
+  clientSecret: 'abc0351a314cc46bb3d58b6dad62c670c2d1e8f9',
+  repo: 'hikerpig.github.io',
+  owner: 'hikerpig',
+  admin: 'hikerpig',
+  labels: ['Gitalk'],
+  id: '2020/08/28/2020-08-28-Mermaid.js-as-a-nice-product/',
+  title: 'Mermaid.js - 一个刚刚好的开源产品',
+  // facebook-like distraction free mode
+  distractionFreeMode: false
+})
+
+gitalk.render('gitalk-container')
+</script></div></div></div></div><script src="//unpkg.com/jquery/dist/jquery.min.js"></script><script src="//unpkg.com/jquery.appear"></script><!-- Global site tag (gtag.js) - Google Analytics--><script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-49433257-1"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-49433257-1');
+</script><script src="//unpkg.com/mermaid@8.6.3/dist/mermaid.min.js"></script><script>if (window.mermaid) {
+  mermaid.initialize({theme: "default"});
+}</script><link rel="stylesheet" href="https://unpkg.com/highlight.js@9.18.1/styles/atom-one-dark.css"><script src="https://unpkg.com/highlight.js@9.18.1/lib/highlight.js"></script><script>hljs.initHighlightingOnLoad();
+</script></body><link rel="stylesheet" href="https://unpkg.com/marka-js@latest/dist/marka.css"><script src="https://unpkg.com/marka-js@latest/dist/marka-js.umd.js" onload="marka.onScriptLoaded(this)"></script><style>:scope {
+  --marka-link-color: #f77f35;
+}
+.marka-link::after {
+  vertical-align: baseline;
+}
+</style><script type="text/javascript">window.addEventListener("DOMContentLoaded", function () {
+  marka.init({
+    container: ".post",
+  });
+});</script></html>

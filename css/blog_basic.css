@@ -65,7 +65,7 @@ figure.highlight .gutter {
 }
 
 figure.highlight .code pre {
-  padding: 1.2em 1.4em!important;
+  padding: 0 !important;
   line-height: 1.5em!important;
   margin: 0!important
 }
