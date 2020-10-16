@@ -9,8 +9,33 @@
     <atom:link href="http://hikerpig.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>Hikerpig 万事记</description>
-    <pubDate>Tue, 15 Sep 2020 03:03:59 GMT</pubDate>
+    <pubDate>Fri, 16 Oct 2020 13:22:11 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>使用 zimfw 作为 zsh 配置框架</title>
+      <link>http://hikerpig.github.io/2020/10/14/2020-10-14-zsh-zimfw-setup/</link>
+      <guid>http://hikerpig.github.io/2020/10/14/2020-10-14-zsh-zimfw-setup/</guid>
+      <pubDate>Tue, 13 Oct 2020 16:00:00 GMT</pubDate>
+      
+      <description>使用 zimfw 替换 oh-my-zsh，提升 zsh 启动速度</description>
+      
+      
+      
+      <content:encoded><![CDATA[<p>之前使用 oh-my-zsh 的自带 git/nvm 等插件有时候有性能问题，同时据说其框架本身相比其他一些主打速度的配置框架(prezto/zimfw 等)也会慢一点。</p><p>稍微折腾了一下，使用 <a href="https://github.com/zimfw/zimfw">zimfw</a> 作为 zsh 配置框架，它在<a href="https://github.com/zimfw/zimfw/wiki/Speed">速度</a>和可配置性间达到了很好的平衡。</p><p>个人切换后，试了下跑 zprof，启动时间只有原先的一半，度量方式参考 <a href="https://stevenvanbael.com/profiling-zsh-startup">Profiling zsh startup time</a>。</p><h2 id="插件加载">插件加载</h2><p>用上<a href="https://github.com/zimfw/zimfw/wiki/Modules">自带的模块</a>和<a href="https://github.com/zsh-users/">zsh-users</a>里一些优秀的插件，就已经有很好的表现，其中 zsh-users/zsh-autosuggestions 和 zsh-users/zsh-syntax-highlighting 能让 zsh 也有类似于 fish 一样友好的代码高亮反馈和输入自动补全功能。zimfw 比较友好的一点就在于默认配置（使用其提供的安装脚本）里给出的组合就已经很棒了。</p><p>添加插件的方式与 oh-my-zsh 不太一样，后者需要把插件添加到指定的 plugins 目录（一般为 clone repo 或者拷贝文件），然后在 <code>.zshrc</code> 文件里 <code>plugins=()</code> 数组里添加插件名。</p><p>而 zimfw 的方式则稍微方便一点，除了类似后者的方式外，还可以不用手动操作目录而是在 <code>.zimrc</code> 文件中添加模块名（一般为 github 上的 user/repo 名），可在 <a href="https://github.com/unixorn/awesome-zsh-plugins">awesome-zsh-plugins</a> 里寻找合适插件，多数与配置框架无关(可以不局限在 oh-my-zsh 提供的插件目录里)。</p><p>修改配置文件后，使用命令 <code>zimfw install</code> 下载并编译插件(会使用 zsh builtin 的 <code>zcompile</code> 将 <code>.zsh</code> 文件编译为 <code>.zwc</code> 字节码，提高下次加载的速度)，打开新 shell 时新插件生效。</p><h2 id="外观和主题">外观和主题</h2><p>zimfw 的主题远不如 oh-my-zsh 丰富，自己的 gallery 里都是偏向极简的风格，不过我们可以自己找一些成熟的主题 <a href="https://github.com/romkatv/powerlevel10k">powerlevel10k</a> 使用，带有问答式的新手配置指导，功能丰富，推荐使用。</p><h2 id="一些配置">一些配置</h2><p><code>~/.zimrc</code></p><figure class="highlight zsh"><table><tr><td class="code"><pre><code class="hljs zsh"><span class="hljs-comment"># Start configuration added by Zim install &#123;&#123;&#123;</span><br><span class="hljs-comment"># -------</span><br><span class="hljs-comment"># Modules</span><br><span class="hljs-comment"># -------</span><br><span class="hljs-comment"># Sets sane Zsh built-in environment options.</span><br>zmodule environment<br><span class="hljs-comment"># Applies correct bindkeys for input events.</span><br>zmodule input<br><span class="hljs-comment"># Sets a custom terminal title.</span><br>zmodule termtitle<br><span class="hljs-comment"># Utility aliases and functions. Adds colour to ls, grep and less.</span><br>zmodule utility<br>zmodule directory<br><br><span class="hljs-comment">#</span><br><span class="hljs-comment"># Prompt</span><br><span class="hljs-comment">#</span><br><span class="hljs-comment"># Exposes git repository status information to prompts.</span><br>zmodule git-info<br><br><span class="hljs-comment"># Theme</span><br>zmodule romkatv/powerlevel10k<br><br><span class="hljs-comment"># Additional completion definitions for Zsh.</span><br>zmodule zsh-users/zsh-completions<br><span class="hljs-comment"># Enables and configures smart and extensive tab completion.</span><br><span class="hljs-comment"># completion must be sourced after zsh-users/zsh-completions</span><br>zmodule completion<br><span class="hljs-comment"># Fish-like autosuggestions for Zsh.</span><br>zmodule zsh-users/zsh-autosuggestions<br><span class="hljs-comment"># Fish-like syntax highlighting for Zsh.</span><br><span class="hljs-comment"># zsh-users/zsh-syntax-highlighting must be sourced after completion</span><br>zmodule zsh-users/zsh-syntax-highlighting<br><span class="hljs-comment"># Fish-like history search (up arrow) for Zsh.</span><br><span class="hljs-comment"># zsh-users/zsh-history-substring-search must be sourced after zsh-users/zsh-syntax-highlighting</span><br>zmodule zsh-users/zsh-history-substring-search<br><span class="hljs-comment"># &#125;&#125;&#125; End configuration added by Zim install</span><br><br><span class="hljs-comment"># Custom 个人推荐的插件</span><br>zmodule DarrinTisdale/zsh-aliases-exa<br>zmodule zsh-users/zaw<br>zmodule wookayin/fzf-fasd<br></code></pre></td></tr></table></figure><p>介绍一些程序和插件:</p><ul><li><a href="https://segmentfault.com/a/1190000011327993">快速跳转工具--FASD 简单介绍</a></li></ul><h2 id="参考文章">参考文章</h2><ul><li><a href="https://www.jkg.tw/p2876/">打造屬於你自己的極速 Shell「iTerm + zsh + zim + powerlevel10k」</a></li><li><a href="https://htr3n.github.io/2018/07/faster-zsh">Faster and enjoyable ZSH</a></li><li><a href="https://blog.spencerwoo.com/2020/07/remove-nvm-to-speed-up-zsh/">Quit using nvm：快删掉这个占据 Zsh 启动时间一半的怪物！ - Spencer's Blog</a></li></ul>]]></content:encoded>
+      
+      
+      <category domain="http://hikerpig.github.io/categories/%E5%B7%A5%E5%85%B7/">工具</category>
+      
+      
+      <category domain="http://hikerpig.github.io/tags/%E6%8A%98%E8%85%BE/">折腾</category>
+      
+      <category domain="http://hikerpig.github.io/tags/zsh/">zsh</category>
+      
+      
+      <comments>http://hikerpig.github.io/2020/10/14/2020-10-14-zsh-zimfw-setup/#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>Hiding My Heart 🎵</title>
@@ -535,39 +560,6 @@
       
       
       <comments>http://hikerpig.github.io/2019/02/15/2019-03-08-Tips-On-Viewing-Logs/#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
-      <title>CSS 中的两种模糊半径</title>
-      <link>http://hikerpig.github.io/2018/12/22/2018-12-22-svg-blur-and-css-text-shadow/</link>
-      <guid>http://hikerpig.github.io/2018/12/22/2018-12-22-svg-blur-and-css-text-shadow/</guid>
-      <pubDate>Sat, 22 Dec 2018 05:52:02 GMT</pubDate>
-      
-        
-        
-      <description>&lt;p&gt;CSS 中两种实现阴影的方式&lt;/p&gt;
-&lt;ol type=&quot;1&quot;&gt;
-&lt;li&gt;text-shadow 和 box-shadow&lt;/li&gt;
-&lt;li&gt;filter: drop-shadow&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;前者的 blur-radius 指的是阴影的最外延半径，后者的 </description>
-        
-      
-      
-      
-      <content:encoded><![CDATA[<p>CSS 中两种实现阴影的方式</p><ol type="1"><li>text-shadow 和 box-shadow</li><li>filter: drop-shadow</li></ol><p>前者的 blur-radius 指的是阴影的最外延半径，后者的 blur-radius 指的是高斯模糊中的标准差($σ)</p><p><a href="https://drafts.csswg.org/css-backgrounds/#shadow-blur">W3C 的 CSS 标准此处</a> 说到将 stdDeviation 设为 blur-radius 的一半可以得到近似的效果</p><blockquote><p>A non-zero blur radius indicates that the resulting shadow should be blurred, such as by a Gaussian filter. The exact algorithm is not defined; however the resulting shadow must approximate (with each pixel being within 5% of its expected value) the image that would be generated by applying to the shadow a Gaussian blur with a standard deviation equal to half the blur radius</p></blockquote><h2 id="一个实验">一个实验</h2><script async src="//jsfiddle.net/hikerpig/1wq70fgn/embed/result,html,js,css/"></script><p>相同的数值，在不同浏览器中效果不同。总体来说 drop-shadow 的结果会比 text-shadow/box-shadow 的效果更加发散和柔和。</p><h2 id="参考">参考</h2><ul><li><a href="https://dbaron.org/log/20110225-blur-radius">What does a blur radius mean?</a></li><li><a href="https://drafts.csswg.org/css-backgrounds/#blur-radius">Blurring Shadow Edges</a></li><li>https://github.com/w3c/fxtf-drafts/issues/102</li><li>https://bugs.chromium.org/p/chromium/issues/detail?id=677689</li><li>https://developer.mozilla.org/en-US/docs/Web/CSS/filter</li></ul>]]></content:encoded>
-      
-      
-      <category domain="http://hikerpig.github.io/categories/%E5%89%8D%E7%AB%AF/">前端</category>
-      
-      
-      <category domain="http://hikerpig.github.io/tags/CSS/">CSS</category>
-      
-      <category domain="http://hikerpig.github.io/tags/SVG/">SVG</category>
-      
-      
-      <comments>http://hikerpig.github.io/2018/12/22/2018-12-22-svg-blur-and-css-text-shadow/#disqus_thread</comments>
       
     </item>
     
